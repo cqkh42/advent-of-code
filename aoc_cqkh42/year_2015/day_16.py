@@ -1,6 +1,7 @@
 import re
 
 REGEX = re.compile(r'Sue \d+: (.*?): (\d+), (.*?): (\d+), (.*?): (\d+)')
+# noinspection SpellCheckingInspection
 AUNTIE = {
     'children': 3,
     'cats': 7,
@@ -24,6 +25,7 @@ def _parse_sues(data):
     return sue_list
 
 
+# noinspection SpellCheckingInspection
 def _good_sue(sue):
     equals = ['children', 'samoyeds', 'akitas', 'vizslas', 'cars', 'perfumes']
     equals = all(sue[attr] == AUNTIE[attr] for attr in equals if attr in sue)

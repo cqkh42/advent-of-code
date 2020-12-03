@@ -6,6 +6,7 @@ REPEATING_SPACED = re.compile(r'(\w).\1')
 
 
 def _is_nice_a(string):
+    # noinspection SpellCheckingInspection
     vowels = sum(string.count(vowel) for vowel in 'aeiou') >= 3
     repeating_char = REPEATING_CHAR.search(string)
     bad_phrases = ['ab', 'cd', 'pq', 'xy']

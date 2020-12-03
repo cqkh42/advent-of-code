@@ -1,7 +1,7 @@
 import itertools
-from collections import Counter
-import re
 import math
+import re
+from collections import Counter
 
 REGEX = re.compile(r'.*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+)')
 
@@ -15,7 +15,10 @@ def _create_recipes(data):
 
 def _score_recipe(recipe, calories=None):
     recipe = Counter(recipe)
-    item_scores = ([v * q for v in vals] for vals, q in recipe.items())
+    item_scores = (
+        [attr * quantity for attr in attrs]
+        for attrs, quantity in recipe.items()
+    )
     attr_scores = [sum(i) for i in zip(*item_scores)]
     if min(attr_scores) <= 0 or (calories and attr_scores[-1] != calories):
         return 0

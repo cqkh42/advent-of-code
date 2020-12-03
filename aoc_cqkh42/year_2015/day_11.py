@@ -30,9 +30,9 @@ def _is_valid(password):
     return has_sequence and pairs_count
 
 
-def _first_string(string):
-    starting_point = ['a'] * len(string)
-    for index, char in enumerate(string):
+def _first_password(password):
+    starting_point = ['a'] * len(password)
+    for index, char in enumerate(password):
         if char not in 'iol':
             starting_point[index] = char
         else:
@@ -43,7 +43,7 @@ def _first_string(string):
 
 
 def part_a(data):
-    data = _first_string(data)
+    data = _first_password(data)
     while not _is_valid(data):
         data = _next_password(data)
     return data

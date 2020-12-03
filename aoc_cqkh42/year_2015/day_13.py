@@ -1,6 +1,6 @@
-from collections import defaultdict
 import itertools
 import re
+from collections import defaultdict
 
 REGEX = re.compile(r'(.*?) would.+?(-?\d+) .* (.*)\.')
 
@@ -24,7 +24,8 @@ def _map_happiness(data):
 
 def part_a(data):
     happiness = _map_happiness(data)
-    possible_arrangements = itertools.permutations(set(itertools.chain(*happiness)))
+    people = set(itertools.chain(*happiness))
+    possible_arrangements = itertools.permutations(people)
     return max((
         _calc_happiness(order, happiness)
         for order in possible_arrangements)
@@ -33,10 +34,10 @@ def part_a(data):
 
 def part_b(data, **_):
     happiness = _map_happiness(data)
-    unique_people = set(itertools.chain(*happiness))
-    unique_people.add('me')
+    people = set(itertools.chain(*happiness))
+    people.add('me')
 
-    possible_arrangements = itertools.permutations(unique_people)
+    possible_arrangements = itertools.permutations(people)
     return max((
         _calc_happiness(order, happiness)
         for order in possible_arrangements

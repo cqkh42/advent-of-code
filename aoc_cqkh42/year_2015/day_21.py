@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import itertools
+from dataclasses import dataclass
 
 
 @dataclass
@@ -10,6 +10,7 @@ class Item:
     armor: int
 
 
+# noinspection SpellCheckingInspection
 weapons = [
     Item('dagger', 8, 4, 0),
     Item('shortsword', 10, 5, 0),
@@ -18,6 +19,7 @@ weapons = [
     Item('greataxe', 74, 8, 0)
 ]
 
+# noinspection SpellCheckingInspection
 armors = [
     Item('leather', 13, 0, 1),
     Item('chainmail', 31, 0, 2),

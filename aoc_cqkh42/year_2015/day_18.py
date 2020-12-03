@@ -1,5 +1,3 @@
-import itertools
-
 def _new_state(x, y, lights):
     around_it = [(x - 1, y + 1), (x, y + 1), (x + 1, y + 1), (x - 1, y), (x + 1, y), (x - 1, y - 1), (x, y - 1),
                  (x + 1, y - 1)]

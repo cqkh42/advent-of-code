@@ -10,8 +10,8 @@ def _count_lights(instructions, mapping):
         f = mapping[action]
 
         for x in range(x_start, x_end + 1):
-            repl = [f(light) for light in lights[x][y_start:y_end + 1]]
-            lights[x][y_start:y_end + 1] = repl
+            new_lights = [f(light) for light in lights[x][y_start:y_end + 1]]
+            lights[x][y_start:y_end + 1] = new_lights
     return sum([light for row in lights for light in row])
 
 

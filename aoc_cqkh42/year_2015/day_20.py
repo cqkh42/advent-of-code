@@ -1,7 +1,8 @@
-from collections import Counter, defaultdict
-from functools import reduce, lru_cache
-import math
 import itertools
+import math
+from collections import defaultdict
+from functools import lru_cache
+
 
 def s(num):
     p = prime_factorize(num)

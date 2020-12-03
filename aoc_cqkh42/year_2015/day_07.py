@@ -1,6 +1,8 @@
 import operator
 import re
 
+REGEX = re.compile(r'([a-z0-9]*) ?([A-Z]*) ?([a-z0-9]*) -> ([a-z0-9]+)')
+
 
 def _parse_input(signal, register):
     if signal.isnumeric():
@@ -45,16 +47,14 @@ def _assemble_wires(instructions):
 
 def part_a(data):
     instructions = data.split('\n')
-    regex = re.compile(r'([a-z0-9]*) ?([A-Z]*) ?([a-z0-9]*) -> ([a-z0-9]+)')
-    instructions = [re.match(regex, inputs).groups() for inputs in instructions]
+    instructions = [REGEX.match(inputs).groups() for inputs in instructions]
     register = _assemble_wires(instructions)
     return register['a']
 
 
 def part_b(data, a):
     instructions = data.split('\n')
-    regex = re.compile(r'([a-z0-9]*) ?([A-Z]*) ?([a-z0-9]*) -> ([a-z0-9]+)')
-    instructions = [re.match(regex, inputs).groups() for inputs in instructions]
+    instructions = [REGEX.match(inputs).groups() for inputs in instructions]
     b_set_at = [output for *_, output in instructions].index('b')
     instructions[b_set_at] = (str(a), '', '', 'b')
     register = _assemble_wires(instructions)
