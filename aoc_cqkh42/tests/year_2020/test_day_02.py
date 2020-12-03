@@ -3,6 +3,7 @@ import pytest
 from aoc_cqkh42.year_2020 import day_02
 
 
+# noinspection SpellCheckingInspection
 @pytest.fixture
 def data():
     return '1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc'

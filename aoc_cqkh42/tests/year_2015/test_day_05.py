@@ -3,6 +3,7 @@ import pytest
 from aoc_cqkh42.year_2015 import day_05
 
 
+# noinspection SpellCheckingInspection
 @pytest.mark.parametrize(
     'data, answer',
     [
@@ -17,6 +18,7 @@ def test_part_a(data, answer):
     assert day_05.part_a(data) == answer
 
 
+# noinspection SpellCheckingInspection
 @pytest.mark.parametrize(
     'data, answer',
     [
