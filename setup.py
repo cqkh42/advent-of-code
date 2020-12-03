@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="aoc_cqkh42",
     version="0.1",
-    description="cqkh42's solutions for https://adventofcode.com/ using aoc_cqkh42 Python",
+    description="cqkh42's solutions for https://adventofcode.com/",
     url="https://github.com/myusername/advent-of-code-myusername",
     author="cqkh42",
     author_email="jackcooper93@gmail.com",
