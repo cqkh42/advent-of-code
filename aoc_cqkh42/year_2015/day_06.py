@@ -1,4 +1,4 @@
-def count_lights(instructions, mapping):
+def _count_lights(instructions, mapping):
     lights = [[0 for _ in range(1000)] for _ in range(1000)]
     for line in instructions:
         line = line.replace('turn ', '')
@@ -16,13 +16,13 @@ def count_lights(instructions, mapping):
 
 
 def part_a(data):
-    instructions = data.replace('turn ', '').split('\n')
+    instructions = data.split('\n')
     mapping = {
         'on': lambda light: 1,
         'off': lambda light: 0,
         'toggle': lambda light: not light
     }
-    return count_lights(instructions, mapping)
+    return _count_lights(instructions, mapping)
 
 
 def part_b(data, **_):
@@ -32,4 +32,4 @@ def part_b(data, **_):
         'off': lambda light: max(light - 1, 0),
         'toggle': lambda light: light + 2
     }
-    return count_lights(instructions, mapping)
+    return _count_lights(instructions, mapping)

@@ -15,7 +15,7 @@ def part_a(data, iters=40):
     return len(data)
 
 
-def part_b(data, **_):
-    for _ in range(50):
+def part_b(data, iters=50, **_):
+    for _ in range(iters):
         data = _look_and_see(data)
     return len(data)

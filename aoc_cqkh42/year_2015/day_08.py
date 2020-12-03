@@ -17,4 +17,7 @@ def part_a(data):
 
 
 def part_b(data, **_):
-    return sum(line.count('"') + line.count('\\') + 2 for line in data.split('\n'))
+    return sum(
+        line.count('"') + line.count('\\') + 2
+        for line in data.split('\n')
+    )

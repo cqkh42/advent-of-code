@@ -1,11 +1,12 @@
 import json
 import re
 
+REGEX = re.compile(r'-?\d+')
+
 
 def part_a(data):
-    numbers = re.findall(r'-?\d+', data)
-    numbers = [int(num) for num in numbers]
-    return sum(numbers)
+    numbers = REGEX.findall(data)
+    return sum(int(num) for num in numbers)
 
 
 def part_b(data, **_):

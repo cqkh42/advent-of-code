@@ -18,5 +18,5 @@ def part_a(data):
     return start
 
 
-def part_b(**_):
+def part_b(*_, **__):
     return None

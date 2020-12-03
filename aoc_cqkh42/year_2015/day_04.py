@@ -1,8 +1,11 @@
+import itertools
+from functools import lru_cache
 from hashlib import md5
 
 
-def _crack_hash(key, sequence, stop=1_000_000_000, start=0):
-    for answer in range(start, stop):
+@lru_cache(maxsize=None)
+def _crack_hash(key, sequence, start=0):
+    for answer in itertools.count(start):
         input_ = f'{key}{answer}'.encode()
         hashed = md5(input_).hexdigest()
         if hashed.startswith(sequence):

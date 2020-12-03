@@ -1,8 +1,13 @@
 import re
 import string
 
-
 REGEX = re.compile(r'([a-z])\1')
+THREE_LETTERS = zip(
+    string.ascii_lowercase,
+    string.ascii_lowercase[1:],
+    string.ascii_lowercase[2:]
+)
+THREE_LETTERS = [''.join(letters) for letters in THREE_LETTERS]
 
 
 def _next_password(password):
@@ -19,10 +24,8 @@ def _next_password(password):
 
 
 def _is_valid(password):
-    sequences = zip(string.ascii_lowercase, string.ascii_lowercase[1:], string.ascii_lowercase[2:])
-    has_sequence = any(''.join(chars) in password for chars in sequences)
-
-    pairs = re.findall(REGEX, password)
+    has_sequence = any(letters in password for letters in THREE_LETTERS)
+    pairs = REGEX.findall(password)
     pairs_count = len(pairs) >= 2
     return has_sequence and pairs_count
 

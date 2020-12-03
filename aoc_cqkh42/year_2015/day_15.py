@@ -1,70 +1,33 @@
 import itertools
-from collections import Counter, defaultdict
+from collections import Counter
 import re
 import math
 
-
-REGEX = re.compile(r'(.*):.*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+)')
-
-
-class Ingredient:
-    def __init__(self, name, capacity, durability, flavor, texture, calories):
-        self.name = name
-        self.capacity = int(capacity)
-        self.durability = int(durability)
-        self.flavor = int(flavor)
-        self.texture = int(texture)
-        self.calories = int(calories)
-
-    def __eq__(self, other):
-        return self.name == other
-
-    def __hash__(self):
-        return hash(self.name)
-
-    def __repr__(self):
-        return self.name
+REGEX = re.compile(r'.*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+)')
 
 
-class Recipe:
-    def __init__(self, ingredients):
-        self.raw_ingredients = ingredients
-        self.ingredients = Counter(ingredients)
-
-    def score(self):
-        totals = defaultdict(int)
-        for ingredient, quantity in self.ingredients.items():
-            for comp in ['capacity', 'durability', 'flavor', 'texture']:
-                new_val = getattr(ingredient, comp) * quantity
-                totals[comp] += new_val
-        totals = [max(val, 0) for val in totals.values()]
-        return math.prod(totals)
-
-    @property
-    def calories(self):
-        return sum(ingredient.calories for ingredient in self.raw_ingredients)
+def _create_recipes(data):
+    rows = (REGEX.search(row).groups() for row in data.split('\n'))
+    ingredients = (tuple(int(val) for val in values) for values in rows)
+    recipes = itertools.combinations_with_replacement(ingredients, 100)
+    return recipes
 
 
-def _parse_data(ingredients):
-    regexes = [re.search(REGEX, row).groups() for row in ingredients]
-    ingredients = [Ingredient(*row) for row in regexes]
-    return ingredients
+def _score_recipe(recipe, calories=None):
+    recipe = Counter(recipe)
+    item_scores = ([v * q for v in vals] for vals, q in recipe.items())
+    attr_scores = [sum(i) for i in zip(*item_scores)]
+    if min(attr_scores) <= 0 or (calories and attr_scores[-1] != calories):
+        return 0
+    else:
+        return math.prod(attr_scores[:4])
 
 
 def part_a(data):
-    ingredients = data.split('\n')
-    components = _parse_data(ingredients)
-
-    possible_ingredients = itertools.combinations_with_replacement(components, 100)
-    possible_recipes = (Recipe(ingredients) for ingredients in possible_ingredients)
-    return max(recipe.score() for recipe in possible_recipes)
+    recipes = _create_recipes(data)
+    return max(_score_recipe(recipe) for recipe in recipes)
 
 
 def part_b(data, **_):
-    ingredients = data.split('\n')
-    components = _parse_data(ingredients)
-
-    possible_ingredients = itertools.combinations_with_replacement(components, 100)
-    possible_recipes = (Recipe(ingredients) for ingredients in possible_ingredients)
-    possible_recipes = (recipe for recipe in possible_recipes if recipe.calories == 500)
-    return max(recipe.score() for recipe in possible_recipes)
+    recipes = _create_recipes(data)
+    return max(_score_recipe(recipe, 500) for recipe in recipes)
