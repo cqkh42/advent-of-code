@@ -16,6 +16,7 @@ def find_smallest_groups(parcels, num):
     ]
     return smallest_groups
 
+
 def valid_group(group, parcels, num, min_length):
     each_weight = sum(parcels) / num
 
@@ -26,6 +27,7 @@ def valid_group(group, parcels, num, min_length):
     group_b = (group for group in itertools.chain.from_iterable(group_b) if
                sum(group) == each_weight)
     return any(group_b)
+
 
 def part_a(data):
     parcels = data.split('\n')
@@ -39,9 +41,8 @@ def part_a(data):
 
 
 def part_b(data, **_):
-    parcel = data
     parcels = data.split('\n')
-    parcels = [int(parcel) for parcel in parcels]
+    parcels = {int(parcel) for parcel in parcels}
     group_a = find_smallest_groups(parcels, 4)
 
     min_length = min(len(group) for group in group_a)
