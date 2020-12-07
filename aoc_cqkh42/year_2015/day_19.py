@@ -23,9 +23,14 @@ def try_permutation(maps, element):
     replaced = 0
     while element != 'e':
         for new, old in maps:
-            if old not in element:
+            if old not in element or element.count('e'):
                 continue
+            c = element.count(old)
             element = element.replace(old, new, 1)
+            if element == 'e':
+                return replaced + 1
+            elif 'e' in element:
+                return None
             if element in visited:
                 return None
             visited.add(element)
@@ -39,6 +44,8 @@ def part_b(data, **_):
     maps = [item.split(' => ') for item in maps]
     possible_orders = itertools.permutations(maps)
     for order in possible_orders:
+        # result = None
         result = try_permutation(order, element)
+        # raise ValueError
         if result:
             return result

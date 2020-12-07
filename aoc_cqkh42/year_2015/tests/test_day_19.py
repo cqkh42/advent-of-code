@@ -16,7 +16,11 @@ def test_part_a(data, answer, transformations):
 
 
 # noinspection SpellCheckingInspection
-@pytest.mark.parametrize('data, answer', [('HOH', 3), ('HOHOHO', 6)])
+@pytest.mark.parametrize('data, answer', [
+    ('HOH', 3),
+    ('HOHOHO', 6)
+])
 def test_part_b(data, answer, transformations):
-    data = transformations + data
+    new_transformations = 'e => H\ne => O\n'
+    data = new_transformations + transformations + data
     assert day_19.part_b(data) == answer
