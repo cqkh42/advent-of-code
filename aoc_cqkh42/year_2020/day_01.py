@@ -3,9 +3,11 @@ import math
 
 
 def _find_combination(numbers, total, n):
-    for nums in itertools.combinations(numbers, n):
-        if sum(nums) == total:
-            return nums
+    combs = (   #pragma:  no branch
+        nums for nums in itertools.combinations(numbers, n)
+        if sum(nums) == total
+    )
+    return next(combs)
 
 
 def part_a(data):
