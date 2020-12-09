@@ -5,17 +5,17 @@ from aoc_cqkh42.year_2020 import day_04
 
 @pytest.mark.parametrize('data, answer', [('2002', True), ('2003', False)])
 def test__valid_byr(data, answer):
-    assert day_04._valid_byr(data) == answer
+    assert day_04._valid_byr(data) is answer
 
 
 @pytest.mark.parametrize('data, answer', [('2015', True), ('2003', False)])
 def test__valid_iyr(data, answer):
-    assert day_04._valid_iyr(data) == answer
+    assert day_04._valid_iyr(data) is answer
 
 
 @pytest.mark.parametrize('data, answer', [('2025', True), ('2003', False)])
 def test__valid_eyr(data, answer):
-    assert day_04._valid_eyr(data) == answer
+    assert day_04._valid_eyr(data) is answer
 
 
 @pytest.mark.parametrize(
@@ -23,26 +23,26 @@ def test__valid_eyr(data, answer):
     [('60in', True), ('190cm', True), ('190in', False), ('190', False)]
 )
 def test__valid_hgt(data, answer):
-    assert day_04._valid_hgt(data) == answer
+    assert day_04._valid_hgt(data) is answer
 
 
 @pytest.mark.parametrize(
     'data, answer', [('#123abc', True), ('#123abz', False), ('123abc', False)]
 )
 def test__valid_hcl(data, answer):
-    assert day_04._valid_hcl(data) == answer
+    assert day_04._valid_hcl(data) is answer
 
 
 @pytest.mark.parametrize('data, answer', [('brn', True), ('wat', False)])
 def test__valid_ecl(data, answer):
-    assert day_04._valid_ecl(data) == answer
+    assert day_04._valid_ecl(data) is answer
 
 
 @pytest.mark.parametrize(
     'data, answer', [('000000001', True), ('0123456789', False)]
 )
 def test__valid_pid(data, answer):
-    assert day_04._valid_pid(data) == answer
+    assert day_04._valid_pid(data) is answer
 
 
 def test_part_a():
