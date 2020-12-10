@@ -15,6 +15,12 @@ def test__chain_adapters():
     assert day_10._chain_adapters(adapters) == answer
 
 
+@pytest.mark.parametrize('num, answer', [(6, 1), (3, 1), (1, 2), (0, 4)])
+def test__num_routes(num, answer):
+    chain = ((1, 2, 3), (2, 3), (3,), (6,), 0, 0, (9,), 0, 0, tuple())
+    assert day_10._num_routes(num, chain) == answer
+
+
 @pytest.mark.parametrize(
     'data, answer',
     [
