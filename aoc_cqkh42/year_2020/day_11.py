@@ -1,62 +1,113 @@
 import itertools
 
 
-def _parse_floor(data):
-    seats = {}
-    for y, row in enumerate(data.split('\n')):
-        for x, item in enumerate(row):
-            if item == 'L':
-                seats[(x, y)] = 'L'
-    return seats
+def _occupied_around(x, y, seats):
+    contents = []
 
-
-def _count_adjacent_seats(x, y, seats):
     x_s = (x-1, x, x + 1)
     y_s = (y-1, y, y+1)
-    occupied = (
-        seats.get((x_, y_)) == '#' for x_, y_ in itertools.product(x_s, y_s)
-        if (x_, y_) != (x, y)
-    )
-    occupied = sum(occupied)
-    return occupied
+    for x_, y_ in itertools.product(x_s, y_s):
+        if (x_, y_) != (x, y) and x_ >= 0 and y_ >= 0:
+            try:
+                there = seats[y_][x_]
+                contents.append(there)
+            except IndexError:
+                continue
+    return contents.count('#')
 
 
-def _new_state(x, y, seats):
-    occupied = _count_adjacent_seats(x, y, seats)
-    if seats[(x, y)] == 'L' and not occupied:
+def _new_value(around, state):
+    if state == 'L' and not around:
         return '#'
-    if seats[(x, y)] == '#' and occupied >= 4:
+    elif state == '#' and around >= 4:
         return 'L'
-    return seats[x, y]
+    else:
+        return state
 
 
-def _update_seats(seats):
-    new_seats = {(x, y): _new_state(x, y, seats) for x, y in seats}
-    return {**seats, **new_seats}
+def _find_first_seat(xs, ys, seats):
+    for y_, x_ in zip(ys, xs):
+        if (seat := seats[y_][x_]) != '.':
+            return seat
 
 
-def _find_seats_in_sight(x, y, seats):
-    occupied = 0
-    #find N
 
+def _occupied_in_sight(x, y, seats):
+    contents = []
+    north = range(y-1, -1, -1)
+    south = range(y+1, len(seats))
+    east = range(x+1, len(seats[0]))
+    west = range(x-1, -1, -1)
+    vertical = itertools.repeat(y)
+    horizontal = itertools.repeat(x)
+    # find N
+    n = _find_first_seat(itertools.repeat(x), north, seats)
+    s = _find_first_seat(itertools.repeat(x), south, seats)
+    contents.extend((n, s))
     #find S
+    # for y_ in south:
+    #     if (seat := seats[y_][x]) != '.':
+    #         contents.append(seat)
+    #         break
     # find E
+    for x_ in east:
+        if (seat := seats[y][x_]) != '.':
+            contents.append(seat)
+            break
     # find W
+    for x_ in west:
+        if seats[y][x_] != '.':
+            contents.append(seats[y][x_])
+            break
     #find NE
-    # find SE
-    #find SW
-
+    angles = (
+        _find_first_seat(x_dir, y_dir, seats)
+        for y_dir, x_dir in itertools.product((north, south), (east, west))
+    )
+    contents.extend(angles)
+    return contents.count('#')
 
 
 def part_a(data):
-    seats = _parse_floor(data)
+    seats = data.split('\n')
     while True:
-        new_seats = _update_seats(seats)
-        if seats == new_seats:
-            return sum(val == '#' for val in seats.values())
+        new_seats = []
+        for y_index, row in enumerate(seats):
+            new_row = ''
+            for x_index, seat in enumerate(row):
+                around = _occupied_around(x_index, y_index, seats)
+                new_seat = _new_value(around, seat)
+                new_row += new_seat
+            new_seats.append(new_row)
+        if new_seats == seats:
+            return ''.join(seats).count('#')
+
         else:
             seats = new_seats
 
 
+def _new_value_2(around, state):
+    if state == 'L' and not around:
+        return '#'
+    elif state == '#' and around >= 5:
+        return 'L'
+    else:
+        return state
+
+
 def part_b(data, **_):
-    return False
+    seats = data.split('\n')
+    while True:
+        new_seats = []
+        for y_index, row in enumerate(seats):
+            new_row = ''
+            for x_index, seat in enumerate(row):
+                around = _occupied_in_sight(x_index, y_index, seats)
+                new_seat = _new_value_2(around, seat)
+                new_row += new_seat
+            new_seats.append(new_row)
+        if new_seats == seats:
+            return ''.join(seats).count('#')
+
+        else:
+            seats = new_seats
