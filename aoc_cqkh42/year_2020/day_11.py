@@ -1,7 +1,11 @@
+"""
+Solutions for day 11 of 2020's Advent of Code
+
+"""
 import itertools
 
 
-def _occupied_around(x, y, seats):
+def _occupied_around(x, y, seats) -> int:
     contents = []
 
     x_s = (x-1, x, x + 1)
@@ -16,7 +20,7 @@ def _occupied_around(x, y, seats):
     return contents.count('#')
 
 
-def _new_value(around, state):
+def _new_value(around, state) -> str:
     if state == 'L' and not around:
         return '#'
     elif state == '#' and around >= 4:
@@ -25,30 +29,21 @@ def _new_value(around, state):
         return state
 
 
-def _find_first_seat(xs, ys, seats):
+def _find_first_seat(xs, ys, seats) -> str:
     for y_, x_ in zip(ys, xs):
         if (seat := seats[y_][x_]) != '.':
             return seat
 
 
-
-def _occupied_in_sight(x, y, seats):
+def _occupied_in_sight(x, y, seats) -> int:
     contents = []
     north = range(y-1, -1, -1)
     south = range(y+1, len(seats))
     east = range(x+1, len(seats[0]))
     west = range(x-1, -1, -1)
-    vertical = itertools.repeat(y)
-    horizontal = itertools.repeat(x)
-    # find N
     n = _find_first_seat(itertools.repeat(x), north, seats)
     s = _find_first_seat(itertools.repeat(x), south, seats)
     contents.extend((n, s))
-    #find S
-    # for y_ in south:
-    #     if (seat := seats[y_][x]) != '.':
-    #         contents.append(seat)
-    #         break
     # find E
     for x_ in east:
         if (seat := seats[y][x_]) != '.':
@@ -59,7 +54,6 @@ def _occupied_in_sight(x, y, seats):
         if seats[y][x_] != '.':
             contents.append(seats[y][x_])
             break
-    #find NE
     angles = (
         _find_first_seat(x_dir, y_dir, seats)
         for y_dir, x_dir in itertools.product((north, south), (east, west))
@@ -68,7 +62,7 @@ def _occupied_in_sight(x, y, seats):
     return contents.count('#')
 
 
-def part_a(data):
+def part_a(data) -> int:
     seats = data.split('\n')
     while True:
         new_seats = []
@@ -86,7 +80,7 @@ def part_a(data):
             seats = new_seats
 
 
-def _new_value_2(around, state):
+def _new_value_2(around, state) -> str:
     if state == 'L' and not around:
         return '#'
     elif state == '#' and around >= 5:
@@ -95,7 +89,7 @@ def _new_value_2(around, state):
         return state
 
 
-def part_b(data, **_):
+def part_b(data, **_) -> int:
     seats = data.split('\n')
     while True:
         new_seats = []

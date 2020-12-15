@@ -1,9 +1,13 @@
+"""
+Solutions for day 2 of 2020's Advent of Code
+
+"""
 import re
 
 REGEX = re.compile(r'(\d+)-(\d+) (\w): (\w+)')
 
 
-def part_a(data):
+def part_a(data) -> int:
     lines = (re.match(REGEX, line).groups() for line in data.split('\n'))
     is_valid = (
         int(low) <= pw.count(char) <= int(high)
@@ -12,7 +16,7 @@ def part_a(data):
     return sum(is_valid)
 
 
-def part_b(data, **_):
+def part_b(data, **_) -> int:
     lines = (re.match(REGEX, line).groups() for line in data.split('\n'))
     extracted = (
         (pw[int(low)-1] + pw[int(high)-1], char)

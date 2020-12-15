@@ -1,9 +1,14 @@
+"""
+Solutions for day 8 of 2020's Advent of Code
+
+"""
 import re
+from typing import Tuple
 
 REGEX = re.compile(r'nop|jmp')
 
 
-def _run_code(instructions):
+def _run_code(instructions) -> Tuple[int, bool]:
     visited = set()
     index = 0
     accumulator = 0
@@ -23,7 +28,7 @@ def _run_code(instructions):
     return accumulator, True
 
 
-def _replace(match):
+def _replace(match) -> str:
     replacement_dict = {
         'nop': 'jmp',
         'jmp': 'nop'
@@ -31,13 +36,13 @@ def _replace(match):
     return replacement_dict[match.group()]
 
 
-def part_a(data):
+def part_a(data) -> int:
     instructions = data.split('\n')
-    accumulator, success = _run_code(instructions)
+    accumulator, _ = _run_code(instructions)
     return accumulator
 
 
-def part_b(data, **_):
+def part_b(data, **_) -> int:
     matches = REGEX.finditer(data)
     potential_instructions = (
         data[:match.start()] + _replace(match) + data[match.end():]

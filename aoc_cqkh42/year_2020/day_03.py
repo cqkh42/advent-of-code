@@ -1,7 +1,11 @@
+"""
+Solutions for day 3 of 2020's Advent of Code
+
+"""
 import math
 
 
-def _trees_in_path(trees, x, y):
+def _trees_in_path(trees, x, y) -> int:
     trees = trees[::y]
     width = len(trees[0])
     x_steps = (x * y for y in range(len(trees)))
@@ -10,12 +14,12 @@ def _trees_in_path(trees, x, y):
     return sum(trees)
 
 
-def part_a(data):
+def part_a(data) -> int:
     trees = data.split('\n')
     return _trees_in_path(trees, 3, 1)
 
 
-def part_b(data, **_):
+def part_b(data, **_) -> int:
     trees = data.split('\n')
     routes = [
         _trees_in_path(trees, 1, 1),

@@ -1,17 +1,12 @@
+"""
+Solutions for day 13 of 2020's Advent of Code
+
+"""
 import itertools
+from typing import Tuple
 
 
-def part_a(data):
-    earliest, buses = data.split('\n')
-    earliest = int(earliest)
-    buses = [int(bus) for bus in buses.split(',') if bus != 'x']
-    for minute in itertools.count(earliest):
-        for bus in buses:
-            if not (minute % bus):
-                return (minute - earliest) * bus
-
-
-def _process(start, jump, index, num):
+def _process(start, jump, index, num) -> Tuple[int, int]:
     found = []
     for t in itertools.count(start, jump):
         if (t + index) % num == 0:
@@ -21,8 +16,18 @@ def _process(start, jump, index, num):
     return found[0], found[1] - found[0]
 
 
-def part_b(data, **_):
+def part_a(data) -> int:
     earliest, buses = data.split('\n')
+    earliest = int(earliest)
+    buses = [int(bus) for bus in buses.split(',') if bus != 'x']
+    for minute in itertools.count(earliest):
+        for bus in buses:
+            if not (minute % bus):
+                return (minute - earliest) * bus
+
+
+def part_b(data, **_) -> int:
+    _, buses = data.split('\n')
 
     buses = [(index, int(bus)) for index, bus in enumerate(buses.split(',')) if
              bus != 'x']

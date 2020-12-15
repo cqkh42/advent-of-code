@@ -1,12 +1,19 @@
-def rotate_right(n, e):
+"""
+Solutions for day 12 of 2020's Advent of Code
+
+"""
+from typing import Tuple
+
+
+def rotate_right(n, e) -> Tuple[int, int]:
     return -e, n
 
 
-def rotate_left(n, e):
+def rotate_left(n, e) -> Tuple[int, int]:
     return e, -n
 
 
-def part_a(data):
+def part_a(data) -> int:
     directions = ['N', 'E', 'S', 'W']
     direction = 'E'
     n = 0
@@ -36,7 +43,7 @@ def part_a(data):
     return abs(n) + abs(e)
 
 
-def part_b(data, **_):
+def part_b(data, **_) -> int:
     w_n = 1
     w_e = 10
     n = 0
@@ -56,9 +63,9 @@ def part_b(data, **_):
         elif action == 'W':
             w_e -= number
         elif action == 'R':
-            for turn in range(number // 90):
+            for _ in range(number // 90):
                 w_n, w_e = rotate_right(w_n, w_e)
         elif action == 'L':
-            for turn in range(number // 90):
+            for _ in range(number // 90):
                 w_n, w_e = rotate_left(w_n, w_e)
     return abs(n) + abs(e)
