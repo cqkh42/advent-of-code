@@ -1,16 +1,18 @@
+import itertools
 import re
 
 REGEX = re.compile(r'mem\[(\d+)] = (\d+)')
 
 
 def _replace_floater(address):
+    replaced = {
+        address.replace('X', '0', 1), address.replace('X', '1', 1)
+    }
     if address.count('X') == 1:
-        return {address.replace('X', '0'), address.replace('X', '1')}
+        return replaced
     else:
-        return {
-            *_replace_floater(address.replace('X', '0', 1)),
-            *_replace_floater(address.replace('X', '1', 1))
-        }
+        new_ones = (_replace_floater(address) for address in replaced)
+        return set(itertools.chain.from_iterable(new_ones))
 
 
 def _mask_value(value, mask):
