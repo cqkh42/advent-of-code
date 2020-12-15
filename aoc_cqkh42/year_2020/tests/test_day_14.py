@@ -1,16 +1,21 @@
+"""
+Tests for day 14 of 2020's Advent of Code
+
+"""
 import pytest
 
 from aoc_cqkh42.year_2020 import day_14
 
 
-def test__replace_floater():
+def test__replace_floater() -> None:
     address = 'X1101X'
     answer = {'111011', '111010', '011011', '011010'}
     assert day_14._replace_floater(address) == answer
 
 
+# noinspection SpellCheckingInspection
 @pytest.mark.parametrize('value, answer', [(11, 73), (101, 101), (0, 64)])
-def test__mask_value(value, answer):
+def test__mask_value(value, answer) -> None:
     mask = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X'
     assert day_14._mask_value(value, mask) == answer
 
@@ -26,11 +31,12 @@ def test__mask_value(value, answer):
         )
     ]
 )
-def test__mask_address(address, mask, answer):
+def test__mask_address(address, mask, answer) -> None:
     assert day_14._mask_address(address, mask) == answer
 
 
-def test_part_a():
+def test_part_a() -> None:
+    # noinspection SpellCheckingInspection
     data = (
         'mask = XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X\n'
         'mem[8] = 11\n'
@@ -40,7 +46,7 @@ def test_part_a():
     assert day_14.part_a(data) == 165
 
 
-def test_part_b():
+def test_part_b() -> None:
     data = (
         'mask = 000000000000000000000000000000X1001X\n'
         'mem[42] = 100\n'

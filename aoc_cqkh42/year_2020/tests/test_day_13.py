@@ -1,9 +1,13 @@
+"""
+Tests for day 13 of 2020's Advent of Code
+
+"""
 import pytest
 
 from aoc_cqkh42.year_2020 import day_13
 
 
-def test_part_a():
+def test_part_a() -> None:
     data = '939\n7,13,x,x,59,x,31,19'
     assert day_13.part_a(data) == 295
 
@@ -19,5 +23,5 @@ def test_part_a():
         ('1\n1789,37,47,1889', 1202161486)
     ]
 )
-def test_part_b(data, answer):
+def test_part_b(data, answer) -> None:
     assert day_13.part_b(data) == answer
