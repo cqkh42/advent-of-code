@@ -56,6 +56,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     w_n = 1
     w_e = 10
     n = 0

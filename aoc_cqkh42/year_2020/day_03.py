@@ -32,6 +32,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     trees = data.split('\n')
     routes = [
         _trees_in_path(trees, 1, 1),

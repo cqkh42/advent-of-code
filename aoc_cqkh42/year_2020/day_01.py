@@ -33,6 +33,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     numbers = (int(num) for num in data.split('\n'))
     comb = _find_combination(numbers, 2020, 3)
     return math.prod(comb)

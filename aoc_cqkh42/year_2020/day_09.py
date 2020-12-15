@@ -27,6 +27,7 @@ def part_a(data, preamble=25) -> int:
     Parameters
     ----------
     data: str
+    preamble: int, default=25
 
     Returns
     -------
@@ -46,6 +47,18 @@ def part_a(data, preamble=25) -> int:
 
 
 def part_b(data, a) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     numbers = [int(num) for num in data.split('\n')]
     sequence = _find_sequence(numbers, a)
     return min(sequence) + max(sequence)

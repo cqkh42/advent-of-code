@@ -29,6 +29,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     lines = (re.match(REGEX, line).groups() for line in data.split('\n'))
     extracted = (
         (pw[int(low)-1] + pw[int(high)-1], char)

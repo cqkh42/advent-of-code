@@ -102,6 +102,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     seats = data.split('\n')
     while True:
         new_seats = []

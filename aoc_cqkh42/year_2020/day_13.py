@@ -39,6 +39,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     _, buses = data.split('\n')
 
     buses = [(index, int(bus)) for index, bus in enumerate(buses.split(',')) if

@@ -49,6 +49,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     adapters = [int(num) for num in data.split('\n')]
     adapters = _sort_adapters(adapters)
     chain = _chain_adapters(adapters)

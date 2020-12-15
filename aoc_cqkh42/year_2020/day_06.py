@@ -24,6 +24,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     groups = data.split('\n\n')
     sub_groups = ((set(g) for g in group.split('\n')) for group in groups)
     intersections = (set.intersection(*groups) for groups in sub_groups)

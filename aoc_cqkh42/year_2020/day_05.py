@@ -40,6 +40,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     ids = [_seat_id(boarding) for boarding in data.split('\n')]
     all_seats = range(min(ids), max(ids))
     missing_ids = (seat for seat in all_seats if seat not in ids)

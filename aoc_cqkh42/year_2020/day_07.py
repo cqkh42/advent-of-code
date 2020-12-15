@@ -56,5 +56,17 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     mapping = _parse_bags(data)
     return _count_bags('shiny gold', mapping) - 1

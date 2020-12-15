@@ -69,6 +69,18 @@ def part_a(data) -> int:
 
 
 def part_b(data, **_) -> int:
+    """
+    Solution for part b
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     test_functions = {
         'byr': _valid_byr,
         'iyr': _valid_iyr,
