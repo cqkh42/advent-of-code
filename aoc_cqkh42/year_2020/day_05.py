@@ -2,6 +2,8 @@
 Solutions for day 5 of 2020's Advent of Code
 
 """
+
+
 def _row(boarding) -> int:
     row = boarding.replace('F', '0').replace('B', '1')
     row = ''.join(char for char in row if char in '01')
@@ -21,6 +23,18 @@ def _seat_id(boarding) -> int:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     ids = (_seat_id(boarding) for boarding in data.split('\n'))
     return max(ids)
 

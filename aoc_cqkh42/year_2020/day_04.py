@@ -45,6 +45,18 @@ def _valid_pid(pid) -> bool:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     test_functions = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
     passport_dicts = (
         dict(KEY_VALUE_REGEX.findall(passport))

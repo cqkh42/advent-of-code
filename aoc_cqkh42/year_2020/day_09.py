@@ -21,6 +21,18 @@ def _find_sequence(numbers, target) -> List[int]:
 
 
 def part_a(data, preamble=25) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     numbers = [int(num) for num in data.split('\n')]
     preambles = (
         numbers[start:start+preamble] for start in range(len(data)-preamble)

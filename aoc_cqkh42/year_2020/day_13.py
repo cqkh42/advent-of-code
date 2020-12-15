@@ -17,6 +17,18 @@ def _process(start, jump, index, num) -> Tuple[int, int]:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     earliest, buses = data.split('\n')
     earliest = int(earliest)
     buses = [int(bus) for bus in buses.split(',') if bus != 'x']

@@ -37,6 +37,18 @@ def _replace(match) -> str:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     instructions = data.split('\n')
     accumulator, _ = _run_code(instructions)
     return accumulator

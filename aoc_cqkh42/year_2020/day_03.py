@@ -15,6 +15,18 @@ def _trees_in_path(trees, x, y) -> int:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     trees = data.split('\n')
     return _trees_in_path(trees, 3, 1)
 

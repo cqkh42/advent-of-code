@@ -38,6 +38,18 @@ def _count_bags(color, mapping) -> int:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     mapping = _parse_bags(data)
     total_mapping = (_can_contain(color, mapping) for color in mapping)
     return sum('shiny gold' in color for color in total_mapping)

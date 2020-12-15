@@ -15,6 +15,18 @@ def _find_combination(numbers, total, n) -> tuple:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     numbers = (int(num) for num in data.split('\n'))
     comb = _find_combination(numbers, 2020, 2)
     return math.prod(comb)

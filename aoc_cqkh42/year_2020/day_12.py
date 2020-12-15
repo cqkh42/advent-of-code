@@ -14,6 +14,18 @@ def rotate_left(n, e) -> Tuple[int, int]:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     directions = ['N', 'E', 'S', 'W']
     direction = 'E'
     n = 0

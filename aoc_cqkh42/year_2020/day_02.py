@@ -8,6 +8,18 @@ REGEX = re.compile(r'(\d+)-(\d+) (\w): (\w+)')
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     lines = (re.match(REGEX, line).groups() for line in data.split('\n'))
     is_valid = (
         int(low) <= pw.count(char) <= int(high)

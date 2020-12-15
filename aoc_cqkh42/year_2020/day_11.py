@@ -62,7 +62,28 @@ def _occupied_in_sight(x, y, seats) -> int:
     return contents.count('#')
 
 
+def _new_value_2(around, state) -> str:
+    if state == 'L' and not around:
+        return '#'
+    elif state == '#' and around >= 5:
+        return 'L'
+    else:
+        return state
+
+
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     seats = data.split('\n')
     while True:
         new_seats = []
@@ -78,15 +99,6 @@ def part_a(data) -> int:
 
         else:
             seats = new_seats
-
-
-def _new_value_2(around, state) -> str:
-    if state == 'L' and not around:
-        return '#'
-    elif state == '#' and around >= 5:
-        return 'L'
-    else:
-        return state
 
 
 def part_b(data, **_) -> int:

@@ -30,6 +30,18 @@ def _num_routes(num, k) -> int:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     adapters = [int(num) for num in data.split('\n')]
     adapters = _sort_adapters(adapters)
     differences = [b-a for a, b in zip(adapters, adapters[1:])]

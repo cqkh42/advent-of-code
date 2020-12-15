@@ -2,7 +2,21 @@
 Solutions for day 6 of 2020's Advent of Code
 
 """
+
+
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     groups = data.split('\n\n')
     as_one = (group.replace('\n', '') for group in groups)
     unique = (set(group) for group in as_one)

@@ -35,6 +35,18 @@ def _mask_address(address, mask) -> Set[int]:
 
 
 def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
     memory = {}
     mask = None
     for row in data.split('\n'):
