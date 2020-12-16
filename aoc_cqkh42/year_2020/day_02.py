@@ -2,9 +2,9 @@
 Solutions for day 2 of 2020's Advent of Code
 
 """
-import re
+import parse
 
-REGEX = re.compile(r'(\d+)-(\d+) (\w): (\w+)')
+PARSER = parse.compile(r'{:d}-{:d} {:w}: {:w}')
 
 
 def part_a(data) -> int:
@@ -20,11 +20,8 @@ def part_a(data) -> int:
     answer: int
 
     """
-    lines = (re.match(REGEX, line).groups() for line in data.split('\n'))
-    is_valid = (
-        int(low) <= pw.count(char) <= int(high)
-        for low, high, char, pw in lines
-    )
+    lines = PARSER.findall(data)
+    is_valid = (low <= pw.count(char) <= high for low, high, char, pw in lines)
     return sum(is_valid)
 
 
@@ -41,10 +38,9 @@ def part_b(data, **_) -> int:
     answer: int
 
     """
-    lines = (re.match(REGEX, line).groups() for line in data.split('\n'))
-    extracted = (
-        (pw[int(low)-1] + pw[int(high)-1], char)
+    lines = PARSER.findall(data)
+    once = [
+        (pw[low-1] + pw[high-1]).count(char)
         for low, high, char, pw in lines
-    )
-    is_valid = (tokens.count(char) == 1 for tokens, char in extracted)
-    return sum(is_valid)
+    ]
+    return once.count(1)

@@ -22,11 +22,11 @@ def _chain_adapters(adapters) -> Tuple[int]:
 
 
 @functools.lru_cache(None)
-def _num_routes(num, k) -> int:
-    if not k[num]:
+def _num_routes(num, chain) -> int:
+    if not chain[num]:
         return 1
     else:
-        return sum(_num_routes(x, k) for x in k[num])
+        return sum(_num_routes(x, chain) for x in chain[num])
 
 
 def part_a(data) -> int:
@@ -44,7 +44,7 @@ def part_a(data) -> int:
     """
     adapters = [int(num) for num in data.split('\n')]
     adapters = _sort_adapters(adapters)
-    differences = [b-a for a, b in zip(adapters, adapters[1:])]
+    differences = [right-left for left, right in zip(adapters, adapters[1:])]
     return differences.count(1) * differences.count(3)
 
 

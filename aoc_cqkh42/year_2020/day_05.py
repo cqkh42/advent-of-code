@@ -54,5 +54,5 @@ def part_b(data, **_) -> int:
     """
     ids = [_seat_id(boarding) for boarding in data.split('\n')]
     all_seats = range(min(ids), max(ids))
-    missing_ids = (seat for seat in all_seats if seat not in ids)
-    return next(missing_ids)
+    missing_ids = set(all_seats).difference(ids)
+    return missing_ids.pop()

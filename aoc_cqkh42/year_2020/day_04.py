@@ -2,9 +2,9 @@
 Solutions for day 4 of 2020's Advent of Code
 
 """
+import parse
 import re
 
-KEY_VALUE_REGEX = re.compile(r'(\w+):([#a-z0-9]+)\s?')
 HCL_REGEX = re.compile(r'#[0-9a-f]{6}')
 PID_REGEX = re.compile(r'\d{9}\b')
 
@@ -44,6 +44,35 @@ def _valid_pid(pid) -> bool:
     return bool(PID_REGEX.match(pid))
 
 
+class _Passport:
+    def __init__(self, passport):
+        self.rows = dict(parse.findall(r'{:S}:{:S}', passport))
+
+    @property
+    def complete(self):
+        return set(self._test_functions).issubset(self.rows)
+
+    def _test_attribute(self, attribute):
+        func = self._test_functions[attribute]
+        return func(self.rows[attribute])
+
+    @property
+    def valid(self):
+        if not self.complete:
+            return False
+        return all(self._test_attribute(attr) for attr in self._test_functions)
+
+    _test_functions = {
+        'byr': _valid_byr,
+        'iyr': _valid_iyr,
+        'eyr': _valid_eyr,
+        'hgt': _valid_hgt,
+        'hcl': _valid_hcl,
+        'ecl': _valid_ecl,
+        'pid': _valid_pid,
+    }
+
+
 def part_a(data) -> int:
     """
     Solution for part a
@@ -57,15 +86,9 @@ def part_a(data) -> int:
     answer: int
 
     """
-    test_functions = {'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'}
-    passport_dicts = (
-        dict(KEY_VALUE_REGEX.findall(passport))
-        for passport in data.split('\n\n')
-    )
-    complete_passports = (
-        test_functions.issubset(passport) for passport in passport_dicts
-    )
-    return sum(complete_passports)
+    passports = (_Passport(row) for row in data.split('\n\n'))
+    complete = (passport.complete for passport in passports)
+    return sum(complete)
 
 
 def part_b(data, **_) -> int:
@@ -81,22 +104,6 @@ def part_b(data, **_) -> int:
     answer: int
 
     """
-    test_functions = {
-        'byr': _valid_byr,
-        'iyr': _valid_iyr,
-        'eyr': _valid_eyr,
-        'hgt': _valid_hgt,
-        'hcl': _valid_hcl,
-        'ecl': _valid_ecl,
-        'pid': _valid_pid,
-    }
-    passport_dicts = (
-        dict(KEY_VALUE_REGEX.findall(passport))
-        for passport in data.split('\n\n')
-    )
-    valid_passports = (
-        all(test_functions[attr](passport[attr]) for attr in test_functions)
-        for passport in passport_dicts
-        if set(test_functions).issubset(passport)
-    )
-    return sum(valid_passports)
+    passports = (_Passport(row) for row in data.split('\n\n'))
+    valid = (passport.valid for passport in passports)
+    return sum(valid)

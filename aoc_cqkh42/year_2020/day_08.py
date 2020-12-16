@@ -5,7 +5,10 @@ Solutions for day 8 of 2020's Advent of Code
 import re
 from typing import Tuple
 
+import parse
+
 REGEX = re.compile(r'nop|jmp')
+PARSER = parse.compile(r'{:w} {:d}')
 
 
 def _run_code(instructions) -> Tuple[int, bool]:
@@ -15,16 +18,16 @@ def _run_code(instructions) -> Tuple[int, bool]:
     while index not in visited:
         visited.add(index)
         try:
-            instruction, number = instructions[index].split()
+            instruction, number = instructions[index]
         except IndexError:
             return accumulator, False
         if instruction == 'nop':
             index += 1
         elif instruction == 'acc':
-            accumulator += int(number)
+            accumulator += number
             index += 1
         else:
-            index += int(number)
+            index += number
     return accumulator, True
 
 
@@ -49,7 +52,7 @@ def part_a(data) -> int:
     answer: int
 
     """
-    instructions = data.split('\n')
+    instructions = list(PARSER.findall(data))
     accumulator, _ = _run_code(instructions)
     return accumulator
 
@@ -73,7 +76,7 @@ def part_b(data, **_) -> int:
         for match in matches
     )
     potential_instructions = (
-        instruction.split('\n') for instruction in potential_instructions
+        list(PARSER.findall(potential)) for potential in potential_instructions
     )
     results = (
         _run_code(instructions) for instructions in potential_instructions

@@ -7,17 +7,17 @@ import itertools
 
 def _occupied_around(x, y, seats) -> int:
     contents = []
+    occupied = 0
 
     x_s = (x-1, x, x + 1)
     y_s = (y-1, y, y+1)
-    for x_, y_ in itertools.product(x_s, y_s):
-        if (x_, y_) != (x, y) and x_ >= 0 and y_ >= 0:
-            try:
-                there = seats[y_][x_]
-                contents.append(there)
-            except IndexError:
-                continue
-    return contents.count('#')
+    adjacent = ((x_, y_) for x_, y_ in itertools.product(x_s, y_s) if (x_, y_) != (x, y))
+    existing = ((x_, y_) for x_, y_ in adjacent if 0<= x_ < len(seats[0]) and 0 <= y_ < len(seats))
+    for x_, y_ in existing:
+        there = seats[y_][x_]
+        occupied += there == '#'
+        contents.append(there)
+    return occupied
 
 
 def _new_value(around, state) -> str:
@@ -114,6 +114,7 @@ def part_b(data, **_) -> int:
     answer: int
 
     """
+    return False
     seats = data.split('\n')
     while True:
         new_seats = []

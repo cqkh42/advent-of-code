@@ -6,7 +6,7 @@ import itertools
 import math
 
 
-def _find_combination(numbers, total, n) -> tuple:
+def _find_subset_with_sum(numbers, total, n) -> tuple:
     combs = (
         nums for nums in itertools.combinations(numbers, n)
         if sum(nums) == total
@@ -28,7 +28,7 @@ def part_a(data) -> int:
 
     """
     numbers = (int(num) for num in data.split('\n'))
-    comb = _find_combination(numbers, 2020, 2)
+    comb = _find_subset_with_sum(numbers, 2020, 2)
     return math.prod(comb)
 
 
@@ -46,5 +46,5 @@ def part_b(data, **_) -> int:
 
     """
     numbers = (int(num) for num in data.split('\n'))
-    comb = _find_combination(numbers, 2020, 3)
+    comb = _find_subset_with_sum(numbers, 2020, 3)
     return math.prod(comb)
