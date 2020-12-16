@@ -46,13 +46,14 @@ def part_a(data, preamble=25) -> int:
     return next(invalids)
 
 
-def part_b(data, a) -> int:
+def part_b(data, answer_a) -> int:
     """
     Solution for part b
 
     Parameters
     ----------
     data: str
+    answer_a: int
 
     Returns
     -------
@@ -60,5 +61,5 @@ def part_b(data, a) -> int:
 
     """
     numbers = [int(num) for num in data.split('\n')]
-    sequence = _find_sequence(numbers, a)
+    sequence = _find_sequence(numbers, answer_a)
     return min(sequence) + max(sequence)

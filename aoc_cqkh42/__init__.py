@@ -6,5 +6,5 @@ def answer(year, day, data):
     module = importlib.import_module(module_string)
 
     a = module.part_a(data)
-    b = module.part_b(data, a=a)
+    b = module.part_b(data, answer_a=a)
     return a, b

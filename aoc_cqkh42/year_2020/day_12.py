@@ -5,11 +5,11 @@ Solutions for day 12 of 2020's Advent of Code
 from typing import Tuple
 
 
-def rotate_right(n, e) -> Tuple[int, int]:
+def _rotate_right(n, e) -> Tuple[int, int]:
     return -e, n
 
 
-def rotate_left(n, e) -> Tuple[int, int]:
+def _rotate_left(n, e) -> Tuple[int, int]:
     return e, -n
 
 
@@ -88,8 +88,8 @@ def part_b(data, **_) -> int:
             w_e -= number
         elif action == 'R':
             for _ in range(number // 90):
-                w_n, w_e = rotate_right(w_n, w_e)
+                w_n, w_e = _rotate_right(w_n, w_e)
         elif action == 'L':
             for _ in range(number // 90):
-                w_n, w_e = rotate_left(w_n, w_e)
+                w_n, w_e = _rotate_left(w_n, w_e)
     return abs(n) + abs(e)
