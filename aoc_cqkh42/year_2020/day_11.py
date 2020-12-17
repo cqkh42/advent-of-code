@@ -6,27 +6,56 @@ import itertools
 
 
 def _occupied_around(x, y, seats) -> int:
-    contents = []
-    occupied = 0
-
     x_s = (x-1, x, x + 1)
     y_s = (y-1, y, y+1)
-    adjacent = ((x_, y_) for x_, y_ in itertools.product(x_s, y_s) if (x_, y_) != (x, y))
-    existing = ((x_, y_) for x_, y_ in adjacent if 0<= x_ < len(seats[0]) and 0 <= y_ < len(seats))
-    for x_, y_ in existing:
-        there = seats[y_][x_]
-        occupied += there == '#'
-        contents.append(there)
-    return occupied
+    adjacent = (seats.get((x_, y_), False) for x_, y_ in itertools.product(x_s, y_s))
+    return sum(adjacent) - seats[(x, y)]
 
 
-def _new_value(around, state) -> str:
-    if state == 'L' and not around:
-        return '#'
-    elif state == '#' and around >= 4:
-        return 'L'
+def _new_value(seat, seats) -> bool:
+    x, y = seat
+    around = _occupied_around(x, y, seats)
+    state = seats[(x, y)]
+    if not state and not around:
+        return True
+    elif state and around >= 4:
+        return False
     else:
         return state
+
+
+def build_seat_dict(data):
+    seats = {}
+    for y, row in enumerate(data.split('\n')):
+        for x, item in enumerate(row):
+            if item != '.':
+                seats[(x, y)] = False
+    return seats
+
+
+
+
+def part_a(data) -> int:
+    """
+    Solution for part a
+
+    Parameters
+    ----------
+    data: str
+
+    Returns
+    -------
+    answer: int
+
+    """
+    seats = build_seat_dict(data)
+
+    for num in itertools.count():
+        new_seats = {seat: _new_value(seat, seats) for seat in seats}
+        unchanged = (new_seats[seat] == seats[seat] for seat in seats)
+        if all(unchanged):
+            return sum(seat for seat in seats.values())
+        seats = new_seats
 
 
 def _find_first_seat(xs, ys, seats) -> str:
@@ -71,36 +100,6 @@ def _new_value_2(around, state) -> str:
         return state
 
 
-def part_a(data) -> int:
-    """
-    Solution for part a
-
-    Parameters
-    ----------
-    data: str
-
-    Returns
-    -------
-    answer: int
-
-    """
-    seats = data.split('\n')
-    while True:
-        new_seats = []
-        for y_index, row in enumerate(seats):
-            new_row = ''
-            for x_index, seat in enumerate(row):
-                around = _occupied_around(x_index, y_index, seats)
-                new_seat = _new_value(around, seat)
-                new_row += new_seat
-            new_seats.append(new_row)
-        if new_seats == seats:
-            return ''.join(seats).count('#')
-
-        else:
-            seats = new_seats
-
-
 def part_b(data, **_) -> int:
     """
     Solution for part b
@@ -114,7 +113,6 @@ def part_b(data, **_) -> int:
     answer: int
 
     """
-    return False
     seats = data.split('\n')
     while True:
         new_seats = []
