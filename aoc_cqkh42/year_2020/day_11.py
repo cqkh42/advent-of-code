@@ -33,8 +33,6 @@ def build_seat_dict(data):
     return seats
 
 
-
-
 def part_a(data) -> int:
     """
     Solution for part a
@@ -57,47 +55,34 @@ def part_a(data) -> int:
             return sum(seat for seat in seats.values())
         seats = new_seats
 
+def _visible_from_seat(seat, seat_locations):
+    x, y = seat
+    found = []
+    # N
+    xs, ys = zip(*seat_locations)
+    highest_x = max(xs)
+    highest_y = max(ys)
 
-def _find_first_seat(xs, ys, seats) -> str:
-    for y_, x_ in zip(ys, xs):
-        if (seat := seats[y_][x_]) != '.':
-            return seat
+    n = range(y-1, -1, -1)
+    s = range(y+1, highest_y+1, 1)
+    e=range(x+1, highest_x+1, 1)
+    w = range(x-1, -1, -1)
 
-
-def _occupied_in_sight(x, y, seats) -> int:
-    contents = []
-    north = range(y-1, -1, -1)
-    south = range(y+1, len(seats))
-    east = range(x+1, len(seats[0]))
-    west = range(x-1, -1, -1)
-    n = _find_first_seat(itertools.repeat(x), north, seats)
-    s = _find_first_seat(itertools.repeat(x), south, seats)
-    contents.extend((n, s))
-    # find E
-    for x_ in east:
-        if (seat := seats[y][x_]) != '.':
-            contents.append(seat)
-            break
-    # find W
-    for x_ in west:
-        if seats[y][x_] != '.':
-            contents.append(seats[y][x_])
-            break
-    angles = (
-        _find_first_seat(x_dir, y_dir, seats)
-        for y_dir, x_dir in itertools.product((north, south), (east, west))
-    )
-    contents.extend(angles)
-    return contents.count('#')
-
-
-def _new_value_2(around, state) -> str:
-    if state == 'L' and not around:
-        return '#'
-    elif state == '#' and around >= 5:
-        return 'L'
-    else:
-        return state
+    n_ = zip(itertools.repeat(x), n)
+    s_ = zip(itertools.repeat(x), s)
+    e_ = zip(e, itertools.repeat(y))
+    w_ = zip(w, itertools.repeat(y))
+    ne = zip(e, n)
+    nw = zip(w, n)
+    se = zip(e, s)
+    sw = zip(w, s)
+    for i in [ne, nw, se, sw, w_, e_, s_, n_]:
+        i = (z for z in i if z in seat_locations)
+        try:
+            found.append(next(i))
+        except StopIteration:
+            pass
+    return set(found)
 
 
 def part_b(data, **_) -> int:
@@ -113,18 +98,23 @@ def part_b(data, **_) -> int:
     answer: int
 
     """
-    seats = data.split('\n')
-    while True:
-        new_seats = []
-        for y_index, row in enumerate(seats):
-            new_row = ''
-            for x_index, seat in enumerate(row):
-                around = _occupied_in_sight(x_index, y_index, seats)
-                new_seat = _new_value_2(around, seat)
-                new_row += new_seat
-            new_seats.append(new_row)
-        if new_seats == seats:
-            return ''.join(seats).count('#')
+    seats = build_seat_dict(data)
+    seat_locations = frozenset(seats)
+    visible = {seat: _visible_from_seat(seat, seat_locations) for seat in seats}
+    # print(visible)
 
-        else:
-            seats = new_seats
+    for num in itertools.count():
+        new_seats = {}
+        for seat in seats:
+            around = sum(seats[v] for v in visible[seat])
+            current = seats[seat]
+            if not current:
+                new_seats[seat] = not bool(around)
+            else:
+                new_seats[seat] = around < 5
+        unchanged = (new_seats[seat] == seats[seat] for seat in seats)
+        if all(unchanged):
+            return sum(seat for seat in seats.values())
+        seats = new_seats
+
+

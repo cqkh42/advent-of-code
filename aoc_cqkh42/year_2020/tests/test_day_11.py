@@ -38,3 +38,15 @@ def test_part_a(data) -> None:
 
 def test_part_b(data) -> None:
     assert day_11.part_b(data) == 26
+
+
+@pytest.mark.parametrize(
+    'seat, answer', [
+        ((0, 0), {(2,0), (0,1), (1,1)}),
+        ((9, 0), {(8, 0), (8, 1), (9,1)})
+    ]
+)
+def test__visible_from_seat(seat, answer, data):
+    seats = day_11.build_seat_dict(data)
+    seat_locations = frozenset(seats)
+    assert day_11._visible_from_seat(seat, seat_locations) == answer
