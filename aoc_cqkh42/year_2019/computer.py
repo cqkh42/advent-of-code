@@ -34,10 +34,7 @@ class Computer:
             return 0
 
     def write_intcode(self, param, value, mode):
-        if mode in [0, 1]:
-            position = param
-        elif mode == 2:
-            position = param + self.relative_base
+        position = param + (self.relative_base * (mode == 2))
         try:
             self.intcode[position] = value
         except IndexError:

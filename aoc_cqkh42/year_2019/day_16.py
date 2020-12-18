@@ -1,5 +1,6 @@
 import itertools
 
+
 def get_pattern(index):
     first_pattern = (
         itertools.repeat(0, index),
