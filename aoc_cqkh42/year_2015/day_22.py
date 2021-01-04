@@ -27,23 +27,19 @@ class State:
 
     player_armor: int = 0
 
-    def change(self, **kwargs):
-        z = copy(self)
-        for k, v in kwargs.items():
-            setattr(z, k, v)
-        if z.mana >= 0 and z.player_health > 0:
-            return z
-
-    def use_mana(self, mana):
-        return {'mana': self.mana - mana, 'used_mana': self.used_mana + mana}
+    def __hash__(self):
+        return hash(
+            (self.player_health, self.boss_health, self.mana, self.poison, self.recharge, self.shield)
+        )
 
     def cast_effect(self, name, duration, mana):
-        to_change = {
-            name: duration,
-            **self.use_mana(mana)
-        }
         if not getattr(self, name):
-            return self.change(**to_change)
+            state = copy(self)
+            setattr(state, name, duration)
+            state.mana -= mana
+            state.used_mana += mana
+            if state.mana >= 0 and state.player_health > 0:
+                return state
 
     def buff(self):
         self.boss_health -= 3 * (self.poison > 0)
@@ -55,12 +51,13 @@ class State:
         self.shield = max(self.shield-1, 0)
 
     def cast_attack(self, mana, boss_change=0, player_change=0):
-        state = self.change(
-            player_health=self.player_health + player_change,
-            boss_health=self.boss_health - boss_change,
-            **self.use_mana(mana)
-        )
-        return state
+        state = copy(self)
+        state.player_health += player_change
+        state.boss_health -= boss_change
+        state.mana -= mana
+        state.used_mana += mana
+        if state.mana >= 0 and state.player_health > 0:
+            return state
 
     def boss_attack(self):
         self.player_health -= self.boss_damage - self.player_armor
@@ -95,30 +92,43 @@ def part_a(data):
     boss_health, boss_damage = parse.parse('Hit Points: {:d}\nDamage: {:d}', data)
 
     cheapest_victory = float('inf')
-    states = [
+    states = {
         State(PLAYER_HEALTH, boss_health, PLAYER_MANA, boss_damage)
-    ]
+    }
+    seen = set()
 
-    for state in states:
+    while states:
+        state = states.pop()
+        if state in seen:
+            continue
+        else:
+            seen.add(state)
         z, cheapest_victory = mm(state, cheapest_victory)
-        states.extend(z)
+        z = set(z)
+        states.update(z)
 
     return cheapest_victory
 
 
-
 def part_b(data, **_):
-    boss_health, boss_damage = parse.parse('Hit Points: {:d}\nDamage: {:d}', data)
+    boss_health, boss_damage = parse.parse('Hit Points: {:d}\nDamage: {:d}',
+                                           data)
 
     cheapest_victory = float('inf')
-    states = [
+    states = {
         State(PLAYER_HEALTH, boss_health, PLAYER_MANA, boss_damage)
-    ]
+    }
+    seen = set()
 
-    for state in states:
-        state = state.change(player_health=state.player_health - 1)
-        if not state:
+    while states:
+        state = states.pop()
+        state.player_health -= 1
+        if state in seen:
             continue
+        else:
+            seen.add(state)
         z, cheapest_victory = mm(state, cheapest_victory)
-        states.extend(z)
+        z = set(z)
+        states.update(z)
+
     return cheapest_victory
