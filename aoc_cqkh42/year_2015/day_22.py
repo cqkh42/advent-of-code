@@ -1,3 +1,4 @@
+from copy import deepcopy, copy
 from dataclasses import dataclass
 
 import parse
@@ -12,6 +13,7 @@ EFFECT_STATS = {
     'recharge': (5, 229)
 }
 
+
 @dataclass
 class State:
     player_health: int
@@ -23,26 +25,23 @@ class State:
     recharge: int = 0
     shield: int = 0
 
-    player_armor = 0
+    player_armor: int = 0
 
     def change(self, **kwargs):
-        d = {
-            "player_health": self.player_health,
-            "boss_health": self.boss_health,
-            "mana": self.mana,
-            "used_mana": self.used_mana,
-            "boss_damage": self.boss_damage,
-            'poison': self.poison,
-            'recharge': self.recharge,
-            'shield': self.shield
-        }
-        d.update(kwargs)
-        state = State(**d)
-        if state.mana >= 0 and state.player_health > 0:
-            return state
+        z = copy(self)
+        for k, v in kwargs.items():
+            setattr(z, k, v)
+        if z.mana >= 0 and z.player_health > 0:
+            return z
 
-    def add_effect(self, name, duration, mana):
-        to_change = {name: duration, 'mana':self.mana-mana, 'used_mana': self.used_mana + mana}
+    def use_mana(self, mana):
+        return {'mana': self.mana - mana, 'used_mana': self.used_mana + mana}
+
+    def cast_effect(self, name, duration, mana):
+        to_change = {
+            name: duration,
+            **self.use_mana(mana)
+        }
         if not getattr(self, name):
             return self.change(**to_change)
 
@@ -55,18 +54,41 @@ class State:
         self.recharge = max(self.recharge-1, 0)
         self.shield = max(self.shield-1, 0)
 
-    def cast(self, mana, boss_change=0, player_change=0):
+    def cast_attack(self, mana, boss_change=0, player_change=0):
         state = self.change(
             player_health=self.player_health + player_change,
-            boss_health=self.boss_health + boss_change,
-            mana=self.mana - mana,
-            used_mana=self.used_mana + mana
+            boss_health=self.boss_health - boss_change,
+            **self.use_mana(mana)
         )
         return state
 
     def boss_attack(self):
-        self.player_health -= self.boss_damage
-        self.player_health += self.player_armor
+        self.player_health -= self.boss_damage - self.player_armor
+
+
+def mm(state, cheapest_victory):
+    states = []
+    state.buff()
+    casts = (state.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)])
+    effects = (
+        state.cast_effect(name, duration, mana) for
+        name, (duration, mana) in EFFECT_STATS.items()
+    )
+    new_states = (*casts, *effects)
+    new_states = (
+        state for state in new_states
+        if state and state.used_mana < cheapest_victory
+    )
+
+    for new_state in new_states:
+        new_state.buff()
+        new_state.boss_attack()
+        if new_state.boss_health <= 0:
+            cheapest_victory = min(cheapest_victory, new_state.used_mana)
+            continue
+        if new_state.player_health > 0:
+            states.append(new_state)
+    return states, cheapest_victory
 
 
 def part_a(data):
@@ -84,27 +106,6 @@ def part_a(data):
     return cheapest_victory
 
 
-def mm(state, cheapest_victory):
-    states = []
-    state.buff()
-    casts = (state.cast(*stats) for stats in [(53, -4, 0), (73, -2, +2)])
-    effects = (state.add_effect(name, duration, mana) for name, (duration, mana) in
-               EFFECT_STATS.items())
-    new_states = (*casts, *effects)
-    new_states = (
-        state for state in new_states
-        if state and state.used_mana < cheapest_victory
-    )
-
-    for new_state in new_states:
-        new_state.buff()
-        new_state.boss_attack()
-        if new_state.boss_health <= 0:
-            cheapest_victory = min(cheapest_victory, new_state.used_mana)
-            continue
-        if new_state.player_health > 0:
-            states.append(new_state)
-    return states, cheapest_victory
 
 def part_b(data, **_):
     boss_health, boss_damage = parse.parse('Hit Points: {:d}\nDamage: {:d}', data)
