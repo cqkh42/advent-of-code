@@ -7,15 +7,9 @@ def part_a(data):
     col = int(col)
 
     triangle_number = col + row - 1
-    that_number = triangle_number * (triangle_number + 1) / 2
-    my_number = int(that_number - row)
-
-    start = 20151125
-    for _ in range(my_number):
-        start *= 252533
-        start %= 33554393
-
-    return start
+    that_number = triangle_number * (triangle_number + 1) // 2
+    my_number = that_number - row
+    return (pow(252533, my_number, 33554393) * 20151125) % 33554393
 
 
 def part_b(*_, **__):

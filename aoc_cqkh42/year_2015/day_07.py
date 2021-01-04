@@ -52,10 +52,10 @@ def part_a(data):
     return register['a']
 
 
-def part_b(data, a):
+def part_b(data, answer_a):
     instructions = data.split('\n')
     instructions = [REGEX.match(inputs).groups() for inputs in instructions]
     b_set_at = [output for *_, output in instructions].index('b')
-    instructions[b_set_at] = (str(a), '', '', 'b')
+    instructions[b_set_at] = (str(answer_a), '', '', 'b')
     register = _assemble_wires(instructions)
     return register['a']

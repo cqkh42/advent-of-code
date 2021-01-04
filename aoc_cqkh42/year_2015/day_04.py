@@ -16,5 +16,5 @@ def part_a(data):
     return _crack_hash(data, '00000')
 
 
-def part_b(data, a):
-    return _crack_hash(data, '000000', start=a)
+def part_b(data, answer_a):
+    return _crack_hash(data, '000000', start=answer_a)
