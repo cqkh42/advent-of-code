@@ -1,83 +1,24 @@
+import functools
 import itertools
 import math
 
 
-def algorithm_u(ns, m):
-    def visit(n, a):
-        ps = [[] for i in range(m)]
-        for j in range(n):
-            ps[a[j + 1]].append(ns[j])
-        return ps
+@functools.lru_cache(maxsize=None)
+def contains_subset_equal_to(set_, target):
+    s = sorted(set_)
+    for c in itertools.count(1):
+        if sum(s[:c]) >= target:
+            max_needed = c
+            break
 
-    def f(mu, nu, sigma, n, a):
-        if mu == 2:
-            yield visit(n, a)
-        else:
-            for v in f(mu - 1, nu - 1, (mu + sigma) % 2, n, a):
-                yield v
-        if nu == mu + 1:
-            a[mu] = mu - 1
-            yield visit(n, a)
-            while a[nu] > 0:
-                a[nu] = a[nu] - 1
-                yield visit(n, a)
-        elif nu > mu + 1:
-            if (mu + sigma) % 2 == 1:
-                a[nu - 1] = mu - 1
-            else:
-                a[mu] = mu - 1
-            if (a[nu] + sigma) % 2 == 1:
-                for v in b(mu, nu - 1, 0, n, a):
-                    yield v
-            else:
-                for v in f(mu, nu - 1, 0, n, a):
-                    yield v
-            while a[nu] > 0:
-                a[nu] = a[nu] - 1
-                if (a[nu] + sigma) % 2 == 1:
-                    for v in b(mu, nu - 1, 0, n, a):
-                        yield v
-                else:
-                    for v in f(mu, nu - 1, 0, n, a):
-                        yield v
-
-    def b(mu, nu, sigma, n, a):
-        if nu == mu + 1:
-            while a[nu] < mu - 1:
-                yield visit(n, a)
-                a[nu] = a[nu] + 1
-            yield visit(n, a)
-            a[mu] = 0
-        elif nu > mu + 1:
-            if (a[nu] + sigma) % 2 == 1:
-                for v in f(mu, nu - 1, 0, n, a):
-                    yield v
-            else:
-                for v in b(mu, nu - 1, 0, n, a):
-                    yield v
-            while a[nu] < mu - 1:
-                a[nu] = a[nu] + 1
-                if (a[nu] + sigma) % 2 == 1:
-                    for v in f(mu, nu - 1, 0, n, a):
-                        yield v
-                else:
-                    for v in b(mu, nu - 1, 0, n, a):
-                        yield v
-            if (mu + sigma) % 2 == 1:
-                a[nu - 1] = 0
-            else:
-                a[mu] = 0
-        if mu == 2:
-            yield visit(n, a)
-        else:
-            for v in b(mu - 1, nu - 1, (mu + sigma) % 2, n, a):
-                yield v
-
-    n = len(ns)
-    a = [0] * (n + 1)
-    for j in range(1, m + 1):
-        a[n - m + j] = j - 1
-    return f(m, n, 0, n, a)
+    for c in itertools.count(1):
+        if sum(s[-c:]) >= target:
+            min_needed = c
+            break
+    for size in range(min_needed, max_needed + 1):
+        possibles = itertools.combinations(set_, size)
+        yield (comb for comb in possibles if sum(comb) == target)
+    return False
 
 
 def find_smallest_groups(parcels, num):
@@ -109,7 +50,6 @@ def valid_group(group, parcels, num, min_length):
 
 def zz(parcels, num):
     parcels = {int(parcel) for parcel in parcels}
-    possible_bundles = (algorithm_u(list(parcels), num))
     group_a = find_smallest_groups(parcels, num)
 
     min_length = min(len(group) for group in group_a)
@@ -120,10 +60,46 @@ def zz(parcels, num):
 
 def part_a(data):
     parcels = data.split('\n')
-    return zz(parcels, 3)
+    parcels = [int(i) for i in parcels]
+
+    packages = frozenset(parcels)
+    total_weight = sum(packages)
+    group_weight = total_weight / 3
+
+    possible_first_groups = contains_subset_equal_to(packages, group_weight)
+
+    for size in possible_first_groups:
+        results = []
+        for group in size:
+            others = packages.difference()
+            if contains_subset_equal_to(others, group_weight):
+                results.append(group)
+        if results:
+            break
+
+    answer = min(math.prod(group) for group in results)
+    return answer
 
 
 def part_b(data, **_):
     parcels = data.split('\n')
-    return zz(parcels, 4)
+    parcels = [int(i) for i in parcels]
 
+    packages = frozenset(parcels)
+    total_weight = sum(packages)
+    group_weight = total_weight / 4
+    possible_first_groups = contains_subset_equal_to(packages, group_weight)
+    #
+    for size in possible_first_groups:
+        results = []
+        for group in size:
+            others = packages.difference()
+            if (bits := contains_subset_equal_to(others, group_weight)):
+                for three_four in bits:
+                    k = others.difference(bits)
+                    if contains_subset_equal_to(k, group_weight):
+                        results.append(group)
+        if results:
+            break
+    answer = min(math.prod(group) for group in results)
+    return answer
