@@ -7,13 +7,17 @@ import itertools
 def find_hashes(door):
     hashes = []
     placed_hashes = [None]*8
+    h = hashlib.md5(door.encode())
     for index in itertools.count():
-        hashed = hashlib.md5(f'{door}{index}'.encode()).hexdigest()
+        hashed = h.copy()
+        hashed.update(str(index).encode())
+        hashed = hashed.hexdigest()
         if hashed.startswith('0'*5):
             hashes.append(hashed[5])
-            if hashed[5] in '01234567' and placed_hashes[int(hashed[5])] is None:
+            if hashed[5] in '01234567' and not placed_hashes[int(hashed[5])]:
                 placed_hashes[int(hashed[5])] = hashed[6]
             if None not in placed_hashes:
+                print(index)
                 return hashes[:8], placed_hashes
 
 
