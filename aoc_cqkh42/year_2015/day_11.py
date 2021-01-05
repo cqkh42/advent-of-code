@@ -49,8 +49,8 @@ def part_a(data):
     return data
 
 
-def part_b(_, a):
-    a = _next_password(a)
+def part_b(_, answer_a):
+    a = _next_password(answer_a)
     while not _is_valid(a):
         a = _next_password(a)
     return a
