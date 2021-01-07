@@ -4,7 +4,7 @@ setup(
     name="aoc_cqkh42",
     version="0.1",
     description="cqkh42's solutions for https://adventofcode.com/",
-    url="https://github.com/myusername/advent-of-code-myusername",
+    url="https://github.com/cqkh42/advent-of-code-cqkh42",
     author="cqkh42",
     author_email="jackcooper93@gmail.com",
     long_description=open("README.md").read(),
@@ -15,6 +15,7 @@ setup(
     ],
     install_requires=[
         "advent-of-code-data >= 0.8.0",
+        'adventocr'
     ],
     packages=find_packages(),
     entry_points={

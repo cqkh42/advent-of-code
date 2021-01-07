@@ -1,4 +1,7 @@
 from collections import defaultdict
+import itertools
+
+import aocr
 
 from aoc_cqkh42.year_2019.computer import Computer
 
@@ -52,45 +55,15 @@ def part_a(data):
     return len(run(inputs, 0))
 
 
-mappings = {
-    ' 11  \n1  1 \n1    \n1    \n1  1 \n 11  ': 'C',
-    '1111 \n1    \n111  \n1    \n1    \n1111 ': 'E',
-    '1  1 \n1 1  \n11   \n1 1  \n1 1  \n1  1 ': 'K',
-    '1  1 \n1  1 \n1  1 \n1  1 \n1  1 \n 11  ': 'U',
-    ' 11  \n1  1 \n1  1 \n1111 \n1  1 \n1  1 ': 'A',
-    '1111 \n   1 \n  1  \n 1   \n1    \n1111 ': 'Z',
-    '1   1\n1   1\n 1 1 \n  1  \n  1  \n  1  ': 'Y',
-    '111  \n1  1 \n111  \n1  1 \n1  1 \n111  ': 'B',
-    '1    \n1    \n1    \n1    \n1    \n1111 ': 'L',
-    '1  1 \n1  1 \n1111 \n1  1 \n1  1 \n1  1 ': 'H',
-    '1111 \n1    \n111  \n1    \n1    \n1    ': 'F',
-    '111  \n1  1 \n1  1 \n111  \n1 1  \n1  1 ': 'R',
-    '111  \n1  1 \n1  1 \n111  \n1    \n1    ': 'P',
-    ' 11  \n1  1 \n1    \n1 11 \n1  1 \n 111 ': 'G'
-}
-
-
-def get_letter(string, index):
-    starts = [((num*40)+(index*5)) for num in range(6)]
-    sliced = [string[start:start+5] for start in starts]
-    sliced = '\n'.join(sliced).replace('0', ' ')
-    return mappings[sliced]
-
-
 def part_b(data, **_):
     inputs = data.split(",")
     inputs = [int(input_) for input_ in inputs]
     results = run(inputs, 1)
-    d = defaultdict(dict)
-    for (x, y), colour in results.items():
-        d[y][x] = colour
+    xs, ys = zip(*results)
+
     rows = []
-    for key in sorted(d, key=lambda x: -x):
-        xs = d[key]
-        max_x = max(xs)
-        row = ["1" if xs.get(x, 0) else " " for x in range(0, max_x + 1)]
+    for y in range(max(ys), min(ys)-1, -1):
+        row = [results.get((x, y)) for x in range(min(xs), max(xs)+1)]
         rows.append(row)
     rows = [row[1:41] for row in rows]
-    master = ''.join([a for b in rows for a in b])
-    letters = ''.join(get_letter(master, i) for i in range(8))
-    return letters
+    return aocr.word(itertools.chain.from_iterable(rows))

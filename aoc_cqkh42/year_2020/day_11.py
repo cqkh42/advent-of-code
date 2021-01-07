@@ -55,6 +55,7 @@ def part_a(data) -> int:
             return sum(seat for seat in seats.values())
         seats = new_seats
 
+
 def _visible_from_seat(seat, seat_locations):
     x, y = seat
     found = []
