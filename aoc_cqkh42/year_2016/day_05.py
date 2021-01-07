@@ -17,7 +17,6 @@ def find_hashes(door):
             if hashed[5] in '01234567' and not placed_hashes[int(hashed[5])]:
                 placed_hashes[int(hashed[5])] = hashed[6]
             if None not in placed_hashes:
-                print(index)
                 return hashes[:8], placed_hashes
 
 
