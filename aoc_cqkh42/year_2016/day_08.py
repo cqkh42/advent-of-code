@@ -2,36 +2,35 @@ import itertools
 import functools
 
 import adventocr
+import parse
+import numpy as np
+
+
+RECT_PARSER = parse.compile(r'rect {:d}x{:d}')
+ROW_PARSER = parse.compile(r'rotate row y={:d} by {:d}')
+COL_PARSER = parse.compile(r'rotate column x={:d} by {:d}')
 
 
 @functools.lru_cache()
 def create_screen(data):
     instructions = data.split('\n')
-    screen = [[0 for _ in range(50)] for _ in range(6)]
+    screen = np.zeros((6, 50))
     for instruction in instructions:
-        parts = instruction.split()
-        if parts[0] == 'rect':
-            x, y = parts[1].split('x')
-            x, y = int(x), int(y)
-            for line in range(y):
-                screen[line][:x] = [1 for _ in range(x)]
-        elif parts[0] == 'rotate' and parts[1] == 'row':
-            y = int(parts[2].split('=')[1])
-            steps = int(parts[-1])
-            screen[y] = screen[y][-steps:] + screen[y][:-steps]
-        elif parts[0] == 'rotate' and parts[1] == 'column':
-            x = int(parts[2].split('=')[1])
-            steps = int(parts[-1])
-            existing = [line[x] for line in screen]
-            new_col = existing[-steps:] + existing[:-steps]
-            for line, val in enumerate(new_col):
-                screen[line][x] = val
-    return screen
+        if instruction.startswith('rect'):
+            x, y = RECT_PARSER.parse(instruction)
+            screen[:y, :x] = 1
+        elif 'row' in instruction:
+            y, steps = ROW_PARSER.parse(instruction)
+            screen[y] = np.roll(screen[y], steps)
+        else:
+            x, steps = COL_PARSER.parse(instruction)
+            screen[:, x] = np.roll(screen[:, x], steps)
+    return screen.astype(int)
 
 
 def part_a(data):
     screen = create_screen(data)
-    return sum(itertools.chain.from_iterable(screen))
+    return screen.sum()
 
 
 def part_b(data, **_):
