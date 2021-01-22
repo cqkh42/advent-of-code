@@ -1,5 +1,4 @@
-from copy import copy
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import queue
 
 import parse
@@ -26,6 +25,7 @@ class State:
     recharge: int = field(default=0, compare=False)
     shield: int=field(default=0, compare=False)
 
+
     player_armor: int = 0
 
     def __hash__(self):
@@ -34,16 +34,13 @@ class State:
         )
 
     def cast_effect(self, name, duration, mana):
-        if not getattr(self, name):
-            state = copy(self)
-            setattr(state, name, duration)
-            state.mana -= mana
-            state.used_mana += mana
-            return state
-        else:
-            state = copy(self)
-            state.player_health = -100
-            return state
+        state = replace(
+            self,
+            mana=self.mana-mana,
+            used_mana=self.used_mana+mana,
+            **{name: duration}
+        )
+        return state
 
     def buff(self):
         self.boss_health -= 3 * (self.poison > 0)
@@ -53,38 +50,41 @@ class State:
         self.poison = max(self.poison-1, 0)
         self.recharge = max(self.recharge-1, 0)
         self.shield = max(self.shield-1, 0)
+        return self
 
     def cast_attack(self, mana, boss_change=0, player_change=0):
-        state = copy(self)
-        state.player_health += player_change
-        state.boss_health -= boss_change
-        state.mana -= mana
-        state.used_mana += mana
-        return state
+        return replace(
+            self,
+            player_health=self.player_health+player_change,
+            boss_health=self.boss_health-boss_change,
+            mana=self.mana-mana,
+            used_mana=self.used_mana+mana
+        )
 
     def boss_attack(self):
+        # self.buff()
         self.player_health -= self.boss_damage - self.player_armor
-
-    def is_valid(self):
-        return self.mana >= 0 and self.player_health > 0
+        return self
 
     def is_complete(self):
         return self.boss_health <= 0
 
     def _next_moves(self):
         self.buff()
-        casts = (self.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)])
+        attacks = (self.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)] if self.mana >= stats[0])
         effects = (
             self.cast_effect(name, duration, mana) for
             name, (duration, mana) in EFFECT_STATS.items()
+            if not getattr(self, name) and self.mana >= mana
         )
-        new_states = (*casts, *effects)
-        new_states = (state for state in new_states if state.is_valid())
+        new_states = (*attacks, *effects)
+        new_states = (state.buff() for state in new_states)
+        # new_states = (state for state in new_states if state.player_health > 0)
+        new_states = (state.boss_attack() for state in new_states)
+        new_states = (state for state in new_states if state.player_health > 0 or state.boss_health <= 0)
 
-        for new_state in new_states:
-            new_state.buff()
-            new_state.boss_attack()
-            yield new_state
+        yield from new_states
+
 
     def next_moves(self):
         yield from self._next_moves()
@@ -108,11 +108,11 @@ def a_star(state):
             continue
         else:
             seen.add(state)
-        z = state.next_moves()
-        for i in z:
-            if i.is_complete():
-                return i.used_mana
-            states.put(i)
+        neighbours = state.next_moves()
+        if state.is_complete():
+            return state.used_mana
+        for neighbour in neighbours:
+            states.put(neighbour)
 
 
 def part_a(data):
