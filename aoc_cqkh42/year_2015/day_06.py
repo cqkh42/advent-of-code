@@ -7,14 +7,14 @@ from aoc_cqkh42 import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile('{:w} {:d},{:d} through {:d},{:d}')
 
-    def map_line(self, line):
-        line = line.replace('turn ', '')
-        action, x_start, y_start, x_end, y_end = self.parser.parse(line)
-        return action, slice(x_start, x_end+1), slice(y_start, y_end+1)
-
     def parse_data(self):
-        lines = [self.map_line(line) for line in self.data.split('\n')]
-        return lines
+        tidied = self.data.replace('turn ', '')
+        instructions = self.parser.findall(tidied)
+        instructions = [
+            (action, slice(x_start, x_end + 1), slice(y_start, y_end + 1))
+            for action, x_start, y_start, x_end, y_end in instructions
+        ]
+        return instructions
 
     def part_a(self):
         lights = np.zeros((1000, 1000), dtype=bool)
