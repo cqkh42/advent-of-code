@@ -1,33 +1,38 @@
+from dataclasses import dataclass
 import itertools
 import math
+from typing import List
+
+import parse
+
+from aoc_cqkh42 import BaseSolution
 
 
-class _Present:
-    def __init__(self, x, y, z):
-        self.x = int(x)
-        self.y = int(y)
-        self.z = int(z)
+@dataclass
+class Present:
+    dims: List[int]
 
-    @property
-    def corners(self):
-        return itertools.combinations((self.x, self.y, self.z), 2)
+    def sides(self):
+        yield from itertools.combinations(self.dims, 2)
 
     def paper(self):
-        sides = [math.prod(corner) for corner in self.corners]
+        sides = [math.prod(corner) for corner in self.sides()]
         return min(sides) + sum(sides)*2
 
     def ribbon(self):
-        perms = (sum(corner) for corner in self.corners)
-        return min(perms)*2 + math.prod((self.x, self.y, self.z))
+        perms = (sum(corner) for corner in self.sides())
+        return min(perms)*2 + math.prod(self.dims)
 
 
-def part_a(data):
-    presents = data.split('\n')
-    presents = (_Present(*data.split('x')) for data in presents)
-    return sum(present.paper() for present in presents)
+class Solution(BaseSolution):
+    parser = parse.compile('{:d}x{:d}x{:d}')
 
+    def parse_data(self):
+        presents = [Present(dims) for dims in self.parser.findall(self.data)]
+        return presents
 
-def part_b(data, **_):
-    presents = data.split('\n')
-    presents = (_Present(*data.split('x')) for data in presents)
-    return sum(present.ribbon() for present in presents)
+    def part_a(self):
+        return sum(present.paper() for present in self.parsed_data)
+
+    def part_b(self):
+        return sum(present.ribbon() for present in self.parsed_data)

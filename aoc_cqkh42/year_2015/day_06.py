@@ -1,35 +1,40 @@
-def _count_lights(instructions, mapping):
-    lights = [[0 for _ in range(1000)] for _ in range(1000)]
-    for line in instructions:
+import numpy as np
+import parse
+
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    parser = parse.compile('{:w} {:d},{:d} through {:d},{:d}')
+
+    def map_line(self, line):
         line = line.replace('turn ', '')
-        action, start, __, end = line.split()
+        action, x_start, y_start, x_end, y_end = self.parser.parse(line)
+        return action, slice(x_start, x_end+1), slice(y_start, y_end+1)
 
-        x_start, y_start = [int(num) for num in start.split(',')]
-        x_end, y_end = [int(num) for num in end.split(',')]
+    def parse_data(self):
+        lines = [self.map_line(line) for line in self.data.split('\n')]
+        return lines
 
-        f = mapping[action]
+    def part_a(self):
+        lights = np.zeros((1000, 1000), dtype=bool)
+        for action, x, y in self.parsed_data:
+            if action == 'on':
+                lights[x, y] = True
+            elif action == 'off':
+                lights[x, y] = False
+            else:
+                lights[x, y] ^= True
+        return lights.sum(dtype=int)
 
-        for x in range(x_start, x_end + 1):
-            new_lights = [f(light) for light in lights[x][y_start:y_end + 1]]
-            lights[x][y_start:y_end + 1] = new_lights
-    return sum([light for row in lights for light in row])
-
-
-def part_a(data):
-    instructions = data.split('\n')
-    mapping = {
-        'on': lambda light: 1,
-        'off': lambda light: 0,
-        'toggle': lambda light: not light
-    }
-    return _count_lights(instructions, mapping)
-
-
-def part_b(data, **_):
-    instructions = data.split('\n')
-    mapping = {
-        'on': lambda light: light + 1,
-        'off': lambda light: max(light - 1, 0),
-        'toggle': lambda light: light + 2
-    }
-    return _count_lights(instructions, mapping)
+    def part_b(self):
+        lights = np.zeros((1000, 1000))
+        for action, x, y in self.parsed_data:
+            if action == 'on':
+                lights[x, y] += 1
+            elif action == 'toggle':
+                lights[x, y] += 2
+            else:
+                lights[x, y] -= 1
+                lights = np.clip(lights, a_min=0, a_max=None)
+        return lights.sum(dtype=int)

@@ -1,20 +1,27 @@
 import itertools
-from functools import lru_cache
 from hashlib import md5
 
-
-@lru_cache(maxsize=None)
-def _crack_hash(key, sequence, start=0):
-    for answer in itertools.count(start):
-        input_ = f'{key}{answer}'.encode()
-        hashed = md5(input_).hexdigest()
-        if hashed.startswith(sequence):
-            return answer
+from aoc_cqkh42 import BaseSolution
 
 
-def part_a(data):
-    return _crack_hash(data, '00000')
+class Solution(BaseSolution):
+    answer_a = None
 
+    def parse_data(self):
+        return md5(self.data.encode())
 
-def part_b(data, answer_a):
-    return _crack_hash(data, '000000', start=answer_a)
+    def part_a(self):
+        answer = self._crack_hash('00000')
+        self.answer_a = answer
+        return answer
+
+    def part_b(self):
+        return self._crack_hash('000000', start=self.answer_a)
+
+    def _crack_hash(self, sequence, start=0):
+        for answer in itertools.count(start):
+            hashed = self.parsed_data.copy()
+            hashed.update(f'{answer}'.encode())
+            hashed = hashed.hexdigest()
+            if hashed.startswith(sequence):
+                return answer
