@@ -1,7 +1,26 @@
 import operator
 import re
 
-REGEX = re.compile(r'([a-z0-9]*) ?([A-Z]*) ?([a-z0-9]*) -> ([a-z0-9]+)')
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    answer_a = None
+    regex = re.compile(r'([a-z0-9]*) ?([A-Z]*) ?([a-z0-9]*) -> ([a-z0-9]+)')
+
+    def parse_data(self):
+        return self.regex.findall(self.data)
+
+    def part_a(self):
+        register = _assemble_wires(self.parsed_data)
+        self.answer_a = register['a']
+        return register['a']
+
+    def part_b(self):
+        b_set_at = [output for *_, output in self.parsed_data].index('b')
+        self.parsed_data[b_set_at] = (str(self.answer_a), '', '', 'b')
+        register = _assemble_wires(self.parsed_data)
+        return register['a']
 
 
 def _parse_input(signal, register):
@@ -43,19 +62,3 @@ def _assemble_wires(instructions):
         else:
             register[destination] = value
     return register
-
-
-def part_a(data):
-    instructions = data.split('\n')
-    instructions = [REGEX.match(inputs).groups() for inputs in instructions]
-    register = _assemble_wires(instructions)
-    return register['a']
-
-
-def part_b(data, answer_a):
-    instructions = data.split('\n')
-    instructions = [REGEX.match(inputs).groups() for inputs in instructions]
-    b_set_at = [output for *_, output in instructions].index('b')
-    instructions[b_set_at] = (str(answer_a), '', '', 'b')
-    register = _assemble_wires(instructions)
-    return register['a']
