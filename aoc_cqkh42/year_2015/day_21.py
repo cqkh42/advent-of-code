@@ -3,6 +3,48 @@ import itertools
 import queue
 import math
 
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def parse_data(self):
+        boss_stats = self.data.split('\n')
+        boss_stats = dict(stat.split(': ') for stat in boss_stats)
+        boss_stats = {k: int(v) for k, v in boss_stats.items()}
+        boss_damage = boss_stats['Damage']
+        boss_health = boss_stats['Hit Points']
+        boss_armor = boss_stats['Armor']
+
+        boss = Stats(0, -boss_armor, -boss_damage)
+        return boss, boss_health
+
+    def part_a(self):
+        boss, boss_health = self.parsed_data
+
+        options = queue.PriorityQueue()
+
+        for items in itertools.product(weapons, armors, rings, rings):
+            options.put(sum(items, boss))
+
+        while options.not_empty:
+            items = options.get()
+            if items.winner(boss_health):
+                return items.cost
+
+    def part_b(self):
+        boss, boss_health = self.parsed_data
+        options = queue.PriorityQueue()
+
+        for items in itertools.product(weapons, armors, rings, rings):
+            t = sum(items, boss)
+            t.cost *= -1
+            options.put(t)
+
+        while options.not_empty:
+            items = options.get()
+            if not items.winner(boss_health):
+                return -items.cost
+
 
 @dataclass(order=True)
 class Stats:
@@ -59,42 +101,3 @@ rings = [
     Stats(0, 0, 0),
     Stats(0, 0, 0)
 ]
-
-def _parse_data(data):
-    boss_stats = data.split('\n')
-    boss_stats = dict(stat.split(': ') for stat in boss_stats)
-    boss_stats = {k: int(v) for k, v in boss_stats.items()}
-    boss_damage = boss_stats['Damage']
-    boss_health = boss_stats['Hit Points']
-    boss_armor = boss_stats['Armor']
-
-    boss = Stats(0, -boss_armor, -boss_damage)
-    return boss, boss_health
-
-def part_a(data):
-    boss, boss_health = _parse_data(data)
-
-    options = queue.PriorityQueue()
-
-    for items in itertools.product(weapons, armors, rings, rings):
-        options.put(sum(items, boss))
-
-    while options.not_empty:
-        items = options.get()
-        if items.winner(boss_health):
-            return items.cost
-
-
-def part_b(data, **_):
-    boss, boss_health = _parse_data(data)
-    options = queue.PriorityQueue()
-
-    for items in itertools.product(weapons, armors, rings, rings):
-        t = sum(items, boss)
-        t.cost *= -1
-        options.put(t)
-
-    while options.not_empty:
-        items = options.get()
-        if not items.winner(boss_health):
-            return -items.cost
