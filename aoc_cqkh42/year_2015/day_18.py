@@ -1,49 +1,52 @@
-def _new_state(x, y, lights):
-    around_it = [(x - 1, y + 1), (x, y + 1), (x + 1, y + 1), (x - 1, y), (x + 1, y), (x - 1, y - 1), (x, y - 1),
-                 (x + 1, y - 1)]
+import numpy as np
+from scipy.ndimage import generic_filter
 
-    lit = sum([lights.get(light) == '#' for light in around_it])
-    if lights[(x, y)] == '#':
-        if lit == 2 or lit == 3:
-            return '#'
-        return '.'
-    else:
-        if lit == 3:
-            return '#'
-        return '.'
+from aoc_cqkh42 import BaseSolution
 
 
-def part_a(data, steps=100):
-    light_string = data.split('\n')
-    lights = {}
-    for y_index, row in enumerate(light_string):
-        for x_index, item in enumerate(row):
-            lights[(x_index, y_index)] = item
-
-    for _ in range(steps):
-        lights = {light: _new_state(*light, lights) for light in lights}
-    return sum([light == '#' for light in lights.values()])
+class Solution(BaseSolution):
+    def parse_data(self):
+        rows = [list(row) for row in self.data.split('\n')]
+        rows = np.array(rows)
+        rows = rows == '#'
+        return rows
 
 
-def part_b(data, steps=100, **_):
-    light_string = data
-    light_string = light_string.split('\n')
-    end_of_x = len(light_string[0]) - 1
-    end_of_y = len(light_string) - 1
+    def part_a(self):
+        light_arr = self.parsed_data.copy()
+        f = [[1,1,1], [1,0,1], [1,1,1]]
 
-    lights = {}
-    for y_index, row in enumerate(light_string):
-        for x_index, item in enumerate(row):
-            lights[(x_index, y_index)] = item
-    lights[(0, 0)] = '#'
-    lights[(0, end_of_y)] = '#'
-    lights[(end_of_x, 0)] = '#'
-    lights[(end_of_x, end_of_y)] = '#'
+        for _ in range(100):
+            neighbours = generic_filter(light_arr, lambda x: x.sum(), footprint=f, mode='constant', output=int)
+            off = np.logical_not(light_arr)
+            twos = neighbours == 2
+            threes = neighbours == 3
+            two_or_three = np.logical_or(twos, threes)
+            on_and_on = np.logical_and(light_arr, two_or_three)
+            off_and_on = threes & off
+            light_arr = np.logical_or(on_and_on, off_and_on)
+        return light_arr.sum()
 
-    for _ in range(steps):
-        lights = {light: _new_state(*light, lights) for light in lights}
-        lights[(0, 0)] = '#'
-        lights[(end_of_x, 0)] = '#'
-        lights[(0, end_of_y)] = '#'
-        lights[(end_of_x, end_of_y)] = '#'
-    return sum([light == '#' for light in lights.values()])
+    def part_b(self):
+        light_arr = self.parsed_data
+        light_arr[0, 0] = 1
+        light_arr[0, -1] = 1
+        light_arr[-1, 0] = 1
+        light_arr[-1, -1] = 1
+
+        for _ in range(100):
+            # print(light_arr.sum())
+            # print(light_arr)
+            neighbours = generic_filter(light_arr, lambda x: x.sum(), footprint=[[1,1,1], [1,0,1], [1,1,1]], mode='constant', output=int)
+
+            two_or_three = np.logical_or(neighbours == 2, neighbours == 3)
+            on_and_on = light_arr & two_or_three
+            off_and_on = np.logical_and(np.logical_not(light_arr), neighbours == 3)
+            light_arr = np.logical_or(on_and_on, off_and_on).astype(int)
+            light_arr[0,0] = 1
+            light_arr[0,-1] = 1
+            light_arr[-1, 0] = 1
+            light_arr [-1, -1] = 1
+            # A light which is on stays on when 2 or 3 neighbors are on, and turns off otherwise.
+            # A light which is off turns on if exactly 3 neighbors are on, and stays off otherwise.
+        return light_arr.sum()

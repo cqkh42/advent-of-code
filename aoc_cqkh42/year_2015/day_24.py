@@ -3,6 +3,57 @@ import itertools
 import math
 
 
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def part_a(self):
+        parcels = self.data.split('\n')
+        parcels = [int(i) for i in parcels]
+
+        packages = frozenset(parcels)
+        total_weight = sum(packages)
+        group_weight = total_weight / 3
+
+        possible_first_groups = contains_subset_equal_to(packages,
+                                                         group_weight)
+
+        for size in possible_first_groups:
+            results = []
+            for group in size:
+                others = packages.difference()
+                if contains_subset_equal_to(others, group_weight):
+                    results.append(group)
+            if results:
+                break
+
+        answer = min(math.prod(group) for group in results)
+        return answer
+
+    def part_b(self):
+        parcels = self.data.split('\n')
+        parcels = [int(i) for i in parcels]
+
+        packages = frozenset(parcels)
+        total_weight = sum(packages)
+        group_weight = total_weight / 4
+        possible_first_groups = contains_subset_equal_to(packages,
+                                                         group_weight)
+        #
+        for size in possible_first_groups:
+            results = []
+            for group in size:
+                others = packages.difference()
+                if (
+                bits := contains_subset_equal_to(others, group_weight)):
+                    for three_four in bits:
+                        k = others.difference(bits)
+                        if contains_subset_equal_to(k, group_weight):
+                            results.append(group)
+            if results:
+                break
+        answer = min(math.prod(group) for group in results)
+        return answer
 @functools.lru_cache(maxsize=None)
 def contains_subset_equal_to(set_, target):
     s = sorted(set_)
@@ -57,49 +108,3 @@ def zz(parcels, num):
                len(group) == min_length and valid_group(group, parcels, num, min_length))
     return min(math.prod(group) for group in group_a)
 
-
-def part_a(data):
-    parcels = data.split('\n')
-    parcels = [int(i) for i in parcels]
-
-    packages = frozenset(parcels)
-    total_weight = sum(packages)
-    group_weight = total_weight / 3
-
-    possible_first_groups = contains_subset_equal_to(packages, group_weight)
-
-    for size in possible_first_groups:
-        results = []
-        for group in size:
-            others = packages.difference()
-            if contains_subset_equal_to(others, group_weight):
-                results.append(group)
-        if results:
-            break
-
-    answer = min(math.prod(group) for group in results)
-    return answer
-
-
-def part_b(data, **_):
-    parcels = data.split('\n')
-    parcels = [int(i) for i in parcels]
-
-    packages = frozenset(parcels)
-    total_weight = sum(packages)
-    group_weight = total_weight / 4
-    possible_first_groups = contains_subset_equal_to(packages, group_weight)
-    #
-    for size in possible_first_groups:
-        results = []
-        for group in size:
-            others = packages.difference()
-            if (bits := contains_subset_equal_to(others, group_weight)):
-                for three_four in bits:
-                    k = others.difference(bits)
-                    if contains_subset_equal_to(k, group_weight):
-                        results.append(group)
-        if results:
-            break
-    answer = min(math.prod(group) for group in results)
-    return answer

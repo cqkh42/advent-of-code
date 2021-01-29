@@ -1,16 +1,18 @@
 import re
 
+from aoc_cqkh42 import BaseSolution
 
-def part_a(data):
-    row, col = re.findall(r'\d+', data)
-    row = int(row)
-    col = int(col)
+class Solution(BaseSolution):
 
-    triangle_number = col + row - 1
-    that_number = triangle_number * (triangle_number + 1) // 2
-    my_number = that_number - row
-    return (pow(252533, my_number, 33554393) * 20151125) % 33554393
+    def part_a(self):
+        row, col = re.findall(r'\d+', self.data)
+        row = int(row)
+        col = int(col)
 
+        triangle_number = col + row - 1
+        that_number = triangle_number * (triangle_number + 1) // 2
+        my_number = that_number - row
+        return (pow(252533, my_number, 33554393) * 20151125) % 33554393
 
-def part_b(*_, **__):
-    return None
+    def part_b(self):
+        return None

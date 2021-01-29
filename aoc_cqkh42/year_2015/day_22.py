@@ -4,6 +4,28 @@ import queue
 import parse
 
 
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def parse_data(self):
+        boss_health, boss_damage = parse.parse(
+            'Hit Points: {:d}\nDamage: {:d}', self.data
+        )
+        return boss_health, boss_damage
+
+    def part_a(self):
+        boss_health, boss_damage = self.parsed_data
+        starting_state = State(PLAYER_HEALTH, boss_health, PLAYER_MANA,
+                               boss_damage)
+        return a_star(starting_state)
+
+    def part_b(self):
+        boss_health, boss_damage = self.parsed_data
+        starting_state = StateB(PLAYER_HEALTH, boss_health, PLAYER_MANA,
+                                boss_damage)
+        return a_star(starting_state)
+
 PLAYER_HEALTH = 50
 PLAYER_MANA = 500
 EFFECT_STATS = {
@@ -79,7 +101,6 @@ class State:
         )
         new_states = (*attacks, *effects)
         new_states = (state.buff() for state in new_states)
-        # new_states = (state for state in new_states if state.player_health > 0)
         new_states = (state.boss_attack() for state in new_states)
         new_states = (state for state in new_states if state.player_health > 0 or state.boss_health <= 0)
 
@@ -115,18 +136,4 @@ def a_star(state):
             states.put(neighbour)
 
 
-def part_a(data):
-    boss_health, boss_damage = parse.parse(
-        'Hit Points: {:d}\nDamage: {:d}', data
-    )
-    starting_state = State(PLAYER_HEALTH, boss_health, PLAYER_MANA, boss_damage)
-    return a_star(starting_state)
 
-
-def part_b(data, **_):
-    boss_health, boss_damage = parse.parse(
-        'Hit Points: {:d}\nDamage: {:d}', data
-    )
-    starting_state = StateB(PLAYER_HEALTH, boss_health, PLAYER_MANA, boss_damage)
-    starting_state.player_health -= 1
-    return a_star(starting_state)
