@@ -17,18 +17,18 @@ class Solution(BaseSolution):
         return instructions
 
     def part_a(self):
-        lights = np.zeros((1000, 1000), dtype=bool)
+        lights = np.zeros((1000, 1000), dtype=int)
         for action, x, y in self.parsed_data:
             if action == 'on':
-                lights[x, y] = True
+                lights[x, y] = 1
             elif action == 'off':
-                lights[x, y] = False
+                lights[x, y] = 0
             else:
-                lights[x, y] ^= True
-        return lights.sum(dtype=int)
+                lights[x, y] ^= 1
+        return lights.sum()
 
     def part_b(self):
-        lights = np.zeros((1000, 1000))
+        lights = np.zeros((1000, 1000), dtype=int)
         for action, x, y in self.parsed_data:
             if action == 'on':
                 lights[x, y] += 1
@@ -37,4 +37,4 @@ class Solution(BaseSolution):
             else:
                 lights[x, y] -= 1
                 lights = np.clip(lights, a_min=0, a_max=None)
-        return lights.sum(dtype=int)
+        return lights.sum()

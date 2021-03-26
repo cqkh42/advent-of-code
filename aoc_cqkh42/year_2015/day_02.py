@@ -13,7 +13,7 @@ class Present:
     dims: List[int]
 
     def sides(self):
-        yield from itertools.combinations(self.dims, 2)
+        return itertools.combinations(self.dims, 2)
 
     def paper(self):
         sides = [math.prod(corner) for corner in self.sides()]

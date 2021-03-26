@@ -1,15 +1,15 @@
 import itertools
 
+import numpy as np
+
 from aoc_cqkh42 import BaseSolution
 
 def _trace_path(steps):
     mapping_dict = {'>': (1, 0), '<': (-1, 0), '^': (0, 1), 'v': (0, -1)}
-    x, y = zip(*(mapping_dict[step] for step in steps))
-    x = itertools.accumulate(x)
-    y = itertools.accumulate(y)
-    visited = set(zip(x, y))
-    visited.add((0, 0))
-    return visited
+    changes = (mapping_dict[step] for step in steps)
+    a = itertools.accumulate(changes, np.add, initial=np.array([0, 0]))
+    b = {tuple(i.tolist()) for i in a}
+    return b
 
 
 class Solution(BaseSolution):
