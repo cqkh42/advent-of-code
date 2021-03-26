@@ -1,46 +1,45 @@
 from collections import defaultdict
 
-def part_a(data):
-    directions = data.split(', ')
+import parse
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def parse_data(self):
+        return list(parse.findall(r'{:l}{:d}', self.data))
+
     compass = ('N', 'E', 'S', 'W')
-    travelled = defaultdict(int)
 
-    current_direction_index = 0
-
-    for change, *distance in directions:
-        if change == 'R':
-            current_direction_index += 1
-        else:
-            current_direction_index -= 1
-        current_direction_index %= 4
-        current_direction = compass[current_direction_index]
-        travelled[current_direction] += int(''.join(distance))
-
-    return abs(travelled['E'] - travelled['W']) + abs(
-        travelled['N'] - travelled['S'])
+    def direction(self, current, turn):
+        incr = 1 if turn == 'R' else -1
+        c_index = self.compass.index(current)
+        new = (c_index + incr) % 4
+        return self.compass[new]
 
 
-def part_b(data, **_):
-    directions = data.split(', ')
-    compass = ('N', 'E', 'S', 'W')
-    visited = set((0, 0))
-    travelled = defaultdict(int)
+    def part_a(self):
+        travelled = defaultdict(int)
 
-    current_direction_index = 0
-    dir_changes = {'R': 1, 'L': -1}
+        current_direction = 'N'
 
-    # directions = ['R8', 'R4', 'R4', 'R8']
-    for change, *distance in directions:
-        distance = int(''.join(distance))
-        current_direction_index += dir_changes[change]
-        current_direction = compass[current_direction_index % 4]
-        try:
-            for step in range(1, distance + 1):
+        for change, distance in self.parsed_data:
+            current_direction = self.direction(current_direction, change)
+            travelled[current_direction] += distance
+
+        return abs(travelled['E'] - travelled['W']) + abs(
+            travelled['N'] - travelled['S'])
+
+    def part_b(self):
+        visited = {(0, 0)}
+        travelled = defaultdict(int)
+        current_direction = 'N'
+
+        for change, distance in self.parsed_data:
+            current_direction = self.direction(current_direction, change)
+            for step in range(distance):
                 travelled[current_direction] += 1
                 at = ((travelled['E'] - travelled['W']),
                       (travelled['N'] - travelled['S']))
                 if at in visited:
                     return abs(at[0]) + abs(at[1])
                 visited.add(at)
-        except IndexError:
-            break

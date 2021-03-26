@@ -1,3 +1,6 @@
 pytest
 setuptools
 adventocr
+parse
+numpy
+scipy
