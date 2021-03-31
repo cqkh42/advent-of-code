@@ -1,39 +1,40 @@
-import re
+from dataclasses import dataclass
+import itertools
 
-def part_a(data):
-    triangles = data.split('\n')
-    triangles = [re.split(r'\s+', triangle.strip()) for triangle in triangles]
-    triangles = [[int(num) for num in triangle] for triangle in triangles]
+import parse
 
-    valid = [triangle for triangle in triangles if
-             triangle[0] + triangle[1] > triangle[2]]
-    valid = [triangle for triangle in valid if
-             triangle[0] + triangle[2] > triangle[1]]
-    valid = [triangle for triangle in valid if
-             triangle[1] + triangle[2] > triangle[0]]
+from aoc_cqkh42 import BaseSolution
 
-    return len(valid)
+@dataclass
+class Triangle:
+    x: int
+    y: int
+    z: int
+
+    def is_valid(self):
+        a = self.x + self.y > self.z
+        b = self.x + self.z > self.y
+        c = self.y + self.z > self.x
+        return a and b and c
 
 
-def part_b(data, **_):
-    triangles = data.split('\n')
-    triangles = [re.split(r'\s+', triangle.strip()) for triangle in triangles]
-    triangles = [[int(num) for num in triangle] for triangle in triangles]
+def grouper(iterable, n):
+    """Collect data into fixed-length chunks or blocks"""
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
+    args = [iter(iterable)] * n
+    return itertools.zip_longest(*args)
 
-    triangles = [
-        *[triangle[0] for triangle in triangles],
-        *[triangle[1] for triangle in triangles],
-        *[triangle[2] for triangle in triangles]
-    ]
 
-    triangles = [(triangles[index:index + 3]) for index in
-                 range(0, len(triangles), 3)]
+class Solution(BaseSolution):
+    def parse_data(self):
+        rows = list(parse.findall('{:>d} {:>d} {:>d}', self.data))
+        return rows
 
-    valid = [triangle for triangle in triangles if
-             triangle[0] + triangle[1] > triangle[2]]
-    valid = [triangle for triangle in valid if
-             triangle[0] + triangle[2] > triangle[1]]
-    valid = [triangle for triangle in valid if
-             triangle[1] + triangle[2] > triangle[0]]
+    def part_a(self):
+        triangles = [Triangle(*row) for row in self.parsed_data]
+        return sum(triangle.is_valid() for triangle in triangles)
 
-    return len(valid)
+    def part_b(self):
+        vertically = itertools.chain.from_iterable(zip(*self.parsed_data))
+        triangles = (Triangle(*row) for row in grouper(vertically, 3))
+        return sum(triangle.is_valid() for triangle in triangles)
