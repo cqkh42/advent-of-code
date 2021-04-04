@@ -1,30 +1,35 @@
 import hashlib
-import functools
 import itertools
 
-
-@functools.lru_cache
-def find_hashes(door):
-    hashes = []
-    placed_hashes = [None]*8
-    h = hashlib.md5(door.encode())
-    for index in itertools.count():
-        hashed = h.copy()
-        hashed.update(str(index).encode())
-        hashed = hashed.hexdigest()
-        if hashed.startswith('0'*5):
-            hashes.append(hashed[5])
-            if hashed[5] in '01234567' and not placed_hashes[int(hashed[5])]:
-                placed_hashes[int(hashed[5])] = hashed[6]
-            if None not in placed_hashes:
-                return hashes[:8], placed_hashes
+from aoc_cqkh42 import BaseSolution
 
 
-def part_a(data):
-    hashes = find_hashes(data)[0]
-    return ''.join(hashes)
+class Solution(BaseSolution):
+    def parse_data(self):
+        hashes = ''
+        placed_hashes = [''] * 8
+        base_hash = hashlib.md5(self.data.encode())
+        for index in itertools.count():
+            hashed = base_hash.copy()
+            hashed.update(str(index).encode())
+            hashed = hashed.hexdigest()
+            start, k, v = hashed[:5], hashed[5], hashed[6]
+            if start == '0'*5:
+                if len(hashes) < 8:
+                    hashes += k
+                try:
+                    z = int(k)
+                    if z < 8 and not placed_hashes[z]:
+                        placed_hashes[z] = v
+                except ValueError:
+                    continue
+            if all(placed_hashes):
+                return hashes, placed_hashes
 
+    def part_a(self):
+        hashes = self.parsed_data[0]
+        return hashes
 
-def part_b(data, **_):
-    hashes = find_hashes(data)[1]
-    return ''.join(hashes)
+    def part_b(self):
+        hashes = self.parsed_data[1]
+        return ''.join(hashes)

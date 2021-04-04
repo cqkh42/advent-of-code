@@ -1,37 +1,51 @@
-import re
+from dataclasses import dataclass
 
-tls = re.compile(r'(\w)(?!\1)(\w)\2\1')
+import regex
+
+from aoc_cqkh42 import BaseSolution
+
+@dataclass()
+class IP:
+    def __init__(self, ip):
+        self.ip = ip
+        self.outside = regex.sub(r'\[.*?]', ' ', ip)
+        self.inside = ' '.join(regex.findall(r'\[(\w+?)\]', ip))
 
 
-def is_tls(ip):
-    outside = re.sub(r'\[.*?\]', ' ', ip)
-    outside_match = re.search(tls, outside)
-    inside = re.search(r'\[\w*{}\w*\]'.format(tls.pattern), ip)
+    def tls(self):
+        outside_match = bool(abba.search(self.outside))
+        inside_match = bool(abba.search(self.inside))
+        return outside_match and not inside_match
 
-    return outside_match and not inside
+    def ssl(self):
+        i = set(regex.findall(r'(\w)(?!\1)(\w)\1', self.inside, overlapped=True))
+
+        o =set(regex.findall(r'(\w)(?!\1)(\w)\1', self.outside, overlapped=True))
+        o = {(b, a) for a, b in o}
+        return bool(i.intersection(o))
+
+
+class Solution(BaseSolution):
+    def parse_data(self):
+        ips = self.data.split('\n')
+        ips = [IP(ip) for ip in ips]
+        return ips
+
+    def part_a(self):
+        return sum(ip.tls() for ip in self.parsed_data)
+
+    def part_b(self):
+        return sum(ip.ssl() for ip in self.parsed_data)
+
+
+abba = regex.compile(r'(\w)(?!\1)(\w)\2\1')
+
+abba_inside_pattern = r'\[\w*{}\w*\]'.format(abba.pattern)
+abba_inside = regex.compile(abba_inside_pattern)
+
 
 
 def find_abas(string):
-    abas = [string[index:index+3] for index in range(len(string)-2) if string[index] == string[index+2]]
-    abas = {aba for aba in abas if ' ' not in aba}
-    return abas
-
-def is_ssl(ip):
-    inside = ' '.join(re.findall(r'\[(\w+?)\]', ip))
-    outside = re.sub(r'\[.*?\]', ' ', ip)
-    inside_abas = find_abas(inside)
-    inside_babs = {'{1}{0}{1}'.format(*string) for string in inside_abas}
-    return inside_babs.intersection(find_abas(outside))
-
-
-def part_a(data):
-    ips = data.split('\n')
-    good = [ip for ip in ips if is_tls(ip)]
-    return len(good)
-
-
-def part_b(data, **_):
-    ips = data.split('\n')
-
-    good = [ip for ip in ips if is_ssl(ip)]
-    return len(good)
+    abas = regex.findall(r'(\w)(?!\1)(\w)(\1)', string, overlapped=True)
+    new_abas = {''.join(i) for i in abas}
+    return new_abas

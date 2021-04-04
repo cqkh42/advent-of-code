@@ -1,23 +1,19 @@
 from collections import Counter
 
-
-def part_a(data):
-    messages = data.split('\n')
-
-    answer_1 = ''
-    for index in range(len(messages[0])):
-        col = Counter(message[index] for message in messages)
-        letter = col.most_common(1)[0][0]
-        answer_1 += letter
-    return answer_1
+from aoc_cqkh42 import BaseSolution
 
 
-def part_b(data, **_):
-    messages = data.split('\n')
+class Solution(BaseSolution):
+    def parse_data(self):
+        rows = self.data.split('\n')
+        cols = zip(*rows)
+        counters = [Counter(col) for col in cols]
+        return counters
 
-    answer_2 = ''
-    for index in range(len(messages[0])):
-        col = Counter(message[index] for message in messages)
-        letter = col.most_common()[-1][0]
-        answer_2 += letter
-    return answer_2
+    def part_a(self):
+        a = [col.most_common(1)[0][0] for col in self.parsed_data]
+        return ''.join(a)
+
+    def part_b(self):
+        a = [col.most_common()[-1][0] for col in self.parsed_data]
+        return ''.join(a)

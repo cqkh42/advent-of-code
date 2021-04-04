@@ -4,3 +4,4 @@ adventocr
 parse
 numpy
 scipy
+regex
