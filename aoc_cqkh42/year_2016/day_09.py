@@ -3,6 +3,29 @@ import re
 
 import parse
 
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def part_a(self):
+        return len(do_sub(self.data))
+
+    def part_b(self):
+        c = {part: 1 for part in split(self.data)}
+        total = 0
+
+        while c:
+            new_parts = defaultdict(int)
+            for k, v in c.items():
+                if k.count('(') == 1:
+                    total += len(do_sub(k)) * v
+                else:
+                    k = do_sub(k)
+                    for i in split(k):
+                        new_parts[i] += v
+            c = new_parts
+        return total
+
 
 BRACKET_REGEX = re.compile(r'\((\d+)+x(\d+)\)')
 p = parse.compile(r'({:d}x{:d})')
@@ -28,24 +51,3 @@ def split(string):
         parts.append(string[:end])
         string = string[end:]
     return parts
-
-
-def part_a(data):
-    return len(do_sub(data))
-
-
-def part_b(data, **_):
-    c = {part: 1 for part in split(data)}
-    total = 0
-
-    while c:
-        new_parts = defaultdict(int)
-        for k, v in c.items():
-            if k.count('(') == 1:
-                total += len(do_sub(k)) * v
-            else:
-                k = do_sub(k)
-                for i in split(k):
-                    new_parts[i] += v
-        c = new_parts
-    return total

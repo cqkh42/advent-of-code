@@ -1,75 +1,60 @@
 from collections import defaultdict
+from dataclasses import dataclass, field
 import itertools
 
 import parse
 
-def part_a(data):
-    instructions = data.split('\n')
+from aoc_cqkh42 import BaseSolution
 
-    bots = defaultdict(set)
-    bot_instructions = {}
+@dataclass
+class Bot:
+    holding: set = field(default_factory=lambda: set())
 
-    for instruction in instructions:
-        if instruction.startswith('value'):
-            new_value, new_bot = parse.search('value {:d} goes to bot {:d}', instruction)
-            bots[new_bot].add(new_value)
-        elif instruction.startswith('bot'):
-            p = parse.parse('bot {:d} gives low to {:w} {:d} and high to {:w} {:d}', instruction)
-            bot, low_out, low, high_out, high = p
-            bot_instructions[bot] = {
-                'high': [high_out, high],
-                'low': [low_out, low]
-            }
+    def add(self, value):
+        self.holding.add(value)
 
-    outputs = {}
-    for bot, instruction in itertools.cycle(bot_instructions.items()):
-        holding = bots[bot]
-        if holding == {17, 61}:
-            break
-        if len(holding) == 2:
-            for level, num in zip(['low', 'high'], sorted(holding)):
-                where, who = instruction[level]
-                if where == 'bot':
-                    bots[who].add(num)
-                else:
-                    outputs[who] = num
-            bots[bot] = set()
+    @property
+    def low(self):
+        return min(self.holding)
 
-    return bot
+    @property
+    def high(self):
+        return max(self.holding)
 
 
-def part_b(data, **_):
-    instructions = data.split('\n')
-
-    bots = defaultdict(list)
+class Solution(BaseSolution):
+    bots = defaultdict(Bot)
+    instructions = {}
     outputs = {}
 
-    setting = [instruction for instruction in instructions if
-               instruction.startswith('value')]
-    for instruction in setting:
-        _, value, *__, bot = instruction.split(' ')
-        bots[int(bot)].append(int(value))
+    def parse_data(self):
+        v = parse.findall('value {:d} goes to bot {:d}', self.data)
+        for v_, b in v:
+            self.bots[b].add(v_)
 
-    bot_instructions = [instruction.split() for instruction in instructions if
-                        instruction.startswith('bot')]
-    bot_instructions = {
-        int(instruction[1]): {
-            'high': [instruction[-2], int(instruction[-1])],
-            'low': [instruction[5], int(instruction[6])]
-        } for instruction in bot_instructions
-    }
+        z = parse.findall('bot {bot:d} gives low to {low[bot]:w} {low[value]:d} and high to {high[bot]:w} {high[value]:d}', self.data)
+        self.instructions = {i['bot']: i.named for i in z}
 
-    for bot, instruction in itertools.cycle(bot_instructions.items()):
-        holding = bots[bot]
-        if 0 in outputs and 1 in outputs and 2 in outputs:
-            break
-        if len(holding) == 2:
-            for level, num in zip(['low', 'high'], sorted(holding)):
-                where, who = instruction[level]
-                if where == 'bot':
-                    bots[who].append(num)
-                else:
-                    outputs[who] = num
-            bots[bot] = []
+    def part_a(self):
+        for bot, instruction in itertools.cycle(self.instructions.items()):
+            holding = self.bots[bot]
+            if holding == Bot({17, 61}):
+                return bot
+            self.update(bot, instruction)
 
-    return outputs[0] * outputs[1] * outputs[2]
+    def part_b(self):
+        for bot, instruction in itertools.cycle(self.instructions.items()):
+            if {0, 1, 2}.issubset(self.outputs):
+                return self.outputs[0] * self.outputs[1] * self.outputs[2]
+            self.update(bot, instruction)
+
+    def update(self, bot_id, instruction):
+        holding = self.bots[bot_id]
+        if len(holding.holding) < 2:
+            return
+        for end in ['low', 'high']:
+            who = instruction[end]['value']
+            if instruction[end]['bot'] == 'bot':
+                self.bots[who].add(getattr(holding, end))
+            else:
+                self.outputs[who] = getattr(holding, end)
