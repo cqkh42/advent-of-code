@@ -1,3 +1,18 @@
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def part_a(self):
+        registers = {'a': 0, 'b': 0, 'c': 0, 'd': 0}
+        instructions = self.data.split('\n')
+        return run_program(instructions, registers)
+
+    def part_b(self):
+        registers = {'a': 0, 'b': 0, 'c': 1, 'd': 0}
+        instructions = self.data.split('\n')
+        return run_program(instructions, registers)
+
+
 def run_program(instructions, registers):
     instructions = [instruction.split() for instruction in instructions]
     index = 0
@@ -20,15 +35,3 @@ def run_program(instructions, registers):
                 if int(val):
                     incr = int(values[0])
             index += incr
-
-
-def part_a(data):
-    registers = {'a': 0, 'b': 0, 'c': 0, 'd': 0}
-    instructions = data.split('\n')
-    return run_program(instructions, registers)
-
-
-def part_b(data, **_):
-    registers = {'a': 0, 'b': 0, 'c': 1, 'd': 0}
-    instructions = data.split('\n')
-    return run_program(instructions, registers)
