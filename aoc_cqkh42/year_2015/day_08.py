@@ -2,6 +2,7 @@ import re
 
 from aoc_cqkh42 import BaseSolution
 
+
 class Solution(BaseSolution):
     def parse_data(self):
         return self.data.split('\n')

@@ -1,3 +1,4 @@
+# TODO use parse here
 import re
 
 from aoc_cqkh42 import BaseSolution
@@ -36,12 +37,10 @@ class Reindeer:
         self.score = 0
 
     def distance(self, time):
-        distance_per_sprint = self.speed * self.duration
-        num_sprints = time // (self.duration + self.rest)
-        sprint_distance = distance_per_sprint * num_sprints
+        sprints, final_stretch = divmod(time, self.duration + self.rest)
+        sprint_distance = self.speed * self.duration * sprints
 
-        the_end = time % (self.duration + self.rest)
         # we either end still sprinting or resting
-        final_sprint_time = min(the_end, self.duration)
+        final_sprint_time = min(final_stretch, self.duration)
         final_distance = final_sprint_time * self.speed
         return sprint_distance + final_distance

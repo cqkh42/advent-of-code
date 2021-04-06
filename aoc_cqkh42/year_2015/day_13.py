@@ -1,6 +1,11 @@
+# TODO use parse
+
+
 import itertools
 import re
 from collections import defaultdict
+
+import parse
 
 from aoc_cqkh42 import BaseSolution
 

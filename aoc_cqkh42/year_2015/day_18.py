@@ -1,3 +1,4 @@
+# TODO tidy up
 import numpy as np
 from scipy.ndimage import generic_filter
 

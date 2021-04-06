@@ -1,3 +1,5 @@
+# TODO this is messy using counters - can be better
+
 import itertools
 import math
 from collections import Counter

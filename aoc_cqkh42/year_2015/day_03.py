@@ -4,6 +4,7 @@ import numpy as np
 
 from aoc_cqkh42 import BaseSolution
 
+
 def _trace_path(steps):
     mapping_dict = {'>': (1, 0), '<': (-1, 0), '^': (0, 1), 'v': (0, -1)}
     changes = (mapping_dict[step] for step in steps)

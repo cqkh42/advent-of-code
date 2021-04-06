@@ -1,3 +1,4 @@
+# TODO really messy
 import functools
 import itertools
 import math

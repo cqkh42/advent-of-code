@@ -1,3 +1,5 @@
+# TODO use parse here
+
 import itertools
 import re
 

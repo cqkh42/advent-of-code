@@ -1,19 +1,17 @@
 import json
-import re
+
+import parse
 
 from aoc_cqkh42 import BaseSolution
 
 
 class Solution(BaseSolution):
-    regex = re.compile(r'-?\d+')
-
     def part_a(self):
-        numbers = self.regex.findall(self.data)
-        return sum(int(num) for num in numbers)
+        hits = parse.findall(r'{num:d}', self.data)
+        return sum(num['num'] for num in hits)
 
     def part_b(self):
         data = [json.loads(self.data)]
-
         answer = 0
 
         for item in data:

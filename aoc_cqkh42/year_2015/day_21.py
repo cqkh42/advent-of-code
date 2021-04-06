@@ -1,3 +1,4 @@
+# TODO - can we just use counters here and add them together
 from dataclasses import dataclass, field
 import itertools
 import queue
