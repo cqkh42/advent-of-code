@@ -24,7 +24,7 @@ class State:
         return self.x == 31 and self.y == 39
 
     def next_moves(self):
-        for x, y in [(0,1),(0,-1),(1,0),(-1,0)]:
+        for x, y in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             new_state = replace(self, x=self.x+x, y=self.y+y, steps=self.steps+1)
             if new_state.valid():
                 yield new_state
