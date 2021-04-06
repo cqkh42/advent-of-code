@@ -11,7 +11,6 @@ class Solution(BaseSolution):
     regex = re.compile(r'([a-z0-9]*) ?([A-Z]*) ?([a-z0-9]*) -> ([a-z0-9]+)')
 
     def parse_data(self):
-        print(self.data)
         return self.regex.findall(self.data)
 
     def part_a(self):
