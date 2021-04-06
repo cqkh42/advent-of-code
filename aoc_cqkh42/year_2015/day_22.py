@@ -136,4 +136,12 @@ def a_star(state):
             states.put(neighbour)
 
 
+class AStar:
+    def __init__(self, start):
+        self.states = queue.PriorityQueue()
+        self.states.put(start)
+        self.seen = set()
+
+
+
 

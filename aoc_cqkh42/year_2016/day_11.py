@@ -1,22 +1,76 @@
+from dataclasses import dataclass, replace
 import itertools
 import re
 import queue
 
 import numpy as np
 
+from aoc_cqkh42 import BaseSolution
+
+
+class Solution(BaseSolution):
+    def parse_data(self):
+        floors = self.data.split('\n')
+        generators = [re.findall(r' (\w+) generator', floor) for floor in floors]
+        generators = [[(element, floor) for element in elements] for floor, elements in (enumerate(generators, start=1))
+                      if elements]
+        generators = [floor for (element, floor) in sorted(itertools.chain.from_iterable(generators))]
+        generators = np.array(generators)
+
+        chips = [set(re.findall(r' (\w+)-compatible', floor)) for floor in floors]
+        chips = [[(element, floor) for element in elements] for floor, elements in (enumerate(chips, start=1)) if
+                 elements]
+        chips = [floor for (element, floor) in sorted(itertools.chain.from_iterable(chips))]
+        chips = np.array(chips)
+
+        # print(generators)
+        # print(chips)
+        pairs = [Pair(g, c) for g, c in zip(generators, chips)]
+        # print(pairs)
+        return State(pairs, 1, 0)
+
+    def part_a(self):
+        return a_star(self.parsed_data)
+
+    def part_b(self):
+        new_pair = Pair(1,1)
+        self.parsed_data.pairs.extend([new_pair, new_pair])
+        self.parsed_data.generators = np.append(self.parsed_data.generators, [1, 1])
+        self.parsed_data.chips = np.append(self.parsed_data.chips, [1, 1])
+
+        return a_star(self.parsed_data)
+
+
+@dataclass(frozen=True, eq=True)
+class Pair:
+    generator: int
+    chip: int
+
+    def on(self, floor):
+        return int(self.generator == floor) + int(self.chip == floor)
+
+    def valid(self):
+        gen = 1 <= self.generator <= 4
+        chip = 1 <= self.chip <= 4
+        return gen and chip
+
+    def same(self):
+        return self.generator == self.chip
+
 
 class State:
-    def __init__(self, generators, chips, lift, g):
-        self.generators = generators
-        self.chips = chips
+    def __init__(self, pairs, lift, g):
+        self.generators = np.array([pair.generator for pair in pairs])
+        self.chips = np.array([pair.chip for pair in pairs])
         self.lift = lift
         self.g = g
+        self.pairs = pairs
 
     def h(self):
         total = 0
-        on_first = (self.generators == 1).sum() + (self.chips == 1).sum()
-        on_second = (self.generators == 2).sum() + (self.chips == 2).sum()
-        on_third = (self.generators == 3).sum() + (self.chips == 3).sum()
+        on_first = sum(p.on(1) for p in self.pairs)
+        on_second = sum(p.on(2) for p in self.pairs)
+        on_third = sum(p.on(3) for p in self.pairs)
         if on_first:
             total += ((on_first-1) * 6) +3
         if on_second:
@@ -30,45 +84,37 @@ class State:
         return self.g + self.h()
 
     def __hash__(self):
-        g = self.generators
-        c = self.chips
-        z = tuple(sorted((str(a) + str(b) for a, b in zip(g, c))))
+        # TODO there must be a better way
+        z = sorted(self.pairs, key=lambda pair: (pair.generator, pair.chip))
+        z = tuple(z)
         return hash((z, self.lift))
 
     def is_valid(self):
-        a = self.generators != self.chips
-        b = self.chips[a].astype(int)
-        loose_chips = set(b)
-        return (not loose_chips.intersection(
-            self.generators)) and self.lift in range(1, 5) and self.generators.max() <= 4 and self.generators.min() >=1 and self.chips.max() <= 4 and self.chips.min() >= 1
+        # what floors are the loose chips on
+        # are there generators on there
+        loose_chips = {pair.chip for pair in self.pairs if not pair.same()}
+        gens = {pair.generator for pair in self.pairs}
+        pieces = all(pair.valid() for pair in self.pairs)
+
+        return (not loose_chips.intersection(gens)) and 1 <= self.lift <= 4 and pieces
 
     def __eq__(self, other):
         return hash(self) == hash(other)
 
     def complete(self):
-        a = np.array_equal(self.generators, self.chips)
-        b = (self.generators == 4).all()
-        return a and b
+        return all(pair.on(4) == 2 for pair in self.pairs)
 
     def move_generator(self, index, floor, add_move=False):
-        generators = self.generators.copy()
-        c = self.chips.copy()
-        generators[index] = floor
-        if add_move:
-            moves = self.g + 1
-        else:
-            moves = self.g
-        return State(generators, c, floor, moves)
+        local_pairs = [p for p in self.pairs]
+        new = replace(local_pairs[index], generator=floor)
+        local_pairs[index] = new
+        return State(local_pairs, floor, self.g+add_move)
 
     def move_chip(self, index, floor, add_move=False):
-        chips = self.chips.copy()
-        g = self.generators.copy()
-        chips[index] = floor
-        if add_move:
-            moves = self.g + 1
-        else:
-            moves = self.g
-        return State(g, chips, floor, moves)
+        local_pairs = [p for p in self.pairs]
+        new = replace(local_pairs[index], chip=floor)
+        local_pairs[index] = new
+        return State(local_pairs, floor, self.g+add_move)
 
     def new_moves(self):
         lowest = min(*[int(gen) for gen in self.generators], *[int(chip) for chip in self.chips])
@@ -89,7 +135,9 @@ class State:
         for floor, (g_1, g_2) in floor_gen_product:
             up = self.generators.copy()
             up[[g_1, g_2]] = floor
-            m = State(up, self.chips.copy(), floor, self.g + 1)
+            pairs = [Pair(g_, c_) for g_, c_ in zip(up, self.chips.copy())]
+
+            m = State(pairs, floor, self.g + 1)
             next_moves.add(m)
 
         two_chip_combinations = itertools.combinations(chips_on_floor, 2)
@@ -111,15 +159,35 @@ class State:
         }
         next_moves.update(chip_and_gen)
 
-        floor_single_chip = itertools.product(elev_moves, chips_on_floor)
-        single_chip = {self.move_chip(chip, floor, True) for floor, chip in
-                       floor_single_chip}
-        next_moves.update(single_chip)
+        # for each pair
+        gens_to_move = [index for index, pair in enumerate(self.pairs) if pair.generator == self.lift]
+        for index in gens_to_move:
+            for direction in [-1, 1]:
+                local_pair = [pair for pair in self.pairs]
+                new_pair = replace(self.pairs[index], generator=self.lift + direction)
+                local_pair[index] = new_pair
+                state = State(local_pair, self.lift + direction, self.g + 1)
+                next_moves.add(state)
 
-        floor_single_gen = itertools.product(elev_moves, generators_on_floor)
-        single_gen = {self.move_generator(gen, floor, True) for floor, gen in
-                      floor_single_gen}
-        next_moves.update(single_gen)
+
+        for index, pair in enumerate(self.pairs):
+
+            local_pair = [pair for pair in self.pairs]
+            if pair.chip == self.lift:
+                for direction in [1, -1]:
+                    new_pair = replace(pair, chip=self.lift+direction)
+                    local_pair[index] = new_pair
+                    state = State(local_pair, self.lift+direction, self.g + 1)
+                    next_moves.add(state)
+        # I move both things
+            local_pair = [pair for pair in self.pairs]
+            if pair.on(self.lift) == 2:
+                for direction in [1, -1]:
+                    new_pair = replace(pair, chip=self.lift+direction, generator=self.lift+direction)
+                    local_pair[index] = new_pair
+                    state = State(local_pair, self.lift+direction, self.g + 1)
+                    next_moves.add(state)
+
 
         next_moves = {state for state in next_moves if state.is_valid()}
         return next_moves
@@ -136,7 +204,6 @@ def a_star(state):
     for turn in itertools.count():
         state = to_visit.get()
         if state.complete():
-            print(turn)
             return state.g
         if state in visited:
             continue
@@ -144,30 +211,3 @@ def a_star(state):
         new_states = state.new_moves()
         for new_state in new_states:
             to_visit.put(new_state)
-
-
-def make_state(data):
-    floors = data.split('\n')
-    generators = [re.findall(r' (\w+) generator', floor) for floor in floors]
-    generators = [[(element, floor) for element in elements] for floor, elements in (enumerate(generators, start=1)) if elements]
-    generators = [floor for (element, floor) in sorted(itertools.chain.from_iterable(generators))]
-    generators = np.array(generators)
-
-    chips = [set(re.findall(r' (\w+)-compatible', floor)) for floor in floors]
-    chips = [[(element, floor) for element in elements] for floor, elements in (enumerate(chips, start=1)) if elements]
-    chips = [floor for (element, floor) in sorted(itertools.chain.from_iterable(chips))]
-    chips = np.array(chips)
-    return State(generators, chips, 1, 0)
-
-
-def part_a(data):
-    state = make_state(data)
-    return a_star(state)
-
-
-def part_b(data, **_):
-    state = make_state(data)
-    state.generators = np.append(state.generators, [1, 1])
-    state.chips = np.append(state.chips, [1, 1])
-
-    return a_star(state)
