@@ -1,3 +1,4 @@
+# TODO A* class?
 from collections import Counter, deque
 
 from aoc_cqkh42.year_2019.computer import Computer
