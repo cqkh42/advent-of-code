@@ -2,12 +2,13 @@
 # TODO extract graph logic
 
 from dataclasses import dataclass, field, replace
+import queue
 
 from aoc_cqkh42 import BaseSolution
 
 
-@dataclass(frozen=True)
-class State:
+@dataclass(frozen=True, eq=True)
+class Node:
     x: int
     y: int
     fav_number: int
@@ -29,16 +30,23 @@ class State:
             if new_state.valid():
                 yield new_state
 
+    def __lt__(self, other):
+        if isinstance(other, Node):
+            return self.steps < other.steps
+        else:
+            raise TypeError
+
 
 class ShortestPath:
     def __init__(self, state, cutoff=float('inf')):
-        self.states = [state]
+        self.states = queue.PriorityQueue()
+        self.states.put(state)
         self.cutoff = cutoff
         self.seen = set()
 
     def run(self):
-        while self.states:
-            state = self.states.pop(0)
+        while not self.states.empty():
+            state = self.states.get()
             if state in self.seen or state.steps > self.cutoff:
                 continue
             else:
@@ -47,17 +55,17 @@ class ShortestPath:
             if state.is_complete():
                 return state.steps
             for neighbour in neighbours:
-                self.states.append(neighbour)
+                self.states.put(neighbour)
 
 
 class Solution(BaseSolution):
     def part_a(self):
-        state = State(1, 1, int(self.data), 0)
+        state = Node(1, 1, int(self.data), 0)
         a_star = ShortestPath(state)
         return a_star.run()
 
     def part_b(self):
-        state = State(1, 1, int(self.data), 0)
+        state = Node(1, 1, int(self.data), 0)
         a_star = ShortestPath(state, 50)
         a_star.run()
         return len(a_star.seen)

@@ -1,4 +1,5 @@
 # TODO use parse here
+# TODO and recursion
 
 import operator
 import re
