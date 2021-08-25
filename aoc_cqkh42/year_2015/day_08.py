@@ -3,6 +3,15 @@ import re
 from aoc_cqkh42 import BaseSolution
 
 
+def _decode_str(string):
+    string = re.sub(r'^"', '', string)
+    string = re.sub(r'"$', '', string)
+    string = re.sub(r'\\\\', r'\\', string)
+    string = re.sub(r'\\"', '"', string)
+    string = re.sub(r'\\x[a-f0-9]{2}', 'x', string)
+    return string
+
+
 class Solution(BaseSolution):
     def parse_data(self):
         return self.data.split('\n')
@@ -19,10 +28,4 @@ class Solution(BaseSolution):
             )
 
 
-def _decode_str(string):
-    string = re.sub(r'^"', '', string)
-    string = re.sub(r'"$', '', string)
-    string = re.sub(r'\\\\', r'\\', string)
-    string = re.sub(r'\\"', '"', string)
-    string = re.sub(r'\\x[a-f0-9]{2}', 'x', string)
-    return string
+

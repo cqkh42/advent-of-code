@@ -13,7 +13,7 @@ class Solution(BaseSolution):
         return self.data.split('\n')
 
     def _is_nice_a(self, string):
-        vowels = sum(char in 'aeiou' for char in string) >= 3
+        vowels = sum(string.count(vowel) for vowel in 'aeiou') >= 3
         repeating_char = bool(self.repeating_char.search(string))
         phrases = all(phrase not in string for phrase in self.bad_phrases)
         return vowels and repeating_char and phrases
