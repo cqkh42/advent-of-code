@@ -6,18 +6,18 @@ from aoc_cqkh42 import BaseSolution
 
 
 def _route_length(route, distances):
-    return sum(distances[(start, end)] for start, end in zip(route, route[1:]))
+    return sum(distances[frozenset((start, end))] for start, end in zip(route, route[1:]))
 
 
 class Solution(BaseSolution):
     parser = parse.compile(r'{:w} to {:w} = {:d}')
 
     def parse_data(self):
-        distances = {}
-        for site_a, site_b, distance in self.parser.findall(self.data):
-            distances[(site_a, site_b)] = int(distance)
-            distances[(site_b, site_a)] = int(distance)
-        locations = {site for pair in distances for site in pair}
+        distances = {
+            frozenset((site_a, site_b)): distance
+            for site_a, site_b, distance in self.parser.findall(self.data)
+        }
+        locations = set(itertools.chain.from_iterable(distances))
         possible_routes = itertools.permutations(locations)
         return [_route_length(route, distances) for route in possible_routes]
 
@@ -26,6 +26,3 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return max(self.parsed_data)
-
-
-
