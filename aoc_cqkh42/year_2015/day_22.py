@@ -1,8 +1,8 @@
-# TODO A* Class
+# TODO abstract dijkstra
+# TODO abstract search
 from dataclasses import dataclass, field, replace
 import queue
 
-from dataclass_property import field_property
 import parse
 
 
@@ -66,13 +66,14 @@ class State:
         return state
 
     def buff(self):
-        self.boss_health -= 3 * (self.poison > 0)
-        self.mana += 101 * (self.recharge > 0)
-
-        self.poison = max(self.poison-1, 0)
-        self.recharge = max(self.recharge-1, 0)
-        self.shield = max(self.shield-1, 0)
-        return self
+        return replace(
+            self,
+            boss_health=self.boss_health - (3 * (self.poison > 0)),
+            mana=self.mana + (101* (self.recharge > 0)),
+            poison = max(self.poison-1,0),
+            recharge = max(self.recharge-1, 0),
+            shield = max(self.shield-1, 0)
+        )
 
     def cast_attack(self, mana, boss_change=0, player_change=0):
         return replace(
@@ -93,38 +94,36 @@ class State:
     def is_target(self):
         return self.boss_health <= 0
 
-    def neighbours(self):
-        a = self.buff()
-        effects = (
-            a.cast_effect(name, duration, mana) for
-            name, (duration, mana) in EFFECT_STATS.items()
-            if not getattr(a, name) and a.mana >= mana
-        )
-        new_states = (*self.attack_neighbours(), *effects)
+    def effect_moves(self):
+        for name, (duration, mana) in EFFECT_STATS.items():
+            a = self.buff()
+            if not getattr(a, name) and a.mana >= mana:
+                a = a.cast_effect(name, duration, mana).buff().boss_attack()
+                if a.player_health > 0 or a.is_target():
+                    yield a
+
+    def attack_moves(self):
+        b = self.buff()
+        new_states = b.attack_neighbours()
         new_states = (state.buff() for state in new_states)
         new_states = (state.boss_attack() for state in new_states)
-        new_states = (state for state in new_states if state.player_health > 0 or state.boss_health <= 0)
+        new_states = (state for state in new_states if
+                      state.player_health > 0 or state.is_target())
+        return new_states
 
-        yield from new_states
+    def _n(self):
+        effect_states = self.effect_moves()
+        attack_states = self.attack_moves()
+        return *attack_states, *effect_states
+
+    def neighbours(self):
+        yield from self._n()
 
 
 class StateB(State):
     def neighbours(self):
         self.player_health -= 1
-        a = self.buff()
-        attacks = (a.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)]
-                   if a.mana >= stats[0])
-        effects = (
-            a.cast_effect(name, duration, mana) for
-            name, (duration, mana) in EFFECT_STATS.items()
-            if not getattr(a, name) and a.mana >= mana
-        )
-        new_states = (*attacks, *effects)
-        new_states = (state.buff() for state in new_states)
-        new_states = (state.boss_attack() for state in new_states)
-        new_states = (state for state in new_states if
-                      state.player_health > 0 or state.boss_health <= 0)
-        yield from new_states
+        yield from self._n()
 
 
 def dijkstra(start):
