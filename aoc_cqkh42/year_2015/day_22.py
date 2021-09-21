@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field, replace
 import queue
 
+from dataclass_property import field_property
 import parse
 
 
@@ -17,15 +18,16 @@ class Solution(BaseSolution):
 
     def part_a(self):
         boss_health, boss_damage = self.parsed_data
-        starting_state = State(PLAYER_HEALTH, boss_health, PLAYER_MANA,
-                               boss_damage)
-        return a_star(starting_state)
+        starting_state = State(PLAYER_HEALTH, boss_health,
+                               boss_damage, PLAYER_MANA)
+        return dijkstra(starting_state)
 
     def part_b(self):
         boss_health, boss_damage = self.parsed_data
-        starting_state = StateB(PLAYER_HEALTH, boss_health, PLAYER_MANA,
-                                boss_damage)
-        return a_star(starting_state)
+        starting_state = StateB(PLAYER_HEALTH, boss_health,
+                                boss_damage, PLAYER_MANA)
+        return dijkstra(starting_state)
+
 
 PLAYER_HEALTH = 50
 PLAYER_MANA = 500
@@ -37,24 +39,22 @@ EFFECT_STATS = {
 }
 
 
-@dataclass(order=True)
+@dataclass(unsafe_hash=True, eq=True, order=True)
 class State:
-    player_health: int=field(compare=False)
-    boss_health: int=field(compare=False)
-    mana: int=field(compare=False)
-    boss_damage: int=field(compare=False)
-    used_mana: int = 0
+    player_health: int = field(compare=False, hash=True)
+    boss_health: int = field(compare=False)
+    boss_damage: int = field(compare=False)
+    mana: int = field(compare=False)
+    used_mana: int = field(default=0, compare=True)
     poison: int = field(default=0, compare=False)
     recharge: int = field(default=0, compare=False)
-    shield: int=field(default=0, compare=False)
+    shield: int = field(default=0, compare=False)
+    # player_armor: int = field(default=0, compare=False)
+    travelled: int = field(default=0, compare=False)
 
-
-    player_armor: int = 0
-
-    def __hash__(self):
-        return hash(
-            (self.player_health, self.boss_health, self.mana, self.poison, self.recharge, self.shield)
-        )
+    @property
+    def player_armor(self):
+        return 7 * (self.shield > 0)
 
     def cast_effect(self, name, duration, mana):
         state = replace(
@@ -68,7 +68,6 @@ class State:
     def buff(self):
         self.boss_health -= 3 * (self.poison > 0)
         self.mana += 101 * (self.recharge > 0)
-        self.player_armor = 7 * (self.shield > 0)
 
         self.poison = max(self.poison-1, 0)
         self.recharge = max(self.recharge-1, 0)
@@ -84,23 +83,24 @@ class State:
             used_mana=self.used_mana+mana
         )
 
+    def attack_neighbours(self):
+        return (self.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)] if self.mana >= stats[0])
+
     def boss_attack(self):
-        # self.buff()
         self.player_health -= self.boss_damage - self.player_armor
         return self
 
-    def is_complete(self):
+    def is_target(self):
         return self.boss_health <= 0
 
-    def _next_moves(self):
-        self.buff()
-        attacks = (self.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)] if self.mana >= stats[0])
+    def neighbours(self):
+        a = self.buff()
         effects = (
-            self.cast_effect(name, duration, mana) for
+            a.cast_effect(name, duration, mana) for
             name, (duration, mana) in EFFECT_STATS.items()
-            if not getattr(self, name) and self.mana >= mana
+            if not getattr(a, name) and a.mana >= mana
         )
-        new_states = (*attacks, *effects)
+        new_states = (*self.attack_neighbours(), *effects)
         new_states = (state.buff() for state in new_states)
         new_states = (state.boss_attack() for state in new_states)
         new_states = (state for state in new_states if state.player_health > 0 or state.boss_health <= 0)
@@ -108,41 +108,37 @@ class State:
         yield from new_states
 
 
-    def next_moves(self):
-        yield from self._next_moves()
-
-
 class StateB(State):
-    def next_moves(self):
+    def neighbours(self):
         self.player_health -= 1
-        yield from self._next_moves()
+        a = self.buff()
+        attacks = (a.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)]
+                   if a.mana >= stats[0])
+        effects = (
+            a.cast_effect(name, duration, mana) for
+            name, (duration, mana) in EFFECT_STATS.items()
+            if not getattr(a, name) and a.mana >= mana
+        )
+        new_states = (*attacks, *effects)
+        new_states = (state.buff() for state in new_states)
+        new_states = (state.boss_attack() for state in new_states)
+        new_states = (state for state in new_states if
+                      state.player_health > 0 or state.boss_health <= 0)
+        yield from new_states
 
 
-def a_star(state):
-    states = queue.PriorityQueue()
+def dijkstra(start):
+    frontier = queue.PriorityQueue()
 
-    states.put(state)
-    seen = set()
+    frontier.put(start)
+    visited = set()
 
-    while states.not_empty:
-        state = states.get()
-        if state in seen:
+    while frontier.not_empty:
+        node = frontier.get()
+        if node in visited:
             continue
-        else:
-            seen.add(state)
-        neighbours = state.next_moves()
-        if state.is_complete():
-            return state.used_mana
-        for neighbour in neighbours:
-            states.put(neighbour)
-
-
-class AStar:
-    def __init__(self, start):
-        self.states = queue.PriorityQueue()
-        self.states.put(start)
-        self.seen = set()
-
-
-
-
+        if node.is_target():
+            return node.used_mana
+        visited.add(node)
+        for neighbour in node.neighbours():
+            frontier.put(neighbour)

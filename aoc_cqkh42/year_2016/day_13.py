@@ -52,7 +52,7 @@ class ShortestPath:
             else:
                 self.seen.add(state)
             neighbours = state.next_moves()
-            if state.is_complete():
+            if state.is_target():
                 return state.steps
             for neighbour in neighbours:
                 self.states.put(neighbour)

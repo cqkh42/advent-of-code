@@ -7,3 +7,4 @@ scipy
 regex
 pylint
 sympy
+dataclass-property
