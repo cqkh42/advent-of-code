@@ -3,8 +3,6 @@ import functools
 import itertools
 import math
 
-import more_itertools
-
 from aoc_cqkh42 import BaseSolution
 
 
@@ -19,8 +17,7 @@ def subsets_equal_to(set_, target):
 
 class Solution(BaseSolution):
     def parse_data(self):
-        parcels = self.data.split('\n')
-        parcels = [int(i) for i in parcels]
+        parcels = [int(i) for i in self.lines]
         return frozenset(parcels)
 
     def part_a(self):
@@ -52,12 +49,9 @@ class Solution(BaseSolution):
                 others = packages.difference()
                 if (
                 bits := subsets_equal_to(others, group_weight)):
-                    for three_four in bits:
+                    for _ in bits:
                         k = others.difference(bits)
                         if subsets_equal_to(k, group_weight):
-                            results.append(group)
+                            results.append(math.prod(group))
             if results:
-                break
-        answer = min(math.prod(group) for group in results)
-        return answer
-
+                return min(results)

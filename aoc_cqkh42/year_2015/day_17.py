@@ -13,7 +13,7 @@ def _increasing_combinations(item):
 
 class Solution(BaseSolution):
     def parse_data(self):
-        containers = [int(container) for container in self.data.split('\n')]
+        containers = [int(container) for container in self.lines]
         containers = _increasing_combinations(containers)
         valid_containers = [group for group in containers if sum(group) == 150]
         return valid_containers

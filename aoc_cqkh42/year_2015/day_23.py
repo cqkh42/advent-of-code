@@ -1,24 +1,38 @@
 # TODO use parse?
+from dataclasses import dataclass
+
 from aoc_cqkh42 import BaseSolution
 
 
-def iteration(instruction, reg, index):
-    incr = 1
-    instr, key, *_ = instruction
-    if instr == 'jio' and reg[key] == 1:
-        incr = instruction[2]
-    elif instr == 'jie' and not reg[key] % 2:
-        incr = instruction[2]
-    elif instr == 'jmp':
-        incr = int(key)
-    elif instr == "inc":
-        reg[key] += 1
-    elif instr == 'tpl':
-        reg[key] *= 3
-    elif instr == 'hlf':
-        reg[key] *= 0.5
+@dataclass
+class Register:
+    reg: dict
+    instructions: list
+    index: int = 0
 
-    return reg, index + incr
+    def run(self):
+        while True:
+            try:
+                self.iteration()
+            except IndexError:
+                return self.reg['b']
+
+    def iteration(self):
+        incr = 1
+        match self.instructions[self.index]:
+            case ['jio', key, inc] if self.reg[key] == 1:
+                incr = inc
+            case ['jie', key, inc] if not self.reg[key] % 2:
+                incr = inc
+            case ['jmp', key]:
+                incr = int(key)
+            case ['inc', key]:
+                self.reg[key] += 1
+            case ['tpl', key]:
+                self.reg[key] *= 3
+            case ['hlf', key]:
+                self.reg[key] *= 0.5
+        self.index += incr
 
 
 class Solution(BaseSolution):
@@ -35,20 +49,10 @@ class Solution(BaseSolution):
 
     def part_a(self):
         registers = {'a': 0, 'b': 0}
-        return self.run(registers)
+        r = Register(registers, self.parsed_data)
+        return r.run()
 
     def part_b(self):
         registers = {'a': 1, 'b': 0}
-        return self.run(registers)
-
-    def run(self, registers):
-        index = 0
-        while True:
-            try:
-                instr = self.parsed_data[index]
-                registers, index = iteration(instr, registers, index)
-            except IndexError:
-                return registers['b']
-
-
-
+        r = Register(registers, self.parsed_data)
+        return r.run()

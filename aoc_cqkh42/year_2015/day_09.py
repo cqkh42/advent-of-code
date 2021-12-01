@@ -6,7 +6,10 @@ from aoc_cqkh42 import BaseSolution
 
 
 def _route_length(route, distances):
-    return sum(distances[frozenset((start, end))] for start, end in zip(route, route[1:]))
+    return sum(
+        distances[frozenset((start, end))]
+        for start, end in zip(route, route[1:])
+    )
 
 
 class Solution(BaseSolution):

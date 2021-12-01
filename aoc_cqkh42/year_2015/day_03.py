@@ -1,6 +1,3 @@
-import itertools
-import operator
-
 import numpy as np
 
 from aoc_cqkh42 import BaseSolution
@@ -8,11 +5,10 @@ from aoc_cqkh42 import BaseSolution
 
 def _trace_path(steps):
     mapping_dict = {'>': (1, 0), '<': (-1, 0), '^': (0, 1), 'v': (0, -1)}
-    changes = (mapping_dict[step] for step in steps)
-    coords = itertools.accumulate(
-        changes, operator.add, initial=np.array([0, 0])
-    )
-    return np.array(list(coords))
+    changes = np.array([mapping_dict[step] for step in steps])
+    changes = np.insert(changes, 0, [0, 0], axis=0)
+    coords = np.cumsum(changes, axis=0)
+    return coords
 
 
 class Solution(BaseSolution):

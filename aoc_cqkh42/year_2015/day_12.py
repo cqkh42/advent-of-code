@@ -5,6 +5,19 @@ import parse
 from aoc_cqkh42 import BaseSolution
 
 
+def recursive_sum(data):
+    match data:
+        case int(data):
+            return data
+        case list(data):
+            return sum(recursive_sum(i) for i in data)
+        case dict(data) if 'red' not in data.values():
+            a = (recursive_sum(i) for i in data.values())
+            return sum(a)
+        case _:
+            return 0
+
+
 class Solution(BaseSolution):
     def part_a(self):
         hits = parse.findall(r'{num:d}', self.data)
@@ -12,13 +25,4 @@ class Solution(BaseSolution):
 
     def part_b(self):
         data = [json.loads(self.data)]
-        answer = 0
-
-        for item in data:
-            if isinstance(item, int):
-                answer += item
-            elif isinstance(item, list):
-                data.extend(item)
-            elif isinstance(item, dict) and 'red' not in item.values():
-                data.extend(item.values())
-        return answer
+        return recursive_sum(data)

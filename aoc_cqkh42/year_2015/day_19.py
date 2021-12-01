@@ -33,7 +33,7 @@ def try_permutation(maps, element):
 
 class Solution(BaseSolution):
     def parse_data(self):
-        *maps, _, element = self.data.split('\n')
+        *maps, _, element = self.lines
         maps = [item.split(' => ') for item in maps]
         return maps, element
 

@@ -1,12 +1,11 @@
 # TODO abstract dijkstra
 # TODO abstract search
 from dataclasses import dataclass, field, replace
-import queue
 
 import parse
 
-
 from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.dijkstra import dijkstra
 
 
 class Solution(BaseSolution):
@@ -49,7 +48,6 @@ class State:
     poison: int = field(default=0, compare=False)
     recharge: int = field(default=0, compare=False)
     shield: int = field(default=0, compare=False)
-    # player_armor: int = field(default=0, compare=False)
     travelled: int = field(default=0, compare=False)
 
     @property
@@ -69,8 +67,8 @@ class State:
         return replace(
             self,
             boss_health=self.boss_health - (3 * (self.poison > 0)),
-            mana=self.mana + (101* (self.recharge > 0)),
-            poison = max(self.poison-1,0),
+            mana=self.mana + (101 * (self.recharge > 0)),
+            poison = max(self.poison-1, 0),
             recharge = max(self.recharge-1, 0),
             shield = max(self.shield-1, 0)
         )
@@ -126,18 +124,3 @@ class StateB(State):
         yield from self._n()
 
 
-def dijkstra(start):
-    frontier = queue.PriorityQueue()
-
-    frontier.put(start)
-    visited = set()
-
-    while frontier.not_empty:
-        node = frontier.get()
-        if node in visited:
-            continue
-        if node.is_target():
-            return node.used_mana
-        visited.add(node)
-        for neighbour in node.neighbours():
-            frontier.put(neighbour)

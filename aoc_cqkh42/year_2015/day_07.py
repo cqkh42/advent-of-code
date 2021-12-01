@@ -10,38 +10,37 @@ FUNC_MAP = {
     "OR": operator.or_,
     "LSHIFT": operator.lshift,
     "RSHIFT": operator.rshift,
-    'NOT': lambda _, x: (1 << 16) - 1 - x,
+    'NOT': lambda x: (1 << 16) - 1 - x,
 }
 
 
-@dataclass(init=False)
+@dataclass
 class Register:
-    def __init__(self, instructions):
-        register = {}
-        for wire_1, op, wire_2, destination in instructions:
-            if wire_1.isnumeric():
-                wire_1 = int(wire_1)
-            if wire_2.isnumeric():
-                wire_2 = int(wire_2)
+    register: {}
 
-            if not op:
-                register[destination] = wire_1
-            else:
-                register[destination] = (wire_1, FUNC_MAP[op], wire_2)
-        self.register = register
+    def add_line(self, line):
+        match line.split():
+            case [wire_1, op, wire_2, '->', destination]:
+                self.register[destination] = (op, (wire_1, wire_2))
+            case [op, wire, '->', destination]:
+                self.register[destination] = (op, (wire,))
+            case [wire, '->', destination]:
+                self.register[destination] = wire
 
     def resolve(self, key):
-        value = self[key]
-        if isinstance(value, str) and value:
-            value = self.resolve(value)
-        elif isinstance(value, tuple):
-            wire_1, op, wire_2 = value
-            value = op(self.resolve(wire_1), self.resolve(wire_2))
-        self[key] = value
-        return value
+        match self[key]:
+            case str(value):
+                self[key] = self.resolve(value)
+            case (op, inputs):
+                inputs = (self.resolve(input_) for input_ in inputs)
+                value = FUNC_MAP[op](*inputs)
+                self[key] = value
+        return self[key]
 
-    def __getitem__(self, item):
-        return self.register.get(item, item)
+    def __getitem__(self, key):
+        if isinstance(key, int) or key.isnumeric():
+            return int(key)
+        return self.register.get(key, key)
 
     def __setitem__(self, key, value):
         self.register[key] = value
@@ -55,11 +54,15 @@ class Solution(BaseSolution):
         return self.regex.findall(self.data)
 
     def part_a(self):
-        register = Register(self.parsed_data)
+        register = Register({})
+        for line in self.lines:
+            register.add_line(line)
         self.answer_a = register.resolve('a')
         return self.answer_a
 
     def part_b(self):
-        register = Register(self.parsed_data)
+        register = Register({})
+        for line in self.lines:
+            register.add_line(line)
         register['b'] = self.answer_a
         return register.resolve('a')
