@@ -11,11 +11,15 @@ class BaseSolution:
     def parse_data(self):
         return self.data
 
+    @property
+    def lines(self):
+        return self.data.split('\n')
+
     def part_a(self):
-        return False
+        return None
 
     def part_b(self):
-        return False
+        return None
 
 
 def answer(year, day, data):

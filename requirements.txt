@@ -7,4 +7,5 @@ scipy
 regex
 pylint
 sympy
-dataclass-property
+advent-of-code-data>=1.1.0
+. -e
