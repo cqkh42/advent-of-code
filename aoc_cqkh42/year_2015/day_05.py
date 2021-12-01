@@ -9,9 +9,6 @@ class Solution(BaseSolution):
     repeats_with_space = re.compile(r'(\w).\1')
     bad_phrases = ('ab', 'cd', 'pq', 'xy')
 
-    def parse_data(self):
-        return self.data.split('\n')
-
     def _is_nice_a(self, string):
         vowels = sum(string.count(vowel) for vowel in 'aeiou') >= 3
         repeating_char = bool(self.repeating_char.search(string))
@@ -24,9 +21,9 @@ class Solution(BaseSolution):
         return repeats and one_between
 
     def part_a(self):
-        return sum(self._is_nice_a(string) for string in self.parsed_data)
+        return sum(self._is_nice_a(string) for string in self.lines)
 
     def part_b(self):
-        return sum(self._is_nice_b(string) for string in self.parsed_data)
+        return sum(self._is_nice_b(string) for string in self.lines)
 
 
