@@ -2,21 +2,43 @@
 from dataclasses import dataclass, replace
 import itertools
 import re
-import queue
 
 import numpy as np
 
 from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.dijkstra import a_star
 
-
+def a(lines):
+    generators = {}
+    chips = {}
+    for floor_num, info in enumerate(lines, start=1):
+        gens = re.findall(r' (\w+) generator', info)
+        for gen in gens:
+            generators[gen] = floor_num
+        chps = re.findall(r' (\w+)-compatible', info)
+        for chip in chps:
+            chips[chip] = floor_num
 class Solution(BaseSolution):
     def parse_data(self):
-        floors = self.data.split('\n')
+        generators = {}
+        chips = {}
+        for floor_num, info in enumerate(self.lines, start=1):
+            gens = re.findall(r' (\w+) generator', info)
+            for gen in gens:
+                generators[gen] = floor_num
+            chps = re.findall(r' (\w+)-compatible', info)
+            for chip in chps:
+                chips[chip] = floor_num
+        print(generators)
+
+        floors = self.lines
         generators = [re.findall(r' (\w+) generator', floor) for floor in floors]
+        print(dict(enumerate(generators, start=1)))
         generators = [[(element, floor) for element in elements] for floor, elements in (enumerate(generators, start=1))
                       if elements]
         generators = [floor for (element, floor) in sorted(itertools.chain.from_iterable(generators))]
         generators = np.array(generators)
+        print(generators)
 
         chips = [set(re.findall(r' (\w+)-compatible', floor)) for floor in floors]
         chips = [[(element, floor) for element in elements] for floor, elements in (enumerate(chips, start=1)) if
@@ -24,8 +46,6 @@ class Solution(BaseSolution):
         chips = [floor for (element, floor) in sorted(itertools.chain.from_iterable(chips))]
         chips = np.array(chips)
 
-        # print(generators)
-        # print(chips)
         pairs = [Pair(g, c) for g, c in zip(generators, chips)]
         # print(pairs)
         return State(pairs, 1, 0)
@@ -172,7 +192,6 @@ class State:
 
 
         for index, pair in enumerate(self.pairs):
-
             local_pair = [pair for pair in self.pairs]
             if pair.chip == self.lift:
                 for direction in [1, -1]:
@@ -197,18 +216,3 @@ class State:
         return self.priority > other.priority
 
 
-def a_star(state):
-    visited = set()
-    to_visit = queue.PriorityQueue()
-    to_visit.put(state)
-
-    for turn in itertools.count():
-        state = to_visit.get()
-        if state.complete():
-            return state.g
-        if state in visited:
-            continue
-        visited.add(state)
-        new_states = state.new_moves()
-        for new_state in new_states:
-            to_visit.put(new_state)
