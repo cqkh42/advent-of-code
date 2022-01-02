@@ -5,7 +5,7 @@ from dataclasses import dataclass, field, replace
 import parse
 
 from aoc_cqkh42 import BaseSolution
-from aoc_cqkh42.helpers.dijkstra import dijkstra
+from aoc_cqkh42.helpers.graph.dijkstra import dijkstra
 
 
 class Solution(BaseSolution):

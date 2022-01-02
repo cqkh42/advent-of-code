@@ -32,7 +32,6 @@ def fix_bracket(string, order=solve_in_sequence):
     return new_string.replace('  ', ' ')
 
 
-
 def solve_in_precedence(equation):
     equation = equation.split(' ')
     while '+' in equation:

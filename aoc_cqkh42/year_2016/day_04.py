@@ -29,7 +29,7 @@ class Room:
         return self.calc_checksum() == self.checksum
 
     def decrypt(self):
-        return ''.join([decrypt_letter(char, self.sector) for char in self.encrypted.strip()])
+        return ''.join(decrypt_letter(char, self.sector) for char in self.encrypted.strip())
 
 
 class Solution(BaseSolution):

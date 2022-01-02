@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import importlib
 
+# TODO do I need to abstract out binary search?
+
 
 @dataclass(init=False)
 class BaseSolution:

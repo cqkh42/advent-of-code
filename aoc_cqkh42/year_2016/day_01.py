@@ -16,7 +16,6 @@ class Solution(BaseSolution):
         new = (c_index + incr) % 4
         return self.compass[new]
 
-
     def part_a(self):
         travelled = defaultdict(int)
 

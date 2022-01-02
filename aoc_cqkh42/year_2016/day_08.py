@@ -1,10 +1,10 @@
 import itertools
 
-import adventocr
 import parse
 import numpy as np
 
 from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers import aocr
 
 
 class Solution(BaseSolution):
@@ -27,7 +27,8 @@ class Solution(BaseSolution):
         return self.parsed_data.sum()
 
     def part_b(self):
-        return adventocr.word(itertools.chain.from_iterable(self.parsed_data))
+        return aocr.word(itertools.chain.from_iterable(self.parsed_data))
+
 
 RECT_PARSER = parse.compile(r'rect {:d}x{:d}')
 ROW_PARSER = parse.compile(r'rotate row y={:d} by {:d}')

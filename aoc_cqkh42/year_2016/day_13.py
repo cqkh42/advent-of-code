@@ -21,7 +21,7 @@ class Node:
         ones = bin(calc).count('1')
         return not(ones % 2)
 
-    def is_complete(self):
+    def terminate(self):
         return self.x == 31 and self.y == 39
 
     def next_moves(self):
@@ -52,7 +52,7 @@ class ShortestPath:
             else:
                 self.seen.add(state)
             neighbours = state.next_moves()
-            if state.is_target():
+            if state.terminate():
                 return state.steps
             for neighbour in neighbours:
                 self.states.put(neighbour)

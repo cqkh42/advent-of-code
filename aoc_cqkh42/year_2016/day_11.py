@@ -1,5 +1,8 @@
 # TODO this is a mess
 # TODO 2016 got to here and is broken
+
+# TODO this runs but takes forever
+import dataclasses
 import itertools
 import re
 
@@ -7,6 +10,7 @@ import numpy as np
 
 from aoc_cqkh42 import BaseSolution
 from aoc_cqkh42.helpers.graph.bfs import BFS, BFSBaseState
+from aoc_cqkh42.helpers.graph import a_star
 
 
 class Solution(BaseSolution):
@@ -30,16 +34,20 @@ class Solution(BaseSolution):
         return State(arr, lift_array, 0)
 
     def part_a(self):
-        z = BFS(self.parsed_data)
+        # return None
+        z = a_star.AStar(self.parsed_data)
         return z.run()
 
-    # def part_b(self):
-    #     new_pair = Pair(1,1)
-    #     self.parsed_data.pairs.extend([new_pair, new_pair])
-    #     self.parsed_data.generators = np.append(self.parsed_data.generators, [1, 1])
-    #     self.parsed_data.chips = np.append(self.parsed_data.chips, [1, 1])
-    #
-    #     return a_star(self.parsed_data)
+    def part_b(self):
+        return None
+        # new = np.zeros((4, 2, 2), dtype=int)
+        # new[0] = 1
+        # arr = np.concatenate([self.parsed_data.arr, new], axis=1)
+        # state = State(arr, np.array([1, 0, 0, 0]), 0)
+        # print(arr[:,:,0])
+        # print(arr[:,:,1])
+        # z = a_star.AStar(state)
+        # return z.run()
 
 
 def roll_array(array, slicer, num):
@@ -48,11 +56,11 @@ def roll_array(array, slicer, num):
     return arr
 
 
-class State(BFSBaseState):
-    def __init__(self, arr, lift, distance):
-        self.arr = arr
-        self.lift = lift
-        self.distance = distance
+@dataclasses.dataclass
+class State(a_star.AStarBaseState):
+    arr: np.array
+    lift: np.array
+    distance: int = dataclasses.field(compare=False, hash=False)
 
     def is_target(self):
         return (self.arr[-1] == 1).all()
@@ -108,18 +116,34 @@ class State(BFSBaseState):
         generator_floors = generator.any(axis=1)
         return not (loose_chip_floors & generator_floors).any()
 
-    # def h(self):
-    #     total = 0
-    #     on_first = sum(p.on(1) for p in self.pairs)
-    #     on_second = sum(p.on(2) for p in self.pairs)
-    #     on_third = sum(p.on(3) for p in self.pairs)
-    #     if on_first:
-    #         total += ((on_first-1) * 6) +3
-    #     if on_second:
-    #         total += ((on_second-1) * 4) +2
-    #     if on_third:
-    #         total += ((on_third-1) * 2) + 1
-    #     return total
+    def h(self):
+        return 0
+        # a = self.arr[0,:,:].sum()
+        # b = self.arr[1, :, :].sum()
+        # c = self.arr[2, :, :].sum()
+        #
+        # return (a * 3) + (b*2) + c
+        # return 3 - self._floor
+        # return 0
+        # stuff_on_floor = self.arr.sum(axis=1)
+        # trips = stuff_on_floor // 2
+
+        # go down to lowest floor
+        # have to bring something down there
+        # bring stuff up one at a time (you have to go back down for it)
+
+        total = 0
+        on_first = self.arr[0,:,:].sum()
+        on_second = self.arr[1,:,:].sum()
+        on_third = self.arr[2,:,:].sum()
+
+        if on_first:
+            total += ((on_first-1) * 6) +3
+        if on_second:
+            total += ((on_second-1) * 4) +2
+        if on_third:
+            total += ((on_third-1) * 2) + 1
+        return total
 
     # @property
     # def priority(self):
