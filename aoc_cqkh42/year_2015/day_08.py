@@ -20,7 +20,7 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return sum(
-            line.count('"') + line.count('\\') + 2
+            line.count('"') + line.count("\\") + 2
             for line in self.lines
             )
 

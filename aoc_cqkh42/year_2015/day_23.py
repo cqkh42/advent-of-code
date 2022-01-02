@@ -1,4 +1,3 @@
-# TODO use parse?
 from dataclasses import dataclass
 
 from aoc_cqkh42 import BaseSolution
@@ -15,7 +14,7 @@ class Register:
             try:
                 self.iteration()
             except IndexError:
-                return self.reg['b']
+                return
 
     def iteration(self):
         incr = 1
@@ -47,12 +46,14 @@ class Solution(BaseSolution):
         ]
         return instructions
 
-    def part_a(self):
+    def part_a(self, target='b'):
         registers = {'a': 0, 'b': 0}
         r = Register(registers, self.parsed_data)
-        return r.run()
+        r.run()
+        return r.reg[target]
 
-    def part_b(self):
+    def part_b(self, target='b'):
         registers = {'a': 1, 'b': 0}
         r = Register(registers, self.parsed_data)
-        return r.run()
+        r.run()
+        return r.reg[target]

@@ -12,7 +12,8 @@ from aoc_cqkh42.year_2015 import day_06
     ]
 )
 def test_part_a(data, answer):
-    assert day_06.part_a(data) == answer
+    solution = day_06.Solution(data)
+    assert solution.part_a() == answer
 
 
 @pytest.mark.parametrize(
@@ -23,4 +24,5 @@ def test_part_a(data, answer):
     ]
 )
 def test_part_b(data, answer):
-    assert day_06.part_b(data) == answer
+    solution = day_06.Solution(data)
+    assert solution.part_b() == answer

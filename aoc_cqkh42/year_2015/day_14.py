@@ -37,11 +37,11 @@ class Solution(BaseSolution):
         ]
         return reindeer
 
-    def part_a(self):
-        return max(deer.distance(TIME) for deer in self.parsed_data)
+    def part_a(self, time=TIME):
+        return max(deer.distance(time) for deer in self.parsed_data)
 
-    def part_b(self):
-        for second in range(1, TIME + 1):
+    def part_b(self, time=TIME):
+        for second in range(1, time + 1):
             highest_score = max(
                 deer.distance(second) for deer in self.parsed_data
             )

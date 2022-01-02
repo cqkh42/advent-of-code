@@ -13,8 +13,8 @@ class Solution(BaseSolution):
         for _ in range(iters):
             self._iteration()
 
-    def part_a(self):
-        self._sequence(40)
+    def part_a(self, iters=40):
+        self._sequence(iters)
         return len(self.data)
 
     def part_b(self):

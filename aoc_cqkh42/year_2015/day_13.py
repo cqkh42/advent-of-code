@@ -1,5 +1,5 @@
-import itertools
 from collections import defaultdict
+import itertools
 
 import parse
 

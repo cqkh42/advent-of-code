@@ -12,10 +12,14 @@ def _increasing_combinations(item):
 
 
 class Solution(BaseSolution):
+    def __init__(self, data, target=150):
+        self.target = target
+        super().__init__(data)
+
     def parse_data(self):
         containers = [int(container) for container in self.lines]
         containers = _increasing_combinations(containers)
-        valid_containers = [group for group in containers if sum(group) == 150]
+        valid_containers = [group for group in containers if sum(group) == self.target]
         return valid_containers
 
     def part_a(self):

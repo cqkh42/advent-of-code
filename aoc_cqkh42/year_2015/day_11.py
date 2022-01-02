@@ -5,7 +5,13 @@ from aoc_cqkh42 import BaseSolution
 
 class Solution(BaseSolution):
     def parse_data(self):
-        return [ord(char) - 97 for char in self.data]
+        ords = [ord(char) - 97 for char in self.data]
+        for index, char in enumerate(ords):
+            if char in [8, 14, 11]:
+                ords[index] += 1
+                ords[index+1:] = [0]*(len(ords)-index-1)
+                break
+        return ords
 
     def part_a(self):
         return self.next_valid_password()
@@ -37,4 +43,4 @@ def _is_valid(password):
     counts = [len(list(b)) for a, b in itertools.groupby(password)]
     counts = [i >= 2 for i in counts]
     match_counts = sum(counts) >= 2
-    return match_counts and match_triples
+    return match_counts and match_triples and 8 not in password

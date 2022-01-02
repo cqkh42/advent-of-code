@@ -1,5 +1,5 @@
 import itertools
-from hashlib import md5
+from _md5 import md5
 
 from aoc_cqkh42 import BaseSolution
 

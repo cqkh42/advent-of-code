@@ -24,17 +24,17 @@ class Solution(BaseSolution):
         rows = rows == '#'
         return rows
 
-    def part_a(self):
+    def part_a(self, steps=100):
         light_arr = self.parsed_data.copy()
-        for _ in range(100):
+        for _ in range(steps):
             light_arr = iteration(light_arr)
         return light_arr.sum()
 
-    def part_b(self):
+    def part_b(self, steps=100):
         light_arr = self.parsed_data
         light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
 
-        for _ in range(100):
+        for _ in range(steps):
             light_arr = iteration(light_arr)
             light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
         return light_arr.sum()
