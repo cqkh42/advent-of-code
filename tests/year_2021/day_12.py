@@ -20,4 +20,9 @@ def test_part_a(solution):
 
 
 def test_part_b(solution):
-    assert solution.part_b() == 103
+    assert solution.part_b() == 36
+
+
+def test_part_b_route_valid():
+    route = day_12.Route(('start', 'b', 'b', 'b', 'end'))
+    assert not route.valid_part_b()

@@ -1,30 +1,36 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 from dataclasses import dataclass, field, replace
 from queue import SimpleQueue
+from typing import Tuple, List
 
 from aoc_cqkh42 import BaseSolution
 
+#todo could we feed in some parsing function
 #todo some graph here
-@dataclass
+@dataclass(frozen=True)
 class Route:
-    def __init__(self, current):
-        self.current = current
-        self.visited = defaultdict(int, {current: 1, 'start': 1})
+    route: Tuple[str, ...]
+
+    @property
+    def complete(self):
+        return self.route[-1] == 'end'
+
+    @property
+    def current(self):
+        return self.route[-1]
 
     def move(self, new: str):
-        new_route = Route(new)
-        new_route.visited = self.visited.copy()
-        new_route.visited[new] += 1
-        return new_route
+        return Route((*self.route, new))
 
-    @property
-    def double_dipped(self):
-        v = max([v for k, v in self.visited.items() if k.islower() and k not in ['start', 'end']], default = 0)
-        return v == 2
+    def valid_part_a(self):
+        lower = [step for step in self.route if step.islower()]
+        return len(lower) == len(set(lower))
 
-    @property
-    def max_lower(self):
-        return max((v for k, v in self.visited.items() if k.islower() and k not in ['start', 'end']), default=0)
+    def valid_part_b(self):
+        lower = [step for step in self.route if step.islower()]
+        c = Counter(lower)
+        # start and end are at most 1
+        return (c['start'] < 2) and (c.get('end', 1) < 2) and (list(c.values()).count(2) < 2) and max(c.values()) <= 2
 
 
 class Solution(BaseSolution):
@@ -34,26 +40,25 @@ class Solution(BaseSolution):
             a, b = row.split('-')
             self.maps[a].append(b)
             self.maps[b].append(a)
-        return [Route(i) for i in self.maps['start']]
+        return [Route(('start', i)) for i in self.maps['start']]
 
     def part_a(self):
-        successful = 0
+        successful = set()
         queue = SimpleQueue()
         for start in self.parsed_data:
             queue.put(start)
         while not queue.empty():
             route = queue.get()
-            if 'end' in route.visited:
-                successful += 1
-                continue
             for step in self.maps[route.current]:
-                if step.isupper() or step not in route.visited:
                     new_route = route.move(step)
-                    queue.put(new_route)
-        return successful
+                    if new_route.complete:
+                        successful.add(route)
+                    elif new_route.valid_part_a():
+                        queue.put(new_route)
+        return len(successful)
 
     def part_b(self):
-        successful = 0
+        successful = set()
         queue = SimpleQueue()
         for start in self.parsed_data:
             queue.put(start)
@@ -61,18 +66,8 @@ class Solution(BaseSolution):
             route = queue.get()
             for step in self.maps[route.current]:
                 new_route = route.move(step)
-                if step == 'start':
-                    continue
-                elif step == 'end':
-                    successful += 1
-                    continue
-                elif new_route.double_dipped and step in route.visited and step.islower():
-                    continue
-                # print(route.current, step)
-
-                # either is upper, havent visited it before, or havenet double dipped
-                queue.put(new_route)
-
-                # elif  new_route.double_dipped:
-                #     print('we cannot go back here', new_route.visited)
-        return successful
+                if new_route.complete:
+                    successful.add(new_route)
+                elif new_route.valid_part_b():
+                    queue.put(new_route)
+        return len(successful)
