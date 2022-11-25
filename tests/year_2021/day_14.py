@@ -32,3 +32,11 @@ def test_part_a(solution):
 
 def test_part_b(solution):
     assert solution.part_b() == 2188189693529
+
+
+def test_replace(solution):
+    assert day_14.replace('NNCB', solution.parsed_data) == 'NCNBCHB'
+
+
+def test_multiple_replace(solution):
+    assert day_14.multiple_replace('NNCB', solution.parsed_data, 4) == 'NBBNBNBBCCNBCNCCNBBNBBNBBBNBBNBBCBHCBHHNHCBBCBHCB'
