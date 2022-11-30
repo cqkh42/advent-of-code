@@ -10,10 +10,10 @@ class Solution(BaseSolution):
     bad_phrases = ('ab', 'cd', 'pq', 'xy')
 
     def _is_nice_a(self, string):
-        vowels = sum(string.count(vowel) for vowel in 'aeiou') >= 3
-        repeating_char = bool(self.repeating_char.search(string))
-        phrases = all(phrase not in string for phrase in self.bad_phrases)
-        return vowels and repeating_char and phrases
+        vowel_count = sum(string.count(vowel) for vowel in 'aeiou')
+        has_repeating_char = bool(self.repeating_char.search(string))
+        no_bad_phrases = all(phrase not in string for phrase in self.bad_phrases)
+        return vowel_count >= 3 and has_repeating_char and no_bad_phrases
 
     def _is_nice_b(self, string):
         repeats = bool(self.repeating_chars.search(string))
@@ -25,5 +25,3 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return sum(self._is_nice_b(string) for string in self.lines)
-
-

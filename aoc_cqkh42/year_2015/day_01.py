@@ -4,9 +4,9 @@ from aoc_cqkh42 import BaseSolution
 
 
 class Solution(BaseSolution):
-    def part_a(self):
+    def part_a(self) -> int:
         return self.data.count('(') - self.data.count(')')
 
-    def part_b(self):
+    def part_b(self) -> int:
         instructions = (1 if item == '(' else -1 for item in self.data)
         return list(itertools.accumulate(instructions)).index(-1) + 1

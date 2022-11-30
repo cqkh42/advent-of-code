@@ -16,7 +16,10 @@ FUNC_MAP = {
 
 @dataclass
 class Register:
-    register: {}
+    def __init__(self, lines):
+        self.register = {}
+        for line in lines:
+            self.add_line(line)
 
     def add_line(self, line):
         match line.split():
@@ -54,15 +57,11 @@ class Solution(BaseSolution):
         return self.regex.findall(self.data)
 
     def part_a(self):
-        register = Register({})
-        for line in self.lines:
-            register.add_line(line)
+        register = Register(self.lines)
         self.answer_a = register.resolve('a')
         return self.answer_a
 
     def part_b(self):
-        register = Register({})
-        for line in self.lines:
-            register.add_line(line)
+        register = Register(self.lines)
         register['b'] = self.answer_a
         return register.resolve('a')

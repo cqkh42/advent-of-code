@@ -5,6 +5,7 @@ import parse
 
 from aoc_cqkh42 import BaseSolution
 
+
 @dataclass
 class Triangle:
     x: int

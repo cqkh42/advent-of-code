@@ -1,32 +1,33 @@
 from abc import ABC, abstractmethod
-import itertools
 import queue
 
 
-class AStarBaseState(ABC):
+class AStarBaseNode(ABC):
+    distance = NotImplemented
+
     @abstractmethod
     def h(self):
-        return NotImplementedError
+        raise NotImplementedError
 
     @abstractmethod
     def is_target(self):
-        return NotImplementedError
+        raise NotImplementedError
 
     @abstractmethod
     def __hash__(self):
-        return NotImplementedError
+        raise NotImplementedError
 
     @abstractmethod
     def __eq__(self, other):
-        return NotImplementedError
+        raise NotImplementedError
 
     @abstractmethod
     def neighbours(self):
-        return NotImplementedError
+        raise NotImplementedError
 
     @abstractmethod
     def is_valid(self):
-        return NotImplementedError
+        raise NotImplementedError
 
     def __gt__(self, other):
         # PriorityQueue returns the lowest value item first

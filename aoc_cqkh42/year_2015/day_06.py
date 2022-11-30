@@ -18,25 +18,25 @@ class Solution(BaseSolution):
 
     def part_a(self):
         lights = np.zeros((1000, 1000), dtype=int)
-        for action, x, y in self.parsed_data:
+        for action, x_slice, y_slice in self.parsed_data:
             match action:
                 case 'on':
-                    lights[x, y] = 1
+                    lights[x_slice, y_slice] = 1
                 case 'off':
-                    lights[x, y] = 0
+                    lights[x_slice, y_slice] = 0
                 case _:
-                    lights[x, y] ^= 1
+                    lights[x_slice, y_slice] ^= 1
         return lights.sum()
 
     def part_b(self):
         lights = np.zeros((1000, 1000), dtype=int)
-        for action, x, y in self.parsed_data:
+        for action, x_slice, y_slice in self.parsed_data:
             match action:
                 case 'on':
-                    lights[x, y] += 1
+                    lights[x_slice, y_slice] += 1
                 case 'toggle':
-                    lights[x, y] += 2
+                    lights[x_slice, y_slice] += 2
                 case _:
-                    lights[x, y] -= 1
+                    lights[x_slice, y_slice] -= 1
                     lights = np.clip(lights, a_min=0, a_max=None)
         return lights.sum()

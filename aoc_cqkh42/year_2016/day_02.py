@@ -2,32 +2,27 @@ from aoc_cqkh42 import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
-        return self.data.split('\n')
-
     def _find_code(self, pad):
-        k = {}
-        for row_index, row in enumerate(pad):
-            for col_index, col in enumerate(row):
-                if col:
-                    k[(row_index, col_index)] = col
-
+        k = {
+            (y, x): a for (y, b) in enumerate(pad) for x, a in enumerate(b)
+            if a
+        }
         code = ''
 
         x = 1
         y = 1
 
-        for step in self.parsed_data:
+        for step in self.lines:
             for move in step:
-                if move == 'D' and k.get((y + 1, x)):
+                if move == 'D' and (y+1, x) in k:
                     y += 1
-                elif move == 'U' and k.get((y - 1, x)):
-                    y = max(0, y - 1)
-                elif move == 'R' and k.get((y, x + 1)):
+                elif move == 'U' and (y-1, x) in k:
+                    y -= 1
+                elif move == 'R' and (y, x+1) in k:
                     x += 1
-                elif move == 'L' and k.get((y, x - 1)):
-                    x = max(0, x - 1)
-            code += str(pad[y][x])
+                elif move == 'L' and (y, x-1) in k:
+                    x -= 1
+            code += str(k[y, x])
         return code
 
     def part_a(self):

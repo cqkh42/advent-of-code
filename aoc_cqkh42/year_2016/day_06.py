@@ -5,15 +5,14 @@ from aoc_cqkh42 import BaseSolution
 
 class Solution(BaseSolution):
     def parse_data(self):
-        rows = self.data.split('\n')
-        cols = zip(*rows)
+        cols = zip(*self.lines)
         counters = [Counter(col) for col in cols]
-        return counters
+        return [counter.most_common() for counter in counters]
 
     def part_a(self):
-        a = [col.most_common(1)[0][0] for col in self.parsed_data]
+        a = [col[0][0] for col in self.parsed_data]
         return ''.join(a)
 
     def part_b(self):
-        a = [col.most_common()[-1][0] for col in self.parsed_data]
+        a = [col[-1][0] for col in self.parsed_data]
         return ''.join(a)

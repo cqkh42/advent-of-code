@@ -4,11 +4,12 @@ from aoc_cqkh42 import BaseSolution
 
 
 def _decode_str(string):
-    string = re.sub(r'^"', '', string)
-    string = re.sub(r'"$', '', string)
-    string = re.sub(r'\\\\', r'\\', string)
-    string = re.sub(r'\\"', '"', string)
-    string = re.sub(r'\\x[a-f0-9]{2}', 'x', string)
+    replacements = [
+        (r'^"', ''), (r'"$', ''), (r'\\\\', r'\\'), (r'\\"', '"'),
+        (r'\\x[a-f0-9]{2}', 'x')
+    ]
+    for regex, repl in replacements:
+        string = re.sub(regex, repl, string)
     return string
 
 
@@ -19,10 +20,4 @@ class Solution(BaseSolution):
         return code_len - sum(decoded)
 
     def part_b(self):
-        return sum(
-            line.count('"') + line.count("\\") + 2
-            for line in self.lines
-            )
-
-
-
+        return 2*len(self.lines) + self.data.count('"') + self.data.count("\\")

@@ -8,18 +8,21 @@ from aoc_cqkh42.helpers import aocr
 
 
 class Solution(BaseSolution):
+    rect = parse.compile(r'rect {:d}x{:d}')
+    row_parser = parse.compile(r'rotate row y={:d} by {:d}')
+    col_parser = parse.compile(r'rotate column x={:d} by {:d}')
+
     def parse_data(self):
-        instructions = self.data.split('\n')
         screen = np.zeros((6, 50))
-        for instruction in instructions:
+        for instruction in self.lines:
             if instruction.startswith('rect'):
-                x, y = RECT_PARSER.parse(instruction)
+                x, y = self.rect.parse(instruction)
                 screen[:y, :x] = 1
             elif 'row' in instruction:
-                y, steps = ROW_PARSER.parse(instruction)
+                y, steps = self.row_parser.parse(instruction)
                 screen[y] = np.roll(screen[y], steps)
             else:
-                x, steps = COL_PARSER.parse(instruction)
+                x, steps = self.col_parser.parse(instruction)
                 screen[:, x] = np.roll(screen[:, x], steps)
         return screen.astype(int)
 
@@ -28,8 +31,3 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return aocr.word(itertools.chain.from_iterable(self.parsed_data))
-
-
-RECT_PARSER = parse.compile(r'rect {:d}x{:d}')
-ROW_PARSER = parse.compile(r'rotate row y={:d} by {:d}')
-COL_PARSER = parse.compile(r'rotate column x={:d} by {:d}')

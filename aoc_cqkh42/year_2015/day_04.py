@@ -1,3 +1,4 @@
+# TODO HASH
 import itertools
 from _md5 import md5
 

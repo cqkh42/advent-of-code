@@ -15,23 +15,19 @@ from aoc_cqkh42.helpers.graph import a_star
 
 class Solution(BaseSolution):
     def parse_data(self):
-        generators = {}
-        chips = {}
+        indices = re.findall(r' (\w+) generator', self.data)
+
+        generators = np.zeros(len(indices), dtype=int)
+        chips = np.zeros(len(indices), dtype=int)
 
         for floor_num, info in enumerate(self.lines):
             for gen in re.findall(r' (\w+) generator', info):
-                generators[gen] = floor_num
+                index = indices.index(gen)
+                generators[index] = floor_num
             for chip in re.findall(r' (\w+)-compatible', info):
-                chips[chip] = floor_num
-        generator_array = np.zeros((4, len(generators)), dtype='int')
-        chip_array = np.zeros((4, len(generators)), dtype='int')
-        for index, (element, floor) in enumerate(sorted(generators.items())):
-            generator_array[floor, index] = 1
-        for index, (element, floor) in enumerate(sorted(chips.items())):
-            chip_array[floor, index] = 1
-        lift_array = np.array([[1], [0], [0], [0]])
-        arr = np.dstack([generator_array, chip_array]).astype(int)
-        return State(arr, lift_array, 0)
+                index = indices.index(chip)
+                chips[index] = floor_num
+        return Node(generators, chips, 0, 0)
 
     def part_a(self):
         # return None
@@ -57,94 +53,73 @@ def roll_array(array, slicer, num):
 
 
 @dataclasses.dataclass
-class State(a_star.AStarBaseState):
-    arr: np.array
-    lift: np.array
+class Node(a_star.AStarBaseNode):
+    generators: np.array
+    chips: np.array
+    lift: int
     distance: int = dataclasses.field(compare=False, hash=False)
 
-    def is_target(self):
-        return (self.arr[-1] == 1).all()
-
     def __hash__(self):
-        return hash((self.arr.tostring(), self.lift.tostring()))
+        return hash((self.generators.tostring(), self.chips.tostring(), self.lift))
+
+    def is_target(self):
+        return (self.generators == 3).all() and (self.chips == 3).all()
 
     def __eq__(self, other):
-        a = (self.arr == other.arr).all()
-        l = (self.lift == other.lift).all()
-        return a and l
-
-    @property
-    def _floor(self):
-        return np.argmax(self.lift)
-
-    def neighbours(self):
-        nn = set()
-        # we go up
-        if self._floor != 3:
-            nn.update(self._moves(1))
-        if self._floor != 0:
-            nn.update(self._moves(-1))
-        return nn
-
-    def _moves(self, direction):
-        nn = []
-        new_lift = np.roll(self.lift, direction)
-
-        moveable_gens = np.nonzero(self.arr[self._floor, :, 0])[0]
-        moveable_chips = np.nonzero(self.arr[self._floor, :, 1])[0]
-        all_combs = [
-            (0, moveable_gens),
-            (1, moveable_chips),
-            (0, itertools.combinations(moveable_gens, 2)),
-            (1, itertools.combinations(moveable_chips, 2)),
-            ([0, 1], itertools.product(moveable_gens, moveable_chips))
-        ]
-        for gen_or_chip, options in all_combs:
-            for option in options:
-                s = (slice(None), option, gen_or_chip)
-                new_arr = roll_array(self.arr, s, direction)
-                new_neighbour = State(new_arr, new_lift,
-                                      self.distance + 1)
-                nn.append(new_neighbour)
-        return {i for i in nn if i.is_valid()}
+        return (
+            (self.generators == other.generators).all() and
+            (self.chips == other.chips).all() and
+            self.lift == other.lift
+        )
 
     def is_valid(self):
-        chip = self.arr[:, :, 1]
-        generator = self.arr[:, :, 0]
-        loose_chip = chip & (generator != 1)
-        loose_chip_floors = loose_chip.any(axis=1)
-        generator_floors = generator.any(axis=1)
-        return not (loose_chip_floors & generator_floors).any()
+        if not 0 <= self.lift <= 3:
+            return False
+        loose_chips = {chip for gen, chip in zip(self.generators, self.chips) if gen != chip}
+        bad_gen = loose_chips.intersection(self.generators)
+        return not bad_gen
+
+        print(loose_chips, self.generators, bad_gen)
+        # prin
+        # print(self.chips, self.generators)
+        # return True
+        # if a chip is with another RTG and not its own, it will be fried
+        # return any(chip in self.generators for chip in loose_chips)
+
+        for gen, chip in zip(self.generators, self.chips):
+            if gen != chip and chip in self.generators:
+                return False
+        return True
+
+    def neighbours(self):
+        a = {i for i in self._neighbours() if i.is_valid()}
+        yield from a
+
+    def _neighbours(self):
+        # we can go up or down
+        # we can move 1 or 2
+
+        available_gens = np.flatnonzero(self.generators == self.lift)
+        available_chips = np.flatnonzero(self.chips == self.lift)
+
+        double_gens = (list(indices) for indices in itertools.combinations(available_gens, 2))
+        for index, change in itertools.product((*available_gens, *double_gens), (-1, 1)):
+            g = self.generators.copy()
+            g[index] += change
+            yield Node(g, self.chips, self.lift + change, self.distance + 1)
+
+        double_chips = (list(indices) for indices in itertools.combinations(available_chips, 2))
+        for index, change in itertools.product((*available_chips, *double_chips), (-1, 1)):
+            c = self.chips.copy()
+            c[index] += change
+            yield Node(self.generators, c, self.lift + change, self.distance + 1)
+
+        for gen_index, chip_index, change in itertools.product(available_gens, available_chips, (-1, 1)):
+            c = self.chips.copy()
+            g = self.generators.copy()
+            c[chip_index] += change
+            g[gen_index] += change
+            yield Node(g, c, self.lift + change, self.distance + 1)
 
     def h(self):
         return 0
-        # a = self.arr[0,:,:].sum()
-        # b = self.arr[1, :, :].sum()
-        # c = self.arr[2, :, :].sum()
-        #
-        # return (a * 3) + (b*2) + c
-        # return 3 - self._floor
-        # return 0
-        # stuff_on_floor = self.arr.sum(axis=1)
-        # trips = stuff_on_floor // 2
-
-        # go down to lowest floor
-        # have to bring something down there
-        # bring stuff up one at a time (you have to go back down for it)
-
-        total = 0
-        on_first = self.arr[0,:,:].sum()
-        on_second = self.arr[1,:,:].sum()
-        on_third = self.arr[2,:,:].sum()
-
-        if on_first:
-            total += ((on_first-1) * 6) +3
-        if on_second:
-            total += ((on_second-1) * 4) +2
-        if on_third:
-            total += ((on_third-1) * 2) + 1
-        return total
-
-    # @property
-    # def priority(self):
-    #     return self.g + self.h()

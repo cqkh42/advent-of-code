@@ -1,6 +1,12 @@
 import itertools
+from functools import cache, lru_cache
 
 from aoc_cqkh42 import BaseSolution
+
+
+# @lru_cache(maxsize=10)
+def _resolve(a, b):
+    return f'{len(list(b))}{a}'
 
 
 class Solution(BaseSolution):
@@ -12,13 +18,10 @@ class Solution(BaseSolution):
     def _sequence(self, iters):
         for _ in range(iters):
             self._iteration()
+        return len(self.data)
 
     def part_a(self, iters=40):
-        self._sequence(iters)
-        return len(self.data)
+        return self._sequence(iters)
 
     def part_b(self):
-        self._sequence(10)
-        return len(self.data)
-
-
+        return self._sequence(10)
