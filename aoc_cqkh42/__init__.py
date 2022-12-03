@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import importlib
 
+import parse
+
 # TODO do I need to abstract out binary search?
 
 
@@ -16,6 +18,11 @@ class BaseSolution:
     @property
     def lines(self):
         return self.data.split('\n')
+
+    @property
+    def numbers(self):
+        parser = parse.compile('{num:d}')
+        return [result['num'] for result in parser.findall(self.data)]
 
     def part_a(self):
         return None
