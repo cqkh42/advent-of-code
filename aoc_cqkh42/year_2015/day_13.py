@@ -1,50 +1,37 @@
-from collections import defaultdict
 import itertools
 
+import networkx as nx
 import parse
 
 from aoc_cqkh42 import BaseSolution
 
 
 PARSER = parse.compile(
-    r'{a:w} would {change:d} happiness units by sitting next to {b:w}.'
+    r'{:w} would {:d} happiness units by sitting next to {:w}.'
 )
 
 
-def _map_happiness(data):
-    data = data.replace('lose ', '-').replace('gain ', '')
-    matches = PARSER.findall(data)
-    score = defaultdict(int)
-    for match in matches:
-        score[frozenset((match['a'], match['b']))] += int(match['change'])
-    return score
-
-
 class Solution(BaseSolution):
-    people = None
 
     def parse_data(self):
-        happiness = _map_happiness(self.data)
-        self.people = set(itertools.chain(*happiness))
-        return happiness
+        graph = nx.Graph()
+        data = self.data.replace('lose ', '-').replace('gain ', '')
+        matches = PARSER.findall(data)
+        for a, change, b in matches:
+            if graph.has_edge(a, b):
+                graph.edges[a, b]['weight'] += change
+            else:
+                graph.add_edge(a, b, weight=change)
 
-    def _calc_happiness(self, order):
-        left = order
-        right = order[1:] + order[:1]
-        people = (frozenset(people) for people in zip(left, right))
-        return sum(self.parsed_data[people] for people in people)
+        perms = ([*i, i[0]] for i in itertools.permutations(graph))
+        weights = (
+            [graph.edges[u, v]['weight'] for u, v in zip(path, path[1:])]
+            for path in perms
+        )
+        return [(sum(weight), min(weight)) for weight in weights]
 
     def part_a(self):
-        possible_arrangements = itertools.permutations(self.people)
-        return max((
-            self._calc_happiness(order)
-            for order in possible_arrangements)
-        )
+        return max(self.parsed_data)[0]
 
     def part_b(self):
-        self.people.add('me')
-        possible_arrangements = itertools.permutations(self.people)
-        return max((
-            self._calc_happiness(order)
-            for order in possible_arrangements
-        ))
+        return max(weight-lowest for weight, lowest in self.parsed_data)

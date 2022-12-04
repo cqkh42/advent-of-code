@@ -6,8 +6,7 @@ from aoc_cqkh42 import BaseSolution
 class Solution(BaseSolution):
     def parse_data(self) -> np.array:
         mapping_dict = {'>': (1, 0), '<': (-1, 0), '^': (0, 1), 'v': (0, -1)}
-        changes = np.array([mapping_dict[step] for step in self.data])
-        changes = np.insert(changes, 0, [0, 0], axis=0)
+        changes = np.array([[0, 0], *(mapping_dict[step] for step in self.data)])
         return changes
 
     def part_a(self) -> int:

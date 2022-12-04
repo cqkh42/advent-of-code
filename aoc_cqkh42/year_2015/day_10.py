@@ -1,10 +1,10 @@
 import itertools
-from functools import cache, lru_cache
+from functools import cache
 
 from aoc_cqkh42 import BaseSolution
 
 
-# @lru_cache(maxsize=10)
+@cache
 def _resolve(a, b):
     return f'{len(list(b))}{a}'
 

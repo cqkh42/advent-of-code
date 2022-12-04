@@ -1,7 +1,5 @@
 import json
 
-import parse
-
 from aoc_cqkh42 import BaseSolution
 
 
@@ -20,8 +18,7 @@ def recursive_sum(data):
 
 class Solution(BaseSolution):
     def part_a(self):
-        hits = parse.findall(r'{num:d}', self.data)
-        return sum(num['num'] for num in hits)
+        return sum(self.numbers)
 
     def part_b(self):
         data = [json.loads(self.data)]

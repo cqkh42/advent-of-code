@@ -3,6 +3,7 @@ from collections import Counter
 import aocr
 
 def make_chunks(lst, n):
+    #todo make this a helper
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
