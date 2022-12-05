@@ -2,47 +2,48 @@
 import itertools
 import math
 
+import more_itertools
+
 from aoc_cqkh42 import BaseSolution
 
 
 def subsets_equal_to(set_, target):
     for size in range(1, len(set_)+1):
         combs = itertools.combinations(set_, size)
-        yield (comb for comb in combs if sum(comb) == target)
+        yield from (comb for comb in combs if sum(comb) == target)
 
+def two_sets_sum_to(set_, target):
+    for first in subsets_equal_to(set_, target):
+        second = subsets_equal_to(set_.difference(first), target)
+        for s in second:
+            yield first, s
+
+def sets_sum_to(set_, target, num):
+    if num == 1:
+        yield from subsets_equal_to(set_, target)
+    elif num == 2:
+        for first in subsets_equal_to(set_, target):
+            second = subsets_equal_to(set_.difference(first), target)
+            for s in second:
+                yield first, s
+    else:
+        for results in sets_sum_to(set_, target, num-1):
+            next_ = subsets_equal_to(set_.difference(*results), target)
+            for t in next_:
+                yield *more_itertools.always_iterable(results), t
 
 class Solution(BaseSolution):
     def parse_data(self):
         return frozenset(self.numbers)
 
+    def solve(self, num_groups, target):
+        results = next(sets_sum_to(self.parsed_data, target, num_groups))
+        groups = *results, self.parsed_data.difference(results)
+        return min(math.prod(i) for i in groups if
+                   len(i) == len(min(groups, key=len)))
+
     def part_a(self):
-        for size in range(len(self.parsed_data)):
-            combs = (
-                math.prod(comb)
-                for comb in itertools.combinations(self.parsed_data, size)
-                if sum(comb) == sum(self.parsed_data) / 3
-            )
-            try:
-                return min(combs)
-            except ValueError:
-                continue
+        return self.solve(2, sum(self.parsed_data) / 3)
 
     def part_b(self):
-        packages = self.parsed_data
-        total_weight = sum(packages)
-        group_weight = total_weight / 4
-        possible_first_groups = subsets_equal_to(packages,
-                                                 group_weight)
-        #
-        for size in possible_first_groups:
-            results = []
-            for group in size:
-                others = packages.difference()
-                if (
-                bits := subsets_equal_to(others, group_weight)):
-                    for _ in bits:
-                        k = others.difference(bits)
-                        if subsets_equal_to(k, group_weight):
-                            results.append(math.prod(group))
-            if results:
-                return min(results)
+        return self.solve(3, sum(self.parsed_data) / 4)
