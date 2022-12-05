@@ -6,24 +6,23 @@ from aoc_cqkh42 import BaseSolution
 
 def replace_occurence(string, old, new, occurence):
     return (
-        string
-        .replace(old, '$$$', occurence - 1)
+        string.replace(old, "$$$", occurence - 1)
         .replace(old, new, 1)
-        .replace('$$$', old)
+        .replace("$$$", old)
     )
 
 
 def try_permutation(maps, element):
     visited = set()
     replaced = 0
-    while element != 'e':
+    while element != "e":
         for new, old in maps:
-            if old not in element or element.count('e'):
+            if old not in element or element.count("e"):
                 continue
             element = element.replace(old, new, 1)
-            if element == 'e':
+            if element == "e":
                 return replaced + 1
-            elif 'e' in element:
+            elif "e" in element:
                 return None
             if element in visited:
                 return None
@@ -38,7 +37,7 @@ class Solution(BaseSolution):
 
     def parse_data(self):
         *maps, _, element = self.lines
-        maps = [item.split(' => ') for item in maps]
+        maps = [item.split(" => ") for item in maps]
         self.element = element
         self.maps = maps
         return maps, element
@@ -48,9 +47,7 @@ class Solution(BaseSolution):
         for old, new in self.maps:
             count = self.element.count(old)
             for occurence in range(1, count + 1):
-                new_string = replace_occurence(
-                    self.element, old, new, occurence
-                )
+                new_string = replace_occurence(self.element, old, new, occurence)
                 new_strings.add(new_string)
         return len(new_strings)
 

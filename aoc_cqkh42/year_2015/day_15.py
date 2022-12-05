@@ -7,7 +7,7 @@ from aoc_cqkh42 import BaseSolution
 
 
 PARSER = parse.compile(
-    'capacity {:d}, durability {:d}, flavor {:d}, texture {:d}, calories {:d}'
+    "capacity {:d}, durability {:d}, flavor {:d}, texture {:d}, calories {:d}"
 )
 
 
@@ -17,8 +17,10 @@ def get_ratios(num_ingredients):
     )
     master_ratios = [ratio for ratio in master_ratios if sum(ratio) == 100]
     master_ratios = (itertools.permutations(i) for i in master_ratios)
-    master_ratios = [np.array(ratio).reshape(-1, 1) for ratio in
-                     itertools.chain.from_iterable(master_ratios)]
+    master_ratios = [
+        np.array(ratio).reshape(-1, 1)
+        for ratio in itertools.chain.from_iterable(master_ratios)
+    ]
     return np.stack(master_ratios)
 
 

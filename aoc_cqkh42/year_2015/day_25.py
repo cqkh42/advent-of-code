@@ -5,7 +5,7 @@ from aoc_cqkh42 import BaseSolution
 
 class Solution(BaseSolution):
     def part_a(self):
-        row, col = re.findall(r'\d+', self.data)
+        row, col = re.findall(r"\d+", self.data)
         row = int(row)
         col = int(col)
 

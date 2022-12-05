@@ -5,7 +5,7 @@ from aoc_cqkh42.year_2015 import day_17
 
 @pytest.fixture
 def solution():
-    data = '20\n15\n10\n5\n5'
+    data = "20\n15\n10\n5\n5"
     solution = day_17.Solution(data)
     return solution
 

@@ -13,12 +13,12 @@ class Solution(BaseSolution):
         houses = np.ones(self.n)
         houses *= 10
         for elf in range(2, self.n):
-            houses[elf::elf] += (elf * 10)
+            houses[elf::elf] += elf * 10
         return np.argmax(houses > self.parsed_data)
 
     def part_b(self):
         houses = np.ones(self.n)
         houses *= 11
         for elf in range(2, self.n):
-            houses[elf:(elf*50)+1:elf] += (elf * 11)
+            houses[elf : (elf * 50) + 1 : elf] += elf * 11
         return np.argmax(houses > self.parsed_data)

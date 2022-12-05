@@ -9,7 +9,7 @@ def recursive_sum(data):
             return data
         case list(data):
             return sum(recursive_sum(i) for i in data)
-        case dict(data) if 'red' not in data.values():
+        case dict(data) if "red" not in data.values():
             a = (recursive_sum(i) for i in data.values())
             return sum(a)
         case _:

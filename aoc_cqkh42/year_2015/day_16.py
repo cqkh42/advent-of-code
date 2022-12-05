@@ -2,33 +2,33 @@ import parse
 
 from aoc_cqkh42 import BaseSolution
 
-PARSER = parse.compile('{:w}: {:d}, {:w}: {:d}, {:w}: {:d}')
+PARSER = parse.compile("{:w}: {:d}, {:w}: {:d}, {:w}: {:d}")
 
 
 # noinspection SpellCheckingInspection
 AUNTIE = {
-    'children': 3,
-    'cats': 7,
-    'samoyeds': 2,
-    'pomeranians': 3,
-    'akitas': 0,
-    'vizslas': 0,
-    'goldfish': 5,
-    'trees': 3,
-    'cars': 2,
-    'perfumes': 1
+    "children": 3,
+    "cats": 7,
+    "samoyeds": 2,
+    "pomeranians": 3,
+    "akitas": 0,
+    "vizslas": 0,
+    "goldfish": 5,
+    "trees": 3,
+    "cars": 2,
+    "perfumes": 1,
 }
 
 
 # noinspection SpellCheckingInspection
 def _good_sue(sue):
-    equals = ['children', 'samoyeds', 'akitas', 'vizslas', 'cars', 'perfumes']
+    equals = ["children", "samoyeds", "akitas", "vizslas", "cars", "perfumes"]
     equals = all(sue.get(key, AUNTIE[key]) == AUNTIE[key] for key in equals)
 
-    gt = ['cats', 'trees']
-    gt = all(sue.get(key, float('inf')) > AUNTIE[key] for key in gt)
+    gt = ["cats", "trees"]
+    gt = all(sue.get(key, float("inf")) > AUNTIE[key] for key in gt)
 
-    lt = ['pomeranians', 'goldfish']
+    lt = ["pomeranians", "goldfish"]
     lt = all(sue.get(key, -1) < AUNTIE[key] for key in lt)
     return equals and gt and lt
 
@@ -40,9 +40,7 @@ class Solution(BaseSolution):
         return [dict(sue) for sue in sues]
 
     def part_a(self):
-        sue_is_good = [
-            sue.items() <= AUNTIE.items() for sue in self.parsed_data
-        ]
+        sue_is_good = [sue.items() <= AUNTIE.items() for sue in self.parsed_data]
         return sue_is_good.index(True) + 1
 
     def part_b(self):

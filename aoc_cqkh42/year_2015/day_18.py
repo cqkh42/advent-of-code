@@ -7,8 +7,9 @@ from aoc_cqkh42 import BaseSolution
 def iteration(lights):
     f = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
 
-    neighbours = generic_filter(lights, lambda x: x.sum(), footprint=f,
-                                mode='constant', output=int)
+    neighbours = generic_filter(
+        lights, lambda x: x.sum(), footprint=f, mode="constant", output=int
+    )
     threes = neighbours == 3
     two_or_three = (neighbours == 2) | threes
     stays_on = lights & two_or_three
@@ -21,7 +22,7 @@ class Solution(BaseSolution):
     def parse_data(self):
         rows = [list(row) for row in self.lines]
         rows = np.array(rows)
-        rows = rows == '#'
+        rows = rows == "#"
         return rows
 
     def part_a(self, steps=100):

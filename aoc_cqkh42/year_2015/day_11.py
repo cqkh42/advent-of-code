@@ -11,7 +11,7 @@ class Solution(BaseSolution):
         for index, char in enumerate(ords):
             if char in [8, 14, 11]:
                 ords[index] += 1
-                ords[index+1:] = [0]*(len(ords)-index-1)
+                ords[index + 1 :] = [0] * (len(ords) - index - 1)
                 break
         return ords
 
@@ -22,7 +22,7 @@ class Solution(BaseSolution):
         return self.next_valid_password()
 
     def cycle_password(self):
-        for index in range(len(self.parsed_data)-1, -1, -1):
+        for index in range(len(self.parsed_data) - 1, -1, -1):
             if num := self.parsed_data[index] != 25:
                 self.parsed_data[index] += 1 + (num in [7, 13, 10])
                 break
@@ -32,13 +32,14 @@ class Solution(BaseSolution):
         self.cycle_password()
         while not _is_valid(self.parsed_data):
             self.cycle_password()
-        return ''.join(chr(index+97) for index in self.parsed_data)
+        return "".join(chr(index + 97) for index in self.parsed_data)
 
 
 def _is_valid(password):
     # TODO this is messy
     match_triples = any(
-        first == second-1 == third-2 for first, second, third in more_itertools.triplewise(password)
+        first == second - 1 == third - 2
+        for first, second, third in more_itertools.triplewise(password)
     )
 
     counts = [len(list(b)) for a, b in itertools.groupby(password)]

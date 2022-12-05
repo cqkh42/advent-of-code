@@ -11,7 +11,7 @@ WEAPONS = [
     np.array([10, 0, 5]),
     np.array([25, 0, 6]),
     np.array([40, 0, 7]),
-    np.array([74, 0, 8])
+    np.array([74, 0, 8]),
 ]
 
 
@@ -21,7 +21,7 @@ ARMORS = [
     np.array([53, 3, 0]),
     np.array([75, 4, 0]),
     np.array([102, 5, 0]),
-    np.array([0, 0, 0])
+    np.array([0, 0, 0]),
 ]
 
 
@@ -33,17 +33,19 @@ RINGS = [
     np.array([40, 2, 0]),
     np.array([80, 3, 0]),
     np.array([0, 0, 0]),
-    np.array([0, 0, 0])
+    np.array([0, 0, 0]),
 ]
 
 
 class Solution(BaseSolution):
     def parse_data(self):
         boss_health, *stats = self.numbers
-        boss = np.array([0, *stats])*-1
+        boss = np.array([0, *stats]) * -1
 
-        p = [np.sum(combo, 0) + boss for combo in
-             itertools.product(WEAPONS, ARMORS, RINGS, RINGS)]
+        p = [
+            np.sum(combo, 0) + boss
+            for combo in itertools.product(WEAPONS, ARMORS, RINGS, RINGS)
+        ]
         return p
 
     def winner(self, boss_damage, player_damage):

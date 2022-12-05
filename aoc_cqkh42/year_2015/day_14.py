@@ -7,8 +7,8 @@ from aoc_cqkh42 import BaseSolution
 
 TIME = 2503
 PARSER = parse.compile(
-    r'{name:w} can fly {speed:d} km/s for {duration:d} seconds, but then must '
-    r'rest for {rest:d} seconds.'
+    r"{name:w} can fly {speed:d} km/s for {duration:d} seconds, but then must "
+    r"rest for {rest:d} seconds."
 )
 
 
@@ -32,9 +32,7 @@ class Reindeer:
 
 class Solution(BaseSolution):
     def parse_data(self):
-        reindeer = [
-            Reindeer(**data.named) for data in PARSER.findall(self.data)
-        ]
+        reindeer = [Reindeer(**data.named) for data in PARSER.findall(self.data)]
         return reindeer
 
     def part_a(self, time=TIME):
@@ -42,13 +40,7 @@ class Solution(BaseSolution):
 
     def part_b(self, time=TIME):
         for second in range(1, time + 1):
-            highest_score = max(
-                deer.distance(second) for deer in self.parsed_data
-            )
+            highest_score = max(deer.distance(second) for deer in self.parsed_data)
             for deer in self.parsed_data:
                 deer.score += deer.distance(second) == highest_score
         return max(self.parsed_data, key=lambda deer: deer.score).score
-
-
-
-
