@@ -12,3 +12,4 @@ advent-of-code-data>=1.3.0
 frozendict
 networkx
 bidict
+more_itertools

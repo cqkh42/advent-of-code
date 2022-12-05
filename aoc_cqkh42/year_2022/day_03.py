@@ -1,21 +1,18 @@
 from aoc_cqkh42 import BaseSolution
-
+#TODO how many places can we use more_itertools
 from collections import Counter
 from string import ascii_letters
 
+from aoc_cqkh42.helpers.helpers import make_chunks
 
-def make_chunks(lst, n):
-    #todo make this a helper
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
-
+import more_itertools
 
 class Solution(BaseSolution):
     def part_a(self):
+        lines = (more_itertools.divide(2, line) for line in self.lines)
         totals = Counter(
-            max(set(line[:len(line)//2]).intersection(line[len(line)//2:]))
-            for line in self.lines
+            max(set(a).intersection(b))
+            for a,b in lines
         )
         return sum(
             (ascii_letters.index(letter) + 1) * count

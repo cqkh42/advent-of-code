@@ -8,6 +8,9 @@ import parse
 
 @dataclass(init=False)
 class BaseSolution:
+    _lines = None
+    _numbers = None
+
     def __init__(self, data):
         self.data = data
         self.parsed_data = self.parse_data()
@@ -17,12 +20,18 @@ class BaseSolution:
 
     @property
     def lines(self):
-        return self.data.split('\n')
+        if self._lines is not None:
+            return self._lines
+        self._lines = self.data.split('\n')
+        return self._lines
 
     @property
     def numbers(self):
+        if self._numbers is not None:
+            return self._numbers
         parser = parse.compile('{num:d}')
-        return [result['num'] for result in parser.findall(self.data)]
+        self._numbers = tuple(result['num'] for result in parser.findall(self.data))
+        return self._numbers
 
     def part_a(self):
         return None

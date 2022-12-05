@@ -19,4 +19,4 @@ def test_part_a(solution):
 
 
 def test_part_b(solution):
-    assert solution.part_b() == float('inf')
+    assert solution.part_b() == 4
