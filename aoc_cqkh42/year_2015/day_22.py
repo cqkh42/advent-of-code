@@ -2,29 +2,17 @@
 # TODO abstract search
 from dataclasses import dataclass, field, replace
 
-import parse
-
 from aoc_cqkh42 import BaseSolution
 from aoc_cqkh42.helpers.graph.dijkstra import dijkstra
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
-        boss_health, boss_damage = parse.parse(
-            'Hit Points: {:d}\nDamage: {:d}', self.data
-        )
-        return boss_health, boss_damage
-
     def part_a(self):
-        boss_health, boss_damage = self.parsed_data
-        starting_state = State(PLAYER_HEALTH, boss_health,
-                               boss_damage, PLAYER_MANA)
+        starting_state = State(PLAYER_HEALTH, *self.numbers, PLAYER_MANA)
         return dijkstra(starting_state)
 
     def part_b(self):
-        boss_health, boss_damage = self.parsed_data
-        starting_state = StateB(PLAYER_HEALTH, boss_health,
-                                boss_damage, PLAYER_MANA)
+        starting_state = StateB(PLAYER_HEALTH, *self.numbers, PLAYER_MANA)
         return dijkstra(starting_state)
 
 
@@ -38,17 +26,33 @@ EFFECT_STATS = {
 }
 
 
-@dataclass(unsafe_hash=True, eq=True, order=True)
+@dataclass(frozen=True)
 class State:
-    player_health: int = field(compare=False, hash=True)
-    boss_health: int = field(compare=False)
-    boss_damage: int = field(compare=False)
-    mana: int = field(compare=False)
-    used_mana: int = field(default=0, compare=True)
-    poison: int = field(default=0, compare=False)
-    recharge: int = field(default=0, compare=False)
-    shield: int = field(default=0, compare=False)
-    travelled: int = field(default=0, compare=False)
+    player_health: int
+    boss_health: int
+    boss_damage: int
+    mana: int
+    used_mana: int = 0
+    poison: int = 0
+    recharge: int = 0
+    shield: int = 0
+    travelled: int = 0
+
+    def __eq__(self, other):
+        #TODO there is a way to get rid of these using eq and compare
+        return self.used_mana == other.used_mana
+
+    def __lt__(self, other):
+        return self.used_mana < other.used_mana
+
+    def __le__(self, other):
+        return self.used_mana <= other.used_mana
+
+    def __gt__(self, other):
+        return self.used_mana > other.used_mana
+
+    def __ge__(self, other):
+        return self.used_mana >= other.used_mana
 
     @property
     def player_armor(self):
@@ -68,9 +72,9 @@ class State:
             self,
             boss_health=self.boss_health - (3 * (self.poison > 0)),
             mana=self.mana + (101 * (self.recharge > 0)),
-            poison = max(self.poison-1, 0),
-            recharge = max(self.recharge-1, 0),
-            shield = max(self.shield-1, 0)
+            poison= max(self.poison-1, 0),
+            recharge= max(self.recharge-1, 0),
+            shield= max(self.shield-1, 0)
         )
 
     def cast_attack(self, mana, boss_change=0, player_change=0):
@@ -86,8 +90,7 @@ class State:
         return (self.cast_attack(*stats) for stats in [(53, 4, 0), (73, 2, 2)] if self.mana >= stats[0])
 
     def boss_attack(self):
-        self.player_health -= self.boss_damage - self.player_armor
-        return self
+        return replace(self, player_health=self.player_health-self.boss_damage+self.player_armor)
 
     def is_target(self):
         return self.boss_health <= 0
@@ -120,7 +123,9 @@ class State:
 
 class StateB(State):
     def neighbours(self):
-        self.player_health -= 1
-        yield from self._n()
+        a = replace(self, player_health=self.player_health-1)
+        if a.player_health <= 0:
+            return []
+        yield from a._n()
 
 

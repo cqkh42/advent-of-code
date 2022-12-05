@@ -2,7 +2,6 @@ import itertools
 import math
 
 import numpy as np
-import parse
 
 from aoc_cqkh42 import BaseSolution
 
@@ -38,35 +37,26 @@ RINGS = [
 ]
 
 
-def winner(boss_damage, player_damage, boss_health):
-    player_health = 100
-    damage_to_player = max(-boss_damage, 1)
-    damage_to_boss = max(player_damage, 1)
-
-    player_turns_needed = math.ceil(boss_health / damage_to_boss)
-    boss_turns_needed = math.ceil(player_health / damage_to_player)
-    return player_turns_needed <= boss_turns_needed
-
-
 class Solution(BaseSolution):
     def parse_data(self):
-        matches = parse.findall(r'{:d}', self.data)
-        boss_health, *stats = [result[0] for result in matches]
+        boss_health, *stats = self.numbers
         boss = np.array([0, *stats])*-1
-        return boss, boss_health
+
+        p = [np.sum(combo, 0) + boss for combo in
+             itertools.product(WEAPONS, ARMORS, RINGS, RINGS)]
+        return p
+
+    def winner(self, boss_damage, player_damage):
+        player_health = 100
+        damage_to_player = max(-boss_damage, 1)
+        damage_to_boss = max(player_damage, 1)
+
+        player_turns_needed = math.ceil(self.numbers[0] / damage_to_boss)
+        boss_turns_needed = math.ceil(player_health / damage_to_player)
+        return player_turns_needed <= boss_turns_needed
 
     def part_a(self):
-        cheapest = float('inf')
-        for combo in itertools.product(WEAPONS, ARMORS, RINGS, RINGS):
-            cost, *stats = np.sum(combo, 0) + self.parsed_data[0]
-            if winner(*stats, self.parsed_data[1]):
-                cheapest = min(cheapest, cost)
-        return cheapest
+        return min(cost for cost, *stats in self.parsed_data if self.winner(*stats))
 
     def part_b(self):
-        priciest = 0
-        for combo in itertools.product(WEAPONS, ARMORS, RINGS, RINGS):
-            cost, *stats = np.sum(combo, 0) + self.parsed_data[0]
-            if not winner(*stats, self.parsed_data[1]):
-                priciest = max(priciest, cost)
-        return priciest
+        return max(cost for cost, *stats in self.parsed_data if not self.winner(*stats))

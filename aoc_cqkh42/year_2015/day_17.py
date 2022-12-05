@@ -1,33 +1,23 @@
-import itertools
+from collections import Counter
+import functools
 
 from aoc_cqkh42 import BaseSolution
 
-
-def _increasing_combinations(item):
-    combs = (
-        itertools.combinations(item, length)
-        for length in range(1, len(item) + 1)
-    )
-    yield from itertools.chain.from_iterable(combs)
+import more_itertools
+@functools.cache
+def valid(numbers, target):
+    containers = more_itertools.powerset(numbers)
+    valid_containers = [group for group in containers if
+                        sum(group) == target]
+    return valid_containers
 
 
 class Solution(BaseSolution):
-    def __init__(self, data, target=150):
-        self.target = target
-        super().__init__(data)
+    def part_a(self, target=150):
+        return len(valid(self.numbers, target))
 
-    def parse_data(self):
-        containers = [int(container) for container in self.lines]
-        containers = _increasing_combinations(containers)
-        valid_containers = [group for group in containers if sum(group) == self.target]
-        return valid_containers
-
-    def part_a(self):
-        return len(self.parsed_data)
-
-    def part_b(self):
-        sizes = [
-            len(group) for group in self.parsed_data
-        ]
-        lowest = min(sizes)
-        return sizes.count(lowest)
+    def part_b(self, target=150):
+        sizes = Counter(
+            len(group) for group in valid(self.numbers, target)
+        )
+        return sizes[min(sizes)]

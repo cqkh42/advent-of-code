@@ -2,6 +2,7 @@ import itertools
 
 import parse
 import networkx as nx
+import more_itertools
 
 from aoc_cqkh42 import BaseSolution
 
@@ -15,7 +16,7 @@ class Solution(BaseSolution):
         )
         distances = {
             sum(graph.edges[start, end]['weight'] for start, end in
-                zip(route, route[1:]))
+                more_itertools.pairwise(route))
             for route in itertools.permutations(graph)
         }
         return distances

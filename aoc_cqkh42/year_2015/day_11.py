@@ -2,6 +2,8 @@ import itertools
 
 from aoc_cqkh42 import BaseSolution
 
+import more_itertools
+
 
 class Solution(BaseSolution):
     def parse_data(self):
@@ -35,9 +37,8 @@ class Solution(BaseSolution):
 
 def _is_valid(password):
     # TODO this is messy
-    triples = zip(password, password[1:], password[2:])
     match_triples = any(
-        first == second-1 == third-2 for first, second, third in triples
+        first == second-1 == third-2 for first, second, third in more_itertools.triplewise(password)
     )
 
     counts = [len(list(b)) for a, b in itertools.groupby(password)]

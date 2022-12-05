@@ -36,10 +36,9 @@ class Register:
 
 class Solution(BaseSolution):
     def parse_data(self):
-        instructions = self.data.split('\n')
         instructions = [
             instr.replace(',', '').replace('+', '').split()
-            for instr in instructions]
+            for instr in self.lines]
         instructions = [
             [part if part.isalpha() else int(part) for part in instr]
             for instr in instructions
