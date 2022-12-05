@@ -11,7 +11,7 @@ class Solution(BaseSolution):
     def _crack_hash(self, sequence):
         for answer in itertools.count(self.counter):
             hashed = self.parsed_data.copy()
-            hashed.update(f'{answer}'.encode())
+            hashed.update(f"{answer}".encode())
             hashed = hashed.hexdigest()
             if hashed.startswith(sequence):
                 return answer
@@ -20,8 +20,7 @@ class Solution(BaseSolution):
         return md5(self.data.encode())
 
     def part_a(self):
-        return self._crack_hash('0'*5)
+        return self._crack_hash("0" * 5)
 
     def part_b(self):
-        return self._crack_hash('0'*6)
-
+        return self._crack_hash("0" * 6)

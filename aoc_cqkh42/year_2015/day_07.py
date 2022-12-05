@@ -10,7 +10,7 @@ FUNC_MAP = {
     "OR": operator.or_,
     "LSHIFT": operator.lshift,
     "RSHIFT": operator.rshift,
-    'NOT': lambda x: (1 << 16) - 1 - x,
+    "NOT": lambda x: (1 << 16) - 1 - x,
 }
 
 
@@ -23,11 +23,11 @@ class Register:
 
     def add_line(self, line):
         match line.split():
-            case [wire_1, op, wire_2, '->', destination]:
+            case [wire_1, op, wire_2, "->", destination]:
                 self.register[destination] = (op, (wire_1, wire_2))
-            case [op, wire, '->', destination]:
+            case [op, wire, "->", destination]:
                 self.register[destination] = (op, (wire,))
-            case [wire, '->', destination]:
+            case [wire, "->", destination]:
                 self.register[destination] = wire
 
     def resolve(self, key):
@@ -51,17 +51,17 @@ class Register:
 
 class Solution(BaseSolution):
     answer_a = None
-    regex = re.compile(r'([a-z0-9]*) ?(\w*) ?([a-z0-9]*) -> (\w+)')
+    regex = re.compile(r"([a-z0-9]*) ?(\w*) ?([a-z0-9]*) -> (\w+)")
 
     def parse_data(self):
         return self.regex.findall(self.data)
 
     def part_a(self):
         register = Register(self.lines)
-        self.answer_a = register.resolve('a')
+        self.answer_a = register.resolve("a")
         return self.answer_a
 
     def part_b(self):
         register = Register(self.lines)
-        register['b'] = self.answer_a
-        return register.resolve('a')
+        register["b"] = self.answer_a
+        return register.resolve("a")

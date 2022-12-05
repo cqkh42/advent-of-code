@@ -19,16 +19,16 @@ class Present:
     @property
     def paper(self) -> int:
         sides = [math.prod(corner) for corner in self.sides]
-        return min(sides) + sum(sides)*2
+        return min(sides) + sum(sides) * 2
 
     @property
     def ribbon(self) -> int:
         perms = (sum(corner) for corner in self.sides)
-        return min(perms)*2 + math.prod(self.dims)
+        return min(perms) * 2 + math.prod(self.dims)
 
 
 class Solution(BaseSolution):
-    parser = parse.compile('{:d}x{:d}x{:d}')
+    parser = parse.compile("{:d}x{:d}x{:d}")
 
     def parse_data(self) -> List[Present]:
         presents = [Present(dims) for dims in self.parser.findall(self.data)]
