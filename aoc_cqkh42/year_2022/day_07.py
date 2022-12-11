@@ -1,11 +1,9 @@
 from aoc_cqkh42 import BaseSolution
 
 from dataclasses import dataclass, field
-from functools import cache
 from frozendict import frozendict
-from collections import defaultdict
-from typing import List, Set, Tuple
-import heapq
+from typing import Set, Tuple
+
 
 @dataclass
 class Directory:
@@ -15,6 +13,16 @@ class Directory:
 
     def file_size(self):
         return sum(file[0] for file in self.files)
+
+
+def total_size(dir_, directories):
+    return (
+        directories[dir_].file_size() +
+        sum(
+            total_size(dir_, directories)
+            for dir_ in directories[dir_].children
+        )
+    )
 
 
 class Solution(BaseSolution):
@@ -41,7 +49,8 @@ class Solution(BaseSolution):
                     a, b = line.split()
                     a = int(a)
                     directories[current_directory].files.add((a, b))
-        return directories
+        directories = frozendict(directories)
+        return [total_size(i, directories) for i in directories]
 
     def total_size(self, dir_):
         return (
@@ -53,14 +62,8 @@ class Solution(BaseSolution):
         )
 
     def part_a(self):
-        k = (self.total_size(i) for i in self.parsed_data)
-        return sum(i for i in k if i <= 100000)
+        return sum(dir_ for dir_ in self.parsed_data if dir_ <= 100000)
 
     def part_b(self):
-        used_space = self.total_size(('/',))
-        available_space = 70000000 - used_space
-        to_free = 30000000 - available_space
-        k = (self.total_size(i) for i in self.parsed_data)
-        k = (i for i in k if i >= to_free)
-        return min(k)
-
+        to_free = 30000000 - 70000000 + max(self.parsed_data)
+        return min(dir_ for dir_ in self.parsed_data if dir_ >= to_free)
