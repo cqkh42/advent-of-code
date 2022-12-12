@@ -6,6 +6,8 @@ import more_itertools
 import parse
 import numpy as np
 
+#TODO move is messy here
+
 def touching(head, tail):
     x = abs(head[0] - tail[0])
     y = abs(head[1] - tail[1])
@@ -21,10 +23,7 @@ def move(head, tail):
         x_move = -1
     # do we need a vertical move (y not x)
     elif head[1] != tail[1] and head[0] == tail[0]:
-        if head[1] - tail[1] == 2:
-            y_move = 1
-        elif head[1] - tail[1] == -2:
-            y_move = -1
+        y_move = (-1)**(1+(head[1] - tail[1] > 0))
     else:
         # we are going to do a diagonal
         if head[1] > tail[1]:
@@ -47,7 +46,6 @@ def chase(steps, tail=(0,0)):
     return tail_locations
 
 
-
 class Solution(BaseSolution):
     parser = parse.compile('{:l} {:d}')
     tail = (0, 0)
@@ -62,13 +60,7 @@ class Solution(BaseSolution):
         return len(set(places))
 
     def part_b(self):
-        k_1 = chase(self.parsed_data)
-        k_2 = chase(k_1)
-        k_3 = chase(k_2)
-        k_4 = chase(k_3)
-        k_5 = chase(k_4)
-        k_6 = chase(k_5)
-        k_7 = chase(k_6)
-        k_8 = chase(k_7)
-        k_9 = chase(k_8)
-        return len(set(k_9))
+        k = self.parsed_data
+        for i in range(9):
+            k = chase(k)
+        return len(set(k))
