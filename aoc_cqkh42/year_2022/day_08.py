@@ -4,7 +4,8 @@ from aoc_cqkh42 import BaseSolution
 
 import more_itertools
 import numpy as np
-from pprint import pprint
+
+#TODO needs a tidy, could do more with arrays
 
 def visible(row):
     max_ = -1
@@ -17,20 +18,14 @@ def visible(row):
 
 def visible_row(row):
     right = []
-    for index, i in enumerate(row):
-        t = 0
-        remainder = row[index+1:]
-        # remainder = list(itertools.takewhile(lambda x: x <= i, remainder))
-        # print(index, i, remainder)
-
-        for ind, x in enumerate(remainder):
-            if x < i:
-                t+=1
-            else:
-                right.append(t+1)
-                break
+    for index in range(len(row)):
+        terminating = [rem >= row[index] for rem in row[index+1:]]
+        if not terminating:
+            right.append(0)
+        elif sum(terminating):
+            right.append(terminating.index(True) + 1)
         else:
-            right.append(t)
+            right.append(len(terminating))
     return right
 
 
@@ -47,7 +42,7 @@ class Solution(BaseSolution):
         for index, row in enumerate(self.parsed_data):
             from_left = visible(row)
             seen[index, from_left] = 1
-            from_right = list(reversed(visible(row[::-1])))
+            from_right = visible(row[::-1])[::-1]
             seen[index, from_right] = 1
 
         for index, col in enumerate(zip(*self.parsed_data)):
