@@ -4,6 +4,7 @@ from aoc_cqkh42 import BaseSolution
 
 import more_itertools
 import parse
+import numpy as np
 
 def touching(head, tail):
     x = abs(head[0] - tail[0])
@@ -36,17 +37,14 @@ def move(head, tail):
             x_move = -1
     return tail[0] + x_move, tail[1] + y_move
 
-def move_big_rope(rope):
-    new_rope = [rope[0]]
-    first = rope[0]
-    for second in rope[1:]:
-        if not touching(first, second):
-            new_place = move(first, second)
-        else:
-            new_place = second
-        new_rope.append(new_place)
-        first = new_place
-    return new_rope
+
+def chase(steps, tail=(0,0)):
+    tail_locations = [tail]
+    for head in steps:
+        if not touching(head, tail):
+            tail = move(head, tail)
+        tail_locations.append(tail)
+    return tail_locations
 
 
 
@@ -55,36 +53,22 @@ class Solution(BaseSolution):
     tail = (0, 0)
 
     def parse_data(self):
-        locations = [(0, 0)]
         movements = more_itertools.run_length.decode(self.parser.findall(self.data))
-        for direction in movements:
-            x, y = locations[-1]
-            if direction == 'R':
-                locations.append((x+1, y))
-            elif direction == 'L':
-                locations.append((x-1, y))
-            elif direction == 'U':
-                locations.append((x, y+1))
-            elif direction == 'D':
-                locations.append((x, y-1))
-        return locations
+        dicts = {'R': (1, 0), 'L': (-1, 0), 'U': (0, 1), 'D': (0, -1)}
+        return list(itertools.accumulate((dicts[i] for i in movements), initial=np.array([0,0])))
 
     def part_a(self):
-        tail = (0, 0)
-        tail_locations = {tail}
-        for head in self.parsed_data:
-            if not touching(head, tail):
-                tail = move(head, tail)
-            tail_locations.add(tail)
-        return len(tail_locations)
+        places = chase(self.parsed_data)
+        return len(set(places))
 
     def part_b(self):
-        return
-        rope = [self.parsed_data[0], *((0,0) for _ in range(9))]
-        final_locations = {(0, 0)}
-        for head in self.parsed_data[1:]:
-            rope[-1] = head
-            rope = move_big_rope(rope)
-            final_locations.add(rope[-1])
-        print(final_locations)
-        return len(final_locations)
+        k_1 = chase(self.parsed_data)
+        k_2 = chase(k_1)
+        k_3 = chase(k_2)
+        k_4 = chase(k_3)
+        k_5 = chase(k_4)
+        k_6 = chase(k_5)
+        k_7 = chase(k_6)
+        k_8 = chase(k_7)
+        k_9 = chase(k_8)
+        return len(set(k_9))
