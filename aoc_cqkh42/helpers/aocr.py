@@ -30,7 +30,7 @@ def letter(text: Iterable[Iterable[int]], true=1) -> str:
     -------
     solution: str
     """
-    rows = [_format_row(row) for row in text]
+    rows = [_format_row(row, true) for row in text]
     text = '\n'.join(rows)
     solution = mappings[text]
     return solution
