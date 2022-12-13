@@ -1,11 +1,12 @@
 from aoc_cqkh42 import BaseSolution
 
+import more_itertools
+
 
 class Solution(BaseSolution):
     def parse_data(self):
-        elves = self.data.split('\n\n')
-        elves = [elf.split('\n') for elf in elves]
-        elves = [sum(int(num) for num in elf) for elf in elves]
+        elves = more_itertools.split_at(self.lines, lambda line: line == '')
+        elves = [sum(int(weight) for weight in elf) for elf in elves]
         return sorted(elves, reverse=True)
 
     def part_a(self):
