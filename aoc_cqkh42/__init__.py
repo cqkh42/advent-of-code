@@ -4,6 +4,8 @@ import importlib
 import parse
 
 # TODO do I need to abstract out binary search?
+# TODO how many places can we use more_itertools
+
 
 
 @dataclass(init=False)
