@@ -1,6 +1,6 @@
-from aoc_cqkh42 import BaseSolution
-
 from bidict import bidict
+
+from aoc_cqkh42 import BaseSolution
 
 
 class Solution(BaseSolution):
@@ -10,7 +10,6 @@ class Solution(BaseSolution):
 
     def parse_data(self):
         elf_mapping = {'A': 'rock', 'B': 'paper', 'C': 'scissors'}
-
         plays = (line.split() for line in self.lines)
         return [(elf_mapping[elf], you) for elf, you in plays]
 
@@ -42,6 +41,3 @@ class Solution(BaseSolution):
             self.round_score(elf, self._find_your_b_play(elf, you))
             for elf, you in self.parsed_data
         )
-
-
-
