@@ -16,7 +16,9 @@ scaffolding heavily supplied by
 
 ![2020](https://img.shields.io/badge/2020-36%2F50-brightgreen)
 
-![2021](https://img.shields.io/badge/2021-22%2F50-brightgreen)
+![2021](https://img.shields.io/badge/2021-32%2F50-brightgreen)
+
+![2022](https://img.shields.io/badge/2022-22%2F50-brightgreen)
 
 ## Setup
 
