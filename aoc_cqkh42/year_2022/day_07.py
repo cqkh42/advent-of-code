@@ -1,65 +1,66 @@
+from dataclasses import dataclass, field
+from typing import Set, Tuple
+
+from frozendict import frozendict
+
 from aoc_cqkh42 import BaseSolution
 
-from dataclasses import dataclass, field
-from frozendict import frozendict
-from typing import Set, Tuple
+import more_itertools
 
 
 @dataclass
 class Directory:
-    name: Tuple[str]
+    name: Tuple[str, ...]
     files: Set[str] = field(default_factory=set)
-    children: Set = field(default_factory=set)
+    children: list = field(default_factory=list)
 
     def file_size(self):
         return sum(file[0] for file in self.files)
 
+    @property
+    def parent(self):
+        return self.name[:-1]
 
-def total_size(dir_, directories):
-    return (
-        directories[dir_].file_size() +
-        sum(
-            total_size(dir_, directories)
-            for dir_ in directories[dir_].children
+    def total_size(self):
+        return (
+                self.file_size() +
+                sum(
+                    dir_.total_size()
+                    for dir_ in self.children
+                )
         )
-    )
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
-        directories = {}
-        current_directory = ''
+    cur_dir = Directory(tuple('/'))
+    directories = {}
 
-        for line in self.data.split('\n'):
+    def cd(self, dir_):
+        if dir_ == '..':
+            self.cur_dir = self.directories[self.cur_dir.parent]
+        else:
+            new_path = (*self.cur_dir.name, dir_)
+            self.cur_dir = self.directories[new_path]
+
+    def create_dir(self, name: str):
+        d = Directory((*self.cur_dir.name, name))
+        self.directories[d.name] = d
+        return d
+
+    def parse_data(self):
+        self.directories[self.cur_dir.name] = self.cur_dir
+        for line in self.lines[1:]:
             match line.split():
-                case ['$', 'cd', '..']:
-                    current_directory = directories[
-                                            current_directory].name[:-1]
-                case ['$', 'cd', new_directory]:
-                    new_path = (*current_directory, new_directory)
-                    if new_path not in directories:
-                        directories[new_path] = Directory(new_path)
-                    current_directory = new_path
-                case ['dir', found_directory]:
-                    directories[current_directory].children.add(
-                        (*current_directory, found_directory))
+                case ['$', 'cd', dir_]:
+                    self.cd(dir_)
+                case ['dir', dir_]:
+                    self.cur_dir.children.append(self.create_dir(dir_))
                 case ['$', 'ls']:
                     continue
                 case _:
-                    a, b = line.split()
-                    a = int(a)
-                    directories[current_directory].files.add((a, b))
-        directories = frozendict(directories)
-        return [total_size(i, directories) for i in directories]
-
-    def total_size(self, dir_):
-        return (
-            self.parsed_data[dir_].file_size() +
-            sum(
-                self.total_size(dir_)
-                for dir_ in self.parsed_data[dir_].children
-            )
-        )
+                    size, name = line.split()
+                    self.cur_dir.files.add((int(size), name))
+        return [dir_.total_size() for dir_ in self.directories.values()]
 
     def part_a(self):
         return sum(dir_ for dir_ in self.parsed_data if dir_ <= 100000)
