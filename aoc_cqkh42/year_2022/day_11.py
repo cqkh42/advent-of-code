@@ -6,7 +6,9 @@ from typing import List, Callable
 import operator
 import functools
 import parse
+import numpy as np
 import math
+import more_itertools
 
 
 @dataclass
@@ -50,46 +52,42 @@ class Solution(BaseSolution):
             monkeys.append(m)
         return monkeys
 
-    def turn(self):
-        for monkey in self.parsed_data:
+    def turn(self, monkeys):
+        for monkey in monkeys:
+            monkey.inspected += len(monkey.items)
             for item in monkey.items:
-                monkey.inspected += 1
-                # print(monkey.operation)
                 value = monkey.operation(item) // 3
                 if value % monkey.test:
                     # we failed
+                    monkeys[monkey.false_].items.append(value)
+                else:
+                    monkeys[monkey.true_].items.append(value)
+            monkey.items = []
+        return monkeys
+
+    def turn_b(self, lcm):
+        for monkey in self.parsed_data:
+            monkey.inspected += len(monkey.items)
+            for item in monkey.items:
+                value = monkey.operation(item) % lcm
+                if value % monkey.test:
                     self.parsed_data[monkey.false_].items.append(value)
                 else:
                     self.parsed_data[monkey.true_].items.append(value)
             monkey.items = []
-
-
-    def turn_b(self):
-        return
-        for monkey in self.parsed_data:
-            for item in monkey.items:
-                monkey.inspected += 1
-                # print(monkey.operation)
-                value = monkey.operation(item) // 3
-                if value % monkey.test:
-                    # we failed
-                    self.parsed_data[monkey.false_].items.append(value)
-                else:
-                    self.parsed_data[monkey.true_].items.append(value)
-            monkey.items = []
-
 
     def part_a(self):
+        monkeys = deepcopy(self.parsed_data)
         for _ in range(20):
-            self.turn()
-        counts = sorted((monkey.inspected for monkey in self.parsed_data), reverse=True)
+            monkeys = self.turn(monkeys)
+        counts = sorted((monkey.inspected for monkey in monkeys), reverse=True)
         return math.prod(counts[:2])
-
-
 
     def part_b(self):
-        return
-        for _ in range(10_000):
-            self.turn()
-        counts = sorted((monkey.inspected for monkey in self.parsed_data), reverse=True)
-        return math.prod(counts[:2])
+        lcm = np.lcm.reduce([monkey.test for monkey in self.parsed_data])
+        for _ in range(10000):
+            self.turn_b(lcm)
+        counts = sorted(
+            (monkey.inspected for monkey in self.parsed_data), reverse=True
+        )
+        return int(math.prod(counts[:2]))
