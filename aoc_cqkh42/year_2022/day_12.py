@@ -27,11 +27,15 @@ class Solution(BaseSolution):
 
     @property
     def start(self):
-        return more_itertools.one(node for node, data in self.parsed_data.nodes(data=True) if data.get('true_val') == 'S')
+        return more_itertools.one(
+            node for node, data in self.parsed_data.nodes(data=True) if
+            data.get('true_val') == 'S')
 
     @property
     def end(self):
-        return more_itertools.one(node for node, data in self.parsed_data.nodes(data=True) if data.get('true_val') == 'E')
+        return more_itertools.one(
+            node for node, data in self.parsed_data.nodes(data=True) if
+            data.get('true_val') == 'E')
 
     def parse_data(self):
         graph = nx.grid_2d_graph(
@@ -52,7 +56,8 @@ class Solution(BaseSolution):
         return self.answer_a
 
     def part_b(self):
-        lowest = [node for node, data in self.parsed_data.nodes(data=True) if data['height'] == 'a']
+        lowest = [node for node, data in self.parsed_data.nodes(data=True) if
+                  data['height'] == 'a']
         shortest_lengths = dict(
             nx.single_target_shortest_path_length(
                 self.parsed_data, self.end, self.answer_a

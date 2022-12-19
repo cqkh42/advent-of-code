@@ -1,14 +1,14 @@
-from aoc_cqkh42 import BaseSolution
-
-from dataclasses import dataclass, field
-from copy import deepcopy
-from typing import List, Callable
-import operator
 import functools
-import parse
-import numpy as np
 import math
-import more_itertools
+import operator
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import List, Callable
+
+import numpy as np
+import parse
+
+from aoc_cqkh42 import BaseSolution
 
 
 @dataclass
