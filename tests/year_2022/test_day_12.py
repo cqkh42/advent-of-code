@@ -16,5 +16,7 @@ abdefghi"""
 def test_part_a(solution):
     assert solution.part_a() == 31
 
+
 def test_part_b(solution):
+    solution.answer_a = 31
     assert solution.part_b() == 29
