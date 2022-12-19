@@ -1,10 +1,10 @@
-from aoc_cqkh42 import BaseSolution
-
-from dataclasses import dataclass
-
 import json
 import math
+from dataclasses import dataclass
+
 import more_itertools
+
+from aoc_cqkh42 import BaseSolution
 
 
 @dataclass

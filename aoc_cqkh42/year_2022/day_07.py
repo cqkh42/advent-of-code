@@ -1,11 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Set, Tuple
 
-from frozendict import frozendict
-
 from aoc_cqkh42 import BaseSolution
-
-import more_itertools
 
 
 @dataclass

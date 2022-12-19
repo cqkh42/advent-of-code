@@ -1,9 +1,9 @@
+import itertools
+
 import more_itertools
 
 from aoc_cqkh42 import BaseSolution
 from aoc_cqkh42.helpers import aocr
-
-import itertools
 
 
 class Solution(BaseSolution):
@@ -17,7 +17,7 @@ class Solution(BaseSolution):
 
     def part_a(self):
         return sum(
-            i*self.parsed_data[i-1]
+            i * self.parsed_data[i - 1]
             for i in [20, 60, 100, 140, 180, 220]
         )
 
@@ -27,4 +27,3 @@ class Solution(BaseSolution):
             for index, sprite in enumerate(self.parsed_data[:-1])
         ]
         return aocr.word(result, True)
-

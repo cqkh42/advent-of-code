@@ -1,11 +1,9 @@
-import itertools
+import numpy as np
 
 from aoc_cqkh42 import BaseSolution
 
-import more_itertools
-import numpy as np
 
-#TODO needs a tidy, could do more with arrays
+# TODO needs a tidy, could do more with arrays
 
 def visible(row):
     max_ = -1
@@ -19,7 +17,7 @@ def visible(row):
 def visible_row(row):
     right = []
     for index in range(len(row)):
-        terminating = [rem >= row[index] for rem in row[index+1:]]
+        terminating = [rem >= row[index] for rem in row[index + 1:]]
         if not terminating:
             right.append(0)
         elif sum(terminating):
@@ -54,11 +52,11 @@ class Solution(BaseSolution):
 
     def part_b(self):
         right = np.array([visible_row(row) for row in self.parsed_data])
-        left = np.array([visible_row(row[::-1])[::-1] for row in self.parsed_data])
+        left = np.array(
+            [visible_row(row[::-1])[::-1] for row in self.parsed_data])
 
         cols = [list(i) for i in zip(*self.parsed_data)]
         down = np.array([visible_row(row) for row in cols]).T
         up = np.array([visible_row(row[::-1])[::-1] for row in cols]).T
         i = (right * left * down * up)
         return i.max()
-
