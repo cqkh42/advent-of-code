@@ -39,4 +39,4 @@ def test_part_a(solution):
 
 
 def test_part_b(solution):
-    assert solution.part_b(20) == 56000011
+    assert solution.part_b(20) == 56_000_011

@@ -1,6 +1,7 @@
-from aoc_cqkh42 import BaseSolution
+import itertools
 
-# 6228183 is too high
+
+from aoc_cqkh42 import BaseSolution
 
 import parse
 
@@ -28,7 +29,6 @@ class Solution(BaseSolution):
         for sensor_x, sensor_y, beacon_x, beacon_y in self.parser.findall(self.data):
             sensors[(sensor_x, sensor_y)] = manhattan((sensor_x, sensor_y), (beacon_x, beacon_y))
             self.beacons.add((beacon_x, beacon_y))
-        # print(sensors)
         return sensors
 
     def part_a(self, y=2_000_000):
@@ -36,9 +36,7 @@ class Solution(BaseSolution):
         for sensor, distance in self.parsed_data.items():
             try:
                 start, end = resolve_manhattan(sensor, distance, y)
-                # print(sensor, start, end, distance)
             except ValueError:
-                # print('raised')
                 continue
             else:
                 for num in range(start, end+1):
@@ -49,9 +47,11 @@ class Solution(BaseSolution):
         for sensor in self.parsed_data:
             if sensor[1] == y:
                 unavailable.remove(sensor[0])
-                # print()
-        # print(sorted(unavailable))
         return len(unavailable)
 
     def part_b(self, limit=4_000_000):
-        ...
+        print()
+        for first, second in itertools.combinations(self.parsed_data, 2):
+            distance_between = manhattan(first, second)
+            print(f'{first=}, {self.parsed_data[first]=}, {second=}, {self.parsed_data[second]=}, {distance_between=}')
+
