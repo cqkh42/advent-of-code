@@ -14,8 +14,7 @@ setup(
         "Topic :: Games/Entertainment :: Puzzle Games",
     ],
     install_requires=[
-        "advent-of-code-data >= 0.8.0",
-        'adventocr'
+        "advent-of-code-data >= 1.3.0",
     ],
     packages=find_packages(),
     entry_points={

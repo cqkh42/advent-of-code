@@ -1,6 +1,5 @@
 pytest
-setuptools
-adventocr
+setuptools==66.1.1
 parse
 numpy
 scipy
