@@ -1,39 +1,32 @@
-from dataclasses import dataclass
 import importlib
+from dataclasses import dataclass
+from functools import cached_property
 
 import parse
 
 # TODO do I need to abstract out binary search?
 # TODO how many places can we use more_itertools
 
+NUM_PARSER = parse.compile('{num:d}')
 
 
-@dataclass(init=False)
+@dataclass
 class BaseSolution:
-    _lines = None
-    _numbers = None
+    data: str
 
-    def __init__(self, data):
-        self.data = data
+    def __post_init__(self):
         self.parsed_data = self.parse_data()
 
     def parse_data(self):
         return self.data
 
-    @property
+    @cached_property
     def lines(self):
-        if self._lines is not None:
-            return self._lines
-        self._lines = self.data.split('\n')
-        return self._lines
+        return self.data.split('\n')
 
-    @property
+    @cached_property
     def numbers(self):
-        if self._numbers is not None:
-            return self._numbers
-        parser = parse.compile('{num:d}')
-        self._numbers = tuple(result['num'] for result in parser.findall(self.data))
-        return self._numbers
+        return tuple(result['num'] for result in NUM_PARSER.findall(self.data))
 
     def part_a(self):
         return None

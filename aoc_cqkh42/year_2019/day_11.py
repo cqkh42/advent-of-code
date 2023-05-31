@@ -1,8 +1,7 @@
-from collections import defaultdict
 import itertools
 
-import aocr
-
+from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers import aocr
 from aoc_cqkh42.year_2019.computer import Computer
 
 
@@ -41,7 +40,7 @@ def run(inputs, start_colour):
     position = (0, 0)
     direction = 0
     results = {position: start_colour}
-    computer = Computer(inputs, [])
+    computer = Computer(list(inputs), [])
     while True:
         try:
             computer, position, direction, results = process_square(computer, position, direction, results)
@@ -49,21 +48,17 @@ def run(inputs, start_colour):
             return results
 
 
-def part_a(data):
-    inputs = data.split(",")
-    inputs = [int(input_) for input_ in inputs]
-    return len(run(inputs, 0))
+class Solution(BaseSolution):
+    def part_a(self):
+        return len(run(self.numbers, 0))
 
+    def part_b(self):
+        results = run(self.numbers, 1)
+        xs, ys = zip(*results)
 
-def part_b(data, **_):
-    inputs = data.split(",")
-    inputs = [int(input_) for input_ in inputs]
-    results = run(inputs, 1)
-    xs, ys = zip(*results)
-
-    rows = []
-    for y in range(max(ys), min(ys)-1, -1):
-        row = [results.get((x, y)) for x in range(min(xs), max(xs)+1)]
-        rows.append(row)
-    rows = [row[1:41] for row in rows]
-    return aocr.word(itertools.chain.from_iterable(rows))
+        rows = []
+        for y in range(max(ys), min(ys) - 1, -1):
+            row = [results.get((x, y)) for x in range(min(xs), max(xs) + 1)]
+            rows.append(row)
+        rows = [row[1:41] for row in rows]
+        return aocr.word(itertools.chain.from_iterable(rows))

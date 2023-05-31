@@ -1,5 +1,7 @@
-from collections import namedtuple
+import math
 import re
+
+from aoc_cqkh42 import BaseSolution
 
 _coords = ["x", "y", "z"]
 
@@ -10,11 +12,11 @@ class Planet:
         self.velocities = dict(zip(_coords, (0, 0, 0)))
 
     def pos(self):
-        return (self.positions["x"], self.positions["y"], self.positions["z"])
+        return self.positions["x"], self.positions["y"], self.positions["z"]
 
     def vel(self):
         return (
-        self.velocities["x"], self.velocities["y"], self.velocities["z"])
+            self.velocities["x"], self.velocities["y"], self.velocities["z"])
 
     def pot(self):
         values = self.pos()
@@ -91,30 +93,29 @@ def prime_factorize(num):
         num //= factor
 
 
-def part_a(data):
-    inputs = data.split("\n")
-    planets = list_to_planets(inputs)
-    results = run_steps(planets, 1000)
-    result = sum([planet.pot() * planet.kin() for planet in results])
-    return result
+class Solution(BaseSolution):
+    def part_a(self):
+        planets = list_to_planets(self.lines)
+        results = run_steps(planets, 1000)
+        result = sum([planet.pot() * planet.kin() for planet in results])
+        return result
 
-import math
-def part_b(data, **_):
-    inputs = data.split("\n")
-    planets = list_to_planets(inputs)
-    x = find_cycle_point(planets, "x")
-    y = find_cycle_point(planets, "y")
-    z = find_cycle_point(planets, "z")
+    def part_b(self):
+        planets = list_to_planets(self.lines)
+        x = find_cycle_point(planets, "x")
+        y = find_cycle_point(planets, "y")
+        z = find_cycle_point(planets, "z")
 
-    x = prime_factorize(x)
-    y = prime_factorize(y)
-    z = prime_factorize(z)
+        x = prime_factorize(x)
+        y = prime_factorize(y)
+        z = prime_factorize(z)
 
-    first = {}
-    first_vals = set(x)
-    first_vals.update(y)
-    first_vals.update(z)
-    for value in first_vals:
-        first[value] = max(x.get(value, 1), y.get(value, 1), z.get(value, 1))
-    zz = [k**v for k, v in first.items()]
-    return math.prod(zz)
+        first = {}
+        first_vals = set(x)
+        first_vals.update(y)
+        first_vals.update(z)
+        for value in first_vals:
+            first[value] = max(x.get(value, 1), y.get(value, 1),
+                               z.get(value, 1))
+        zz = [k ** v for k, v in first.items()]
+        return math.prod(zz)

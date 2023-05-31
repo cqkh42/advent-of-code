@@ -1,5 +1,7 @@
 import itertools
 
+from aoc_cqkh42 import BaseSolution
+
 
 def get_pattern(index):
     first_pattern = (
@@ -65,20 +67,20 @@ def run_it_all(numbers, iters):
     return "".join([str(i) for i in numbers[:8]])
 
 
-def part_a(data):
-    inputs = list(data)
-    inputs = [int(num) for num in inputs]
-    phased = run_phases(inputs, 100)[:8]
-    r = [str(i) for i in phased]
-    result = int("".join(r))
-    return result
+class Solution(BaseSolution):
+    def part_a(self):
+        inputs = list(self.data)
+        inputs = [int(num) for num in inputs]
+        phased = run_phases(inputs, 100)[:8]
+        r = [str(i) for i in phased]
+        result = int("".join(r))
+        return result
 
+    def part_b(self):
+        # return False
+        listed = [int(num) for num in self.data] * 10000
 
-def part_b(data, **_):
-    # return False
-    listed = [int(num) for num in data] * 10000
-
-    skip = int(data[:7])
-    post_skip = listed[skip:]
-    result = int(run_it_all(post_skip, 100))
-    return result
+        skip = int(self.data[:7])
+        post_skip = listed[skip:]
+        result = int(run_it_all(post_skip, 100))
+        return result

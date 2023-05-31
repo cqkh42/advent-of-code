@@ -1,10 +1,10 @@
 import itertools
 
-import parse
 import numpy as np
+import parse
 
 from aoc_cqkh42 import BaseSolution
-from aoc_cqkh42.helpers import aocr
+from aoc_cqkh42.helpers.aocr import word
 
 
 class Solution(BaseSolution):
@@ -30,4 +30,4 @@ class Solution(BaseSolution):
         return self.parsed_data.sum()
 
     def part_b(self):
-        return aocr.word(itertools.chain.from_iterable(self.parsed_data))
+        return word(itertools.chain.from_iterable(self.parsed_data))

@@ -1,6 +1,6 @@
-from aoc_cqkh42.year_2016.day_21 import Scrambler
-
 import pytest
+
+from aoc_cqkh42.year_2016.day_21 import Scrambler
 
 
 def test_swap_position():

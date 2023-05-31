@@ -1,6 +1,7 @@
-from aoc_cqkh42.year_2019.computer import Computer
-
 from collections import defaultdict
+
+from aoc_cqkh42 import BaseSolution
+
 
 def count_orbital_injections(object_1, object_2, orbits):
     orbits = dict(reversed(orbit.split(")")) for orbit in orbits)
@@ -38,11 +39,10 @@ def count_orbits(orbits):
 
     return sum(distances.values())
 
-def part_a(data):
-    result = count_orbits(data.split('\n'))
-    return result
 
+class Solution(BaseSolution):
+    def part_a(self):
+        return count_orbits(self.lines)
 
-def part_b(data, **_):
-    result = count_orbital_injections("YOU", "SAN", data.split('\n'))
-    return result
+    def part_b(self):
+        return count_orbital_injections("YOU", "SAN", self.lines)

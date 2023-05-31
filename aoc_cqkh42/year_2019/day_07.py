@@ -1,5 +1,6 @@
 import itertools
 
+from aoc_cqkh42 import BaseSolution
 from aoc_cqkh42.year_2019.computer import Computer
 
 
@@ -11,8 +12,6 @@ def find_best_config(possible_configs, intcode):
             amp = Computer(intcode, [config, input_])
             amp.run()
             input_ = amp.output
-
-        output = amp.output
 
         results.append((configs, input_))
     return max(results, key=lambda result: result[1])
@@ -42,17 +41,20 @@ def find_best_config_b(possible_configs, intcode):
                 input_ = computer.output
 
     return max(results, key=lambda result: result[1])
-def part_a(data):
-    inputs = [int(num) for num in data.split(',')]
-    configs = itertools.permutations(range(5))
-    result = find_best_config(configs, inputs)[1]
-    return result
 
 
-def part_b(data, **_):
-    range_ = range(5, 10)
-    inputs = [int(num) for num in data.split(',')]
+class Solution(BaseSolution):
 
-    configs = itertools.permutations(range_)
-    result = find_best_config_b(configs, inputs)[1]
-    return result
+    def part_a(self):
+        inputs = list(self.numbers)
+        configs = itertools.permutations(range(5))
+        result = find_best_config(configs, inputs)[1]
+        return result
+
+    def part_b(self):
+        range_ = range(5, 10)
+        inputs = list(self.numbers)
+
+        configs = itertools.permutations(range_)
+        result = find_best_config_b(configs, inputs)[1]
+        return result

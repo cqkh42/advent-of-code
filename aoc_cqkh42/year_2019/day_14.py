@@ -1,8 +1,9 @@
-from dataclasses import dataclass
+import math
 import re
 from collections import defaultdict
-import itertools
-import math
+from dataclasses import dataclass
+
+from aoc_cqkh42 import BaseSolution
 
 
 @dataclass
@@ -74,13 +75,12 @@ def fuel_with_ore(reactions, ore):
                 return half
 
 
-def part_a(data):
-    replacements = extract_conversions(data)
-    return ore_needed(replacements, 1)
+class Solution(BaseSolution):
+    def parse_data(self):
+        return extract_conversions(self.data)
 
+    def part_a(self):
+        return ore_needed(self.parsed_data, 1)
 
-def part_b(data, **_):
-    replacements = extract_conversions(data)
-    result = fuel_with_ore(replacements, 1e12)
-    return result
-
+    def part_b(self):
+        return fuel_with_ore(self.parsed_data, 1e12)

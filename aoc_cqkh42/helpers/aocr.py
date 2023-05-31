@@ -1,10 +1,10 @@
 """
 Parsing functions to identify characters from visual outputs.
 """
-import itertools
 from typing import Generator, Iterable, Any, List
 
-from aocr.mappings import mappings
+from aoc_cqkh42.helpers.aocr_mappings import mappings
+
 __all__ = ['letter', 'word']
 #todo stop all auto suggests
 

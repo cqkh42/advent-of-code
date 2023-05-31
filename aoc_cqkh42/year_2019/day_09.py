@@ -1,19 +1,14 @@
+from aoc_cqkh42 import BaseSolution
 from aoc_cqkh42.year_2019.computer import Computer
 
 
-def part_a(data):
-    inputs = data.split(",")
-    inputs = [int(input_) for input_ in inputs]
+class Solution(BaseSolution):
+    def part_a(self):
+        computer = Computer(list(self.numbers), [1])
+        computer.run()
+        return computer.output
 
-    computer = Computer(inputs, [1])
-    computer.run()
-    return computer.output
-
-
-def part_b(data, **_):
-    inputs = data.split(",")
-    inputs = [int(input_) for input_ in inputs]
-
-    computer = Computer(inputs, [2])
-    computer.run()
-    return computer.output
+    def part_b(self):
+        computer = Computer(list(self.numbers), [2])
+        computer.run()
+        return computer.output
