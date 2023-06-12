@@ -1,6 +1,10 @@
 import pytest
 
-from aoc_cqkh42.year_2015 import day_19
+from aoc_cqkh42.year_2015 import day_19, day_19_help
+
+
+def test_solve():
+    assert day_19.run(day_19_help.input_, day_19_help.molecule) == 195
 
 
 @pytest.fixture
