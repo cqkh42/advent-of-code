@@ -1,6 +1,7 @@
 # TODO chompsky language decomposition
 
 from aoc_cqkh42 import BaseSolution
+from .day_19_help import input_
 
 
 def replace_occurence(string, old, new, occurence):
@@ -11,45 +12,37 @@ def replace_occurence(string, old, new, occurence):
     )
 
 
-def try_permutation(maps, element):
-    visited = set()
-    replaced = 0
-    while element != "e":
-        for new, old in maps:
-            if old not in element or element.count("e"):
-                continue
-            element = element.replace(old, new, 1)
-            if element == "e":
-                return replaced + 1
-            elif "e" in element:
-                return None
-            if element in visited:
-                return None
-            visited.add(element)
-            replaced += 1
-    return replaced
-
-
 import itertools
 import collections
 import re
-from dataclasses import dataclass, field
 from functools import cached_property
 
 
-@dataclass
-class CYKRunner:
-    molecule: str
-    rules: collections.defaultdict
-    revrules: collections.defaultdict
-    calibrate: set
-    cyk: collections.defaultdict = field(
-        default_factory=lambda: collections.defaultdict(
-            lambda: collections.defaultdict(list)))
-    backref: collections.defaultdict = field(
-        default_factory=lambda: collections.defaultdict(
-            lambda: collections.defaultdict(list)))
-    counter: int = field(default=0)
+class NewCYKRunner:
+    def __init__(self, maps, molecule):
+        calibrate = set()
+        rules = collections.defaultdict(list)
+        revrules = collections.defaultdict(list)
+
+        pattern = r"(.+) => (.+)"
+        for src, repl in re.findall(pattern, maps):
+            rules[src] += [repl]
+            revrules[repl] += [src]
+
+        for src, repl in re.findall(pattern, maps):
+            for start in re.finditer(src, ''.join(molecule)):
+                start = start.start()
+                calibrate.add(''.join(molecule[:start]) + repl + ''.join(
+                    molecule[start + len(src):]))
+        self.molecule = molecule
+        self.rules = rules
+        self.revrules = revrules
+        self.calibrate = set()
+        self.cyk = collections.defaultdict(
+            lambda: collections.defaultdict(list))
+        self.backref = collections.defaultdict(
+            lambda: collections.defaultdict(list))
+        self.counter = 0
 
     @cached_property
     def letters(self):
@@ -71,8 +64,7 @@ class CYKRunner:
                                 self.backref[y][x].append(
                                     ((x, i), (x + i + 1, y - i - 1), n))
 
-    def recur(self, x,
-              y):  # TODO: IS THIS WRONG IF THE FIRST EXPANSION FOUND IS NONOPTIMAL? (probably not because CNF)
+    def recur(self, x, y):
         if y == 0:
             return
         l, r, n = self.backref[y][x][0]
@@ -81,31 +73,10 @@ class CYKRunner:
         self.recur(*r)
 
 
-def run(input, molecule):
-    calibrate = set()
-    rules = collections.defaultdict(list)
-    revrules = collections.defaultdict(list)
-
-    pattern = r"(.+) => (.+)"
-    for src, repl in re.findall(pattern, input):
-        rules[src] += [repl]
-        revrules[repl] += [src]
-
-    for src, repl in re.findall(pattern, input):
-        for start in re.finditer(src, ''.join(molecule)):
-            start = start.start()
-            calibrate.add(''.join(molecule[:start]) + repl + ''.join(
-                molecule[start + len(src):]))
-
-    solution = CYKRunner(molecule, rules, revrules, calibrate)
-    solution.run()
-    solution.recur(0, solution.letters)
-    return solution.counter
-
-
 class Solution(BaseSolution):
     element = None
     maps = None
+    new_maps = input_
 
     def parse_data(self):
         *maps, _, element = self.lines
@@ -125,5 +96,8 @@ class Solution(BaseSolution):
         return len(new_strings)
 
     def part_b(self):
-        return run(self.maps, self.element)
-# TODO: CAN JUST KEEP A COUNTER IN RECUR
+        p = re.findall('[A-Z][a-z]?', self.element)
+        solution = NewCYKRunner(input_, p)
+        solution.run()
+        solution.recur(0, solution.letters)
+        return solution.counter

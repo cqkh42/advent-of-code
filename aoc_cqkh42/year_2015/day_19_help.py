@@ -92,6 +92,8 @@ Zpa => RnZpb
 Zpb => FAr
 """
 
+9
+
 molecule = [
     "C", "Rn", "Ca", "Si", "Rn", "B", "Si", "Rn", "F", "Ar", "Ti", "B", "P",
     "Ti", "Ti", "B", "F", "Ar", "P", "B", "Ca", "Si", "Th", "Si", "Rn", "Ti",
