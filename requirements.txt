@@ -13,3 +13,4 @@ networkx
 bidict
 more_itertools
 black
+multidict
