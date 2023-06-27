@@ -2,7 +2,6 @@ import itertools
 
 from aoc_cqkh42 import BaseSolution
 
-
 TRAPS = {
     '^^.',
     '.^^',

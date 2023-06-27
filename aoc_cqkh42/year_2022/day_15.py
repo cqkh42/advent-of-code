@@ -1,9 +1,8 @@
 import itertools
 
+import parse
 
 from aoc_cqkh42 import BaseSolution
-
-import parse
 
 
 def manhattan(u, v):

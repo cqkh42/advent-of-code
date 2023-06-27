@@ -1,5 +1,6 @@
-import pytest
 import numpy as np
+import pytest
+
 from aoc_cqkh42.year_2021 import day_15
 
 

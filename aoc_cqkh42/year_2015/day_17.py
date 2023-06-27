@@ -1,9 +1,9 @@
-from collections import Counter
 import functools
-
-from aoc_cqkh42 import BaseSolution
+from collections import Counter
 
 import more_itertools
+
+from aoc_cqkh42 import BaseSolution
 
 
 @functools.cache

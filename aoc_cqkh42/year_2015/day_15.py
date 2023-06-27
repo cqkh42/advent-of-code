@@ -5,7 +5,6 @@ import parse
 
 from aoc_cqkh42 import BaseSolution
 
-
 PARSER = parse.compile(
     "capacity {:d}, durability {:d}, flavor {:d}, texture {:d}, calories {:d}"
 )

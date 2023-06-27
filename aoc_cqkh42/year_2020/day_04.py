@@ -2,8 +2,9 @@
 Solutions for day 4 of 2020's Advent of Code
 
 """
-import parse
 import re
+
+import parse
 
 HCL_REGEX = re.compile(r'#[0-9a-f]{6}')
 PID_REGEX = re.compile(r'\d{9}\b')

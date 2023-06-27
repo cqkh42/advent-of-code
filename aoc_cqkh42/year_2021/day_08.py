@@ -1,6 +1,5 @@
-from collections import Counter
-from dataclasses import dataclass
 import itertools
+from dataclasses import dataclass
 
 from aoc_cqkh42 import BaseSolution
 

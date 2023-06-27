@@ -4,7 +4,6 @@ import parse
 
 from aoc_cqkh42 import BaseSolution
 
-
 TIME = 2503
 PARSER = parse.compile(
     r"{name:w} can fly {speed:d} km/s for {duration:d} seconds, but then must "

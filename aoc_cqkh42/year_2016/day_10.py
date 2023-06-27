@@ -1,10 +1,11 @@
+import itertools
 from collections import defaultdict
 from dataclasses import dataclass, field
-import itertools
 
 import parse
 
 from aoc_cqkh42 import BaseSolution
+
 
 @dataclass
 class Bot:

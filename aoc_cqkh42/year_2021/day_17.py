@@ -1,10 +1,8 @@
-from collections import Counter, defaultdict
 import itertools
 
 import parse
 
 from aoc_cqkh42 import BaseSolution
-
 
 # h = sum(y-(n-1))
 # h = yn - sum(n) + n

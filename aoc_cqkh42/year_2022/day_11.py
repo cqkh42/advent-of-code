@@ -3,7 +3,7 @@ import math
 import operator
 from copy import deepcopy
 from dataclasses import dataclass
-from typing import List, Callable
+from typing import Callable, List
 
 import numpy as np
 import parse

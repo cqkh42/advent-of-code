@@ -1,8 +1,8 @@
 import itertools
 
-from aoc_cqkh42 import BaseSolution
-
 import more_itertools
+
+from aoc_cqkh42 import BaseSolution
 
 
 class Solution(BaseSolution):
@@ -11,7 +11,7 @@ class Solution(BaseSolution):
         for index, char in enumerate(ords):
             if char in [8, 14, 11]:
                 ords[index] += 1
-                ords[index + 1 :] = [0] * (len(ords) - index - 1)
+                ords[index + 1:] = [0] * (len(ords) - index - 1)
                 break
         return ords
 

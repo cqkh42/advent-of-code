@@ -1,7 +1,7 @@
-from collections import defaultdict
 import itertools
-from hashlib import md5
 import re
+from collections import defaultdict
+from hashlib import md5
 
 from aoc_cqkh42 import BaseSolution
 

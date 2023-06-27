@@ -1,12 +1,13 @@
-from collections import defaultdict, Counter
-from dataclasses import dataclass, field, replace
+from collections import Counter, defaultdict
+from dataclasses import dataclass
 from queue import SimpleQueue
-from typing import Tuple, List
+from typing import Tuple
 
 from aoc_cqkh42 import BaseSolution
 
-#todo could we feed in some parsing function
-#todo some graph here
+
+# todo could we feed in some parsing function
+# todo some graph here
 @dataclass(frozen=True)
 class Route:
     route: Tuple[str, ...]

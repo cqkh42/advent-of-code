@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
 import math
+from dataclasses import dataclass, field
 
 import numpy as np
 from scipy.ndimage import generic_filter

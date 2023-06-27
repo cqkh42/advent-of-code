@@ -1,8 +1,8 @@
 # TODO USing A*
 # TODO extract graph logic
 
-from dataclasses import dataclass, field, replace
 import queue
+from dataclasses import dataclass, field, replace
 
 from aoc_cqkh42 import BaseSolution
 

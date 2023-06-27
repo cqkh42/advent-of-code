@@ -110,7 +110,7 @@ class Computer:
         func, num_params = self.opcode_map[instruction]
 
         param_modes = opcode.rjust(num_params + 2, "0")
-        param_modes = list((int(mode) for mode in param_modes))[:num_params]
+        param_modes = list(int(mode) for mode in param_modes)[:num_params]
         param_modes.reverse()
         param_modes = tuple(param_modes)
         return func, param_modes

@@ -1,16 +1,14 @@
-import itertools
-from io import StringIO
-
-from aoc_cqkh42 import BaseSolution
-
 import networkx as nx
 import numpy as np
+
+from aoc_cqkh42 import BaseSolution
 
 
 def heuristic(a, b):
     a_diff = abs(a[0] - b[0])
     b_diff = abs(a[1] - b[1])
-    return a_diff+b_diff
+    return a_diff + b_diff
+
 
 def make_big_square(start):
     pieces = [start]

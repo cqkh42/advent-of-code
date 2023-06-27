@@ -1,8 +1,8 @@
 import itertools
 
-import parse
-import networkx as nx
 import more_itertools
+import parse
+from networkx import Graph
 
 from aoc_cqkh42 import BaseSolution
 
@@ -11,7 +11,7 @@ class Solution(BaseSolution):
     parser = parse.compile(r"{:w} to {:w} = {:d}")
 
     def parse_data(self):
-        graph = nx.Graph(
+        graph = Graph(
             (a, b, {"weight": c}) for a, b, c in self.parser.findall(self.data)
         )
         distances = {

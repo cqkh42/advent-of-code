@@ -1,8 +1,10 @@
 # Advent Of Code
-Python based solutions to the annual Advent of Code challenge, with 
-scaffolding heavily supplied by 
+
+Python based solutions to the annual Advent of Code challenge, with
+scaffolding heavily supplied by
 [advent-of-code-data](https://github.com/wimglenn/advent-of-code-data).
 
+https://img.shields.io/badge/linting-pylint-yellowgreen
 
 ![2015](https://img.shields.io/badge/2015-50%2F50-brightgreen)
 

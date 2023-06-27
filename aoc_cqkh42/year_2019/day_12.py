@@ -39,6 +39,7 @@ def list_to_planets(list_):
 
 import itertools
 
+
 def run_step(planets, axis):
     pairs = itertools.combinations(planets, 2)
     for planet_a, planet_b in pairs:
@@ -74,8 +75,9 @@ def find_cycle_point(planets, axis):
             return convergence_point
     return cycle_points
 
-from functools import lru_cache
+
 from collections import defaultdict
+from functools import lru_cache
 
 
 @lru_cache(maxsize=1_000_000)

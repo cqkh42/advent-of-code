@@ -1,5 +1,5 @@
-from collections import defaultdict
 import itertools
+from collections import defaultdict
 
 
 def around(coords):

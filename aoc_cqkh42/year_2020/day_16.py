@@ -1,6 +1,6 @@
-from collections import defaultdict
 import itertools
 import math
+from collections import defaultdict
 
 import parse
 
@@ -39,15 +39,18 @@ def _possibles_to_actuals(possibles, actuals):
 
 def _label_ticket(data):
     fields, my_ticket, tickets = data.split('\n\n')
-    fields = parse.findall(r'{:w}:_{:d}-{:d}_or_{:d}-{:d}', fields.replace(' ', '_'))
-    fields = {field: set((*range(start, end+1), *range(start_2, end_2+1))) for field, start, end, start_2, end_2 in fields}
+    fields = parse.findall(r'{:w}:_{:d}-{:d}_or_{:d}-{:d}',
+                           fields.replace(' ', '_'))
+    fields = {field: {*range(start, end + 1), *range(start_2, end_2 + 1)} for
+              field, start, end, start_2, end_2 in fields}
 
     all_field_values = set(itertools.chain.from_iterable(fields.values()))
     my_ticket = _parse_ticket(my_ticket)
     tickets = [_parse_ticket(ticket) for ticket in tickets.split('\n')[1:]]
     tickets = [my_ticket, *tickets]
 
-    tickets = [ticket for ticket in tickets if set(ticket.values()).issubset(all_field_values)]
+    tickets = [ticket for ticket in tickets if
+               set(ticket.values()).issubset(all_field_values)]
     tickets = dict(enumerate(list(zip(*[i.values() for i in tickets]))))
     possibles = defaultdict(list)
     for field in fields:

@@ -29,18 +29,27 @@ class NewCYKRunner:
                 re.findall(r'[A-Z][a-z]?', self.molecule)):
             self.cyk[0][index] = [element]
 
-        for y in range(1, self.elements + 1):
-            for x in range(self.elements - y + 1):
-                for i in range(y):
+        for start_point in range(self.elements):
+            remainders = self.elements - start_point
+            for remainder in range(remainders):
+                for i in range(start_point + 1):
+                    new_need = itertools.product(self.cyk[i][remainder],
+                                                 self.cyk[start_point - i][
+                                                     remainder + i + 1])
                     need = [t[0] + t[1] for t in
-                            itertools.product(self.cyk[i][x],
-                                              self.cyk[y - i - 1][x + i + 1])]
+                            itertools.product(self.cyk[i][remainder],
+                                              self.cyk[start_point - i][
+                                                  remainder + i + 1])]
                     for n in need:
                         for blah in self.rules.getall("".join(n), []):
-                            if blah not in self.cyk[y][x]:
-                                self.cyk[y][x].append(blah)
-                                self.backref[y][x].append(
-                                    ((x, i), (x + i + 1, y - i - 1), n))
+                            if blah not in self.cyk[(start_point + 1)][
+                                remainder]:
+                                self.cyk[start_point + 1][remainder].append(
+                                    blah)
+                                self.backref[start_point + 1][
+                                    remainder].append(
+                                    ((remainder, i),
+                                     (remainder + i + 1, start_point - i), n))
 
     def recur(self, x, y):
         if y == 0:

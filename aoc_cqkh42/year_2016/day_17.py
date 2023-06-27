@@ -16,7 +16,7 @@ class Solution(BaseSolution):
                 continue
             c = self.data + steps
             digest = hashlib.md5(c.encode()).hexdigest()[:4]
-            u, d, l, r = [char in 'bcdef' for char in digest]
+            u, d, l, r = (char in 'bcdef' for char in digest)
             if u and y - 1 >= 0:
                 to_visit.append((x, y - 1, steps + 'U'))
             if d and y + 1 <= 3:

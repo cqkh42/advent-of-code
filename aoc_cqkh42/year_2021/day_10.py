@@ -4,6 +4,7 @@ import numpy as np
 
 from aoc_cqkh42 import BaseSolution
 
+
 def is_corrupt(line):
     while True:
         new_line = line.replace('{}', '').replace('[]', '').replace('<>', '').replace('()', '')

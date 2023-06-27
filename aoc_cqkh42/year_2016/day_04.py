@@ -1,8 +1,9 @@
+import string
 from collections import Counter
 from dataclasses import dataclass
-import string
 
 import parse
+
 from aoc_cqkh42 import BaseSolution
 
 

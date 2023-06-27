@@ -20,7 +20,7 @@ class Solution(BaseSolution):
         sizes = defaultdict(dict)
         for row_index, row in enumerate(self.lines):
             for col_index, val in enumerate(row):
-                mapped_val = val.translate(({83: 97, 69: 90}))
+                mapped_val = val.translate({83: 97, 69: 90})
                 sizes[(row_index, col_index)]['true_val'] = val
                 sizes[(row_index, col_index)]['height'] = mapped_val
         nx.set_node_attributes(graph, sizes)

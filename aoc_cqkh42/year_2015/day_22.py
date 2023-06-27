@@ -1,6 +1,6 @@
 # TODO abstract dijkstra
 # TODO abstract search
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, replace
 
 from aoc_cqkh42 import BaseSolution
 from aoc_cqkh42.helpers.graph.dijkstra import dijkstra

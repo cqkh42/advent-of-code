@@ -5,7 +5,6 @@ import numpy as np
 
 from aoc_cqkh42 import BaseSolution
 
-
 WEAPONS = [
     np.array([8, 0, 4]),
     np.array([10, 0, 5]),

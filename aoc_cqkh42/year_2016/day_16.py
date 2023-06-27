@@ -1,6 +1,5 @@
 from aoc_cqkh42 import BaseSolution
 
-
 DISC_LENGTH = 272
 TRANS = str.maketrans('01', '10')
 

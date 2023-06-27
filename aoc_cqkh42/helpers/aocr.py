@@ -1,7 +1,7 @@
 """
 Parsing functions to identify characters from visual outputs.
 """
-from typing import Generator, Iterable, Any, List
+from typing import Any, Generator, Iterable, List
 
 from aoc_cqkh42.helpers.aocr_mappings import mappings
 

@@ -12,7 +12,9 @@ class Solution(BaseSolution):
     def _is_nice_a(self, string):
         vowel_count = sum(string.count(vowel) for vowel in "aeiou")
         has_repeating_char = bool(self.repeating_char.search(string))
-        no_bad_phrases = all(phrase not in string for phrase in self.bad_phrases)
+        no_bad_phrases = all(
+            phrase not in string for phrase in self.bad_phrases
+        )
         return vowel_count >= 3 and has_repeating_char and no_bad_phrases
 
     def _is_nice_b(self, string):

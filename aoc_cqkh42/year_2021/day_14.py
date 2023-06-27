@@ -1,12 +1,12 @@
 from collections import Counter, defaultdict
-from functools import cache
+
+import parse
+from frozendict import frozendict
+
 # old SKNHVVBSCOPFHKFBKSPNVFFPFVBBKPVBCBVHSHHOHVVFVFFPFHHVNBBCBCBBKSPVKSSBPNVOONHFC
 # old = {'V': 12, 'B': 12, 'F': 10, 'H': 9, 'S': 7, 'P': 7, 'K': 6, 'N': 5, 'C': 5, 'O': 4}
 # new = {'B': 12, 'V': 11.5, 'H': 9, 'F': 7, 'S': 7, 'K': 6, 'P': 6, 'C': 5, 'N': 5, 'O': 4}
 from aoc_cqkh42 import BaseSolution
-
-from frozendict import frozendict
-import parse
 
 
 class Solution(BaseSolution):

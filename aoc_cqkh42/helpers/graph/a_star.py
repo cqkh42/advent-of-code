@@ -1,5 +1,5 @@
-from abc import ABC, abstractmethod
 import queue
+from abc import ABC, abstractmethod
 
 
 class AStarBaseNode(ABC):

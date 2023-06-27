@@ -1,6 +1,7 @@
 from collections import defaultdict
 
 import parse
+
 from aoc_cqkh42 import BaseSolution
 
 

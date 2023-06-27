@@ -1,8 +1,8 @@
-from aoc_cqkh42 import BaseSolution
-from aoc_cqkh42.helpers import aocr
-
 import numpy as np
 import parse
+
+from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers import aocr
 
 
 class Solution(BaseSolution):

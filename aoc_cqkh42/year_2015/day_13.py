@@ -5,7 +5,6 @@ import parse
 
 from aoc_cqkh42 import BaseSolution
 
-
 PARSER = parse.compile(r"{:w} would {:d} happiness units by sitting next to {:w}.")
 
 

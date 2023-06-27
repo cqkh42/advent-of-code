@@ -1,6 +1,6 @@
-from dataclasses import dataclass
 import itertools
 import math
+from dataclasses import dataclass
 from typing import List
 
 import parse

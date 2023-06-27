@@ -1,7 +1,7 @@
 # TODO HASH
 import itertools
-
 from _md5 import md5
+
 from aocd import get_data
 
 from aoc_cqkh42 import BaseSolution
@@ -30,8 +30,10 @@ class Solution(BaseSolution):
 
 if __name__ == "__main__":
     data = get_data(
-        session='53616c7465645f5f7578abb37529958ea6c4839cbbeeb414870a119609f21ea219dd7295504325ddb3aa309f17baa02e1a0c67d897449610aa0d811e4d721457',
-        day=4, year=2015)
+        session="53616c7465645f5f7578abb37529958ea6c4839cbbeeb414870a119609f21ea219dd7295504325ddb3aa309f17baa02e1a0c67d897449610aa0d811e4d721457",
+        day=4,
+        year=2015,
+    )
     solution = Solution(data).part_a()
     # submit(solution.part_a(), part='a', day=4, year=2015,
     #        session='53616c7465645f5f7578abb37529958ea6c4839cbbeeb414870a119609f21ea219dd7295504325ddb3aa309f17baa02e1a0c67d897449610aa0d811e4d721457')

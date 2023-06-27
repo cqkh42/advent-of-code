@@ -1,4 +1,5 @@
 from collections import defaultdict
+
 from aoc_cqkh42 import BaseSolution
 
 

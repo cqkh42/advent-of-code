@@ -1,5 +1,6 @@
 import operator
 
+
 def solve_in_sequence(equation):
     equation = equation.split(' ')
     total = int(equation[0])

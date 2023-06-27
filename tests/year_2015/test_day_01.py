@@ -26,3 +26,9 @@ def test_part_a(data, answer):
 def test_part_b(data, answer):
     solution = day_01.Solution(data)
     assert solution.part_b() == answer
+
+
+def test_part_b_raises():
+    solution = day_01.Solution("(")
+    with pytest.raises(ValueError):
+        solution.part_b()
