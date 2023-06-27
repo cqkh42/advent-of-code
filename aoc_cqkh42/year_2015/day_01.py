@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """Solutions for day 1 of 2015's Advent of Code.
 
 Read the full puzzle at https://adventofcode.com/2015/day/1
@@ -7,6 +8,7 @@ __all__ = ["Solution"]
 import itertools
 from typing import Self
 
+from aocd.models import Puzzle
 from more_itertools import first, iter_index
 
 from aoc_cqkh42 import BaseSolution
@@ -35,3 +37,15 @@ class Solution(BaseSolution):
         )
         indexes = iter_index(accumulated, -1)
         return first(indexes) + 1
+
+
+def main() -> None:
+    """Solve and submit answers for 2015 day 1"""
+    puzzle = Puzzle(year=2015, day=1)
+    solution = Solution(puzzle.input_data)
+    puzzle.answer_a = solution.part_a()
+    puzzle.answer_b = solution.part_b()
+
+
+if __name__ == "__main__":
+    main()
