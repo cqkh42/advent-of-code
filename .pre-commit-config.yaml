@@ -28,13 +28,13 @@ repos:
           - --cov-fail-under=100
           - --tb=no
           - --cov-branch
-#  - repo: https://github.com/DanielNoord/pydocstringformatter
-#    rev: v0.7.3
-#    hooks:
-#      - id: pydocstringformatter
-#        args:
-#          - --max-line-length=72
-#          - --linewrap-full-docstring
+  - repo: https://github.com/DanielNoord/pydocstringformatter
+    rev: v0.7.3
+    hooks:
+      - id: pydocstringformatter
+        args:
+          - --max-line-length=72
+          - --linewrap-full-docstring
 #  - repo: https://github.com/PyCQA/bandit
 #    rev: 1.7.5
 #    hooks:

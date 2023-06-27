@@ -40,7 +40,7 @@ class Solution(BaseSolution):
 
 
 def main() -> None:
-    """Solve and submit answers for 2015 day 1"""
+    """Solve and submit answers for 2015 day 1."""
     puzzle = Puzzle(year=2015, day=1)
     solution = Solution(puzzle.input_data)
     puzzle.answer_a = solution.part_a()
