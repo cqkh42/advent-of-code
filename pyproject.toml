@@ -7,24 +7,17 @@ inline-quotes = 'double'
 literal-inline-quotes = 'double'
 requirements-file = "requirements.txt"
 
+[tool.flake8.known-modules]
+advent-of-code-data = ["aocd"]
+
 [tool.pylint.parameter_documentation]
 accept-no-param-doc = false
-
 accept-no-raise-doc = false
-
 accept-no-return-doc = false
-
 accept-no-yields-doc = false
 
 [tool.pytest.ini_options]
 addopts = "-p no:warnings"
-#filterwarnings = [
-
-#    "error",
-#    "ignore::UserWarning",
-#    # note the use of single quote below to denote "raw" strings in TOML
-#    'ignore:function ham\(\) is deprecated:DeprecationWarning',
-#]
 
 [tool.coverage.run]
 omit = "*/tests/*"

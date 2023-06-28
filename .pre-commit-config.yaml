@@ -109,10 +109,8 @@ repos:
           - flake8-noqa
           - flake8-length
           - flake8-variables-names
-          #          - pep8-naming
-          #          - flake8-test-name
-          #          - flake8-annotations-complexity
+          - pep8-naming
+          - flake8-annotations-complexity
           - flake8-cognitive-complexity
           - flake8-expression-complexity
-#          - cohesion
-#          - hacking
+          - cohesion
