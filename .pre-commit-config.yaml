@@ -61,59 +61,58 @@ repos:
         args:
           - --pytest-test-first
       - id: requirements-txt-fixer
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 6.0.0
-#    hooks:
-#      - id: flake8
-#        additional_dependencies:
-#          - flake8-pyproject
-#          - flake8-docstrings
-#          - dlint
-#          - simplify
-#          - flake8-dunder-all
-#          - flake8-encodings
-#          - flake8-requirements
-#          - flake8-secure-coding-standard
-#          - flake8-string-format
-#          - flake8-unused-arguments
-#          - flake8-useless-assert
-#          - flake8-warnings
-#          - flake8-class-attributes-order
-#          - flake8-clean-block
-#          - flake8-comprehensions
-#          - flake8-literal
-#          - flake8-implicit-str-concat
-#          - flake8-newspaper-style
-#          - flake8-picky-parentheses
-#          - flake8-quotes
-#          - flake8-return
-#          - flake8-print
-#          - flake8-use-fstring
-#          - flake8-builtins
-#          - flake8-comments
-#          - flake8-spellcheck
-#          - flake8-type-checking
-#          - pydoclint
-#          - flake8-eradicate
-#          - flake8-pytest
-#          - flake8-bandit
-#          - flake8-annotations-coverage
-#          - flake8-annotations
-#          - flake8-new-union-types
-#          - flake8-pep585
-#          - flake8-executable
-#          - flake8-docstring-checker
-#          - flake8-docstrings
-#          - flake8-docstrings-complete
-#          - flake8-functions
-#          - flake8-noqa
-#          - flake8-length
-#          - flake8-variables-names
-#          - pep8-naming
-#          - flake8-test-name
-#          - flake8-annotations-complexity
-#          - flake8-slots
-#          - flake8-cognitive-complexity
-#          - flake8-expression-complexity
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-pyproject
+          - flake8-docstrings
+          - dlint
+          - simplify
+          - flake8-dunder-all
+          - flake8-encodings
+          - flake8-requirements
+          - flake8-secure-coding-standard
+          - flake8-string-format
+          - flake8-unused-arguments
+          - flake8-useless-assert
+          - flake8-warnings
+          - flake8-class-attributes-order
+          - flake8-clean-block
+          - flake8-comprehensions
+          - flake8-literal
+          - flake8-implicit-str-concat
+          - flake8-newspaper-style
+          - flake8-picky-parentheses
+          - flake8-quotes
+          - flake8-return
+          - flake8-print
+          - flake8-use-fstring
+          - flake8-builtins
+          - flake8-comments
+          - flake8-spellcheck
+          - flake8-type-checking
+          - pydoclint
+          - flake8-eradicate
+          - flake8-pytest
+          - flake8-bandit
+          - flake8-annotations-coverage
+          - flake8-annotations
+          - flake8-new-union-types
+          - flake8-pep585
+          - flake8-executable
+          - flake8-docstring-checker
+          - flake8-docstrings
+          - flake8-docstrings-complete
+          - flake8-functions
+          - flake8-noqa
+          - flake8-length
+          - flake8-variables-names
+          #          - pep8-naming
+          #          - flake8-test-name
+          #          - flake8-annotations-complexity
+          - flake8-cognitive-complexity
+          - flake8-expression-complexity
 #          - cohesion
 #          - hacking
