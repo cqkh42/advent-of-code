@@ -4,7 +4,7 @@ from _md5 import md5
 
 from aocd import get_data
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):

@@ -2,7 +2,7 @@ import itertools
 
 import parse
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 # h = sum(y-(n-1))
 # h = yn - sum(n) + n

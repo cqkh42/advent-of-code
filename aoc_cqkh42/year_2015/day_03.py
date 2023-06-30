@@ -1,6 +1,6 @@
 import numpy as np
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def _unique_coords(steps) -> np.array:

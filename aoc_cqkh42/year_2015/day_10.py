@@ -1,7 +1,7 @@
 import itertools
 from functools import cache
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 @cache

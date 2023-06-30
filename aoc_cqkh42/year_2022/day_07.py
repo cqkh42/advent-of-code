@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Set, Tuple
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 @dataclass

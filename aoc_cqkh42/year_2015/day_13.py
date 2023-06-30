@@ -3,7 +3,7 @@ import itertools
 import networkx as nx
 import parse
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile(r"{:w} would {:d} happiness units by sitting next to {:w}.")
 

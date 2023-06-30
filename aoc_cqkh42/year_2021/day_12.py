@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from queue import SimpleQueue
 from typing import Tuple
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 # todo could we feed in some parsing function

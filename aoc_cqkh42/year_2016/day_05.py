@@ -1,7 +1,7 @@
 import itertools
 from _md5 import md5 as md5_builtin
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):

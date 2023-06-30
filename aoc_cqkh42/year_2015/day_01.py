@@ -11,7 +11,7 @@ from typing import Self
 from aocd.models import Puzzle
 from more_itertools import first, iter_index
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):

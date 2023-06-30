@@ -8,7 +8,7 @@ import re
 
 import numpy as np
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.helpers.graph import a_star
 
 

@@ -4,7 +4,7 @@ import more_itertools
 import numpy as np
 import parse
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 # TODO move is messy here

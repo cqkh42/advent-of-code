@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 WINNING_OPTIONS = [
     {(0, row) for row in range(5)},

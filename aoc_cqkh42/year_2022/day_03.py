@@ -3,7 +3,7 @@ from string import ascii_letters
 
 import more_itertools
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def count_total(counts):

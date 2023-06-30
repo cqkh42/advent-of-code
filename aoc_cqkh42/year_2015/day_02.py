@@ -1,41 +1,107 @@
+#!/usr/bin/python3
+"""Solutions for day 2 of 2015's Advent of Code.
+
+Read the full puzzle at https://adventofcode.com/2015/day/2
+"""
+__all__ = ["Solution"]
+
 import itertools
 import math
 from dataclasses import dataclass
-from typing import List
+from typing import Self
 
 import parse
+from aocd.models import Puzzle
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+
+PARSER = parse.compile("{dim_0:d}x{dim_1:d}x{dim_2:d}")
 
 
 @dataclass
 class Present:
-    dims: List[int]
+    """A present represented by 3 dimensions.
+
+    Attributes:
+        dim_0: The first dimension
+        dim_1: The second dimension
+        dim_2: The third dimension
+        paper: How much paper is needed for the present.
+        ribbon: How much ribbon is needed for the present.
+    """
+
+    dim_0: int
+    dim_1: int
+    dim_2: int
 
     @property
-    def sides(self) -> itertools.combinations:
-        return itertools.combinations(self.dims, 2)
+    def _pairs(self: Self) -> itertools.combinations:
+        """Pairs of dimensions.
+
+        Returns:
+            generator: iterable of pairs of dimensions
+        """
+        return itertools.combinations([self.dim_0, self.dim_1, self.dim_2], 2)
 
     @property
-    def paper(self) -> int:
-        sides = [math.prod(corner) for corner in self.sides]
+    def paper(self: Self) -> int:
+        """How much paper is needed for the present.
+
+        Returns:
+            int: the amount of paper needed for the present
+        """
+        sides = [math.prod(corner) for corner in self._pairs]
         return min(sides) + sum(sides) * 2
 
     @property
-    def ribbon(self) -> int:
-        perms = (sum(corner) for corner in self.sides)
-        return min(perms) * 2 + math.prod(self.dims)
+    def ribbon(self: Self) -> int:
+        """How much ribbon is needed for the present.
+
+        Returns:
+            int: the amount of ribbon needed for the present
+        """
+        perms = (sum(corner) for corner in self._pairs)
+        return min(perms) * 2 + math.prod([self.dim_0, self.dim_1, self.dim_2])
 
 
-class Solution(BaseSolution):
-    parser = parse.compile("{:d}x{:d}x{:d}")
+class Solution(BaseSolution):  # noqa: H601
+    """Solutions for day 2 of 2015's Advent of Code."""
 
-    def parse_data(self) -> List[Present]:
-        presents = [Present(dims) for dims in self.parser.findall(self.data)]
-        return presents
+    def part_a(self: Self) -> int:
+        """Answer part a.
 
-    def part_a(self) -> int:
+        Returns:
+            Total paper needed for all presents
+        """
         return sum(present.paper for present in self.parsed_data)
 
-    def part_b(self) -> int:
+    def part_b(self: Self) -> int:
+        """Answer part b.
+
+        Returns:
+            Total ribbon needed for all presents
+        """
         return sum(present.ribbon for present in self.parsed_data)
+
+    def _parse_data(self: Self) -> list[Present, ...]:
+        """Build a list of Presents from raw input data.
+
+        Returns:
+            List of Presents
+        """
+        return [
+            Present(dims["dim_0"], dims["dim_1"], dims["dim_2"])
+            for dims in PARSER.findall(self.data)
+        ]
+
+
+def main() -> None:
+    """Solve and submit answers for 2015 day 2."""
+    puzzle = Puzzle(year=2015, day=2)
+    solution = Solution(puzzle.input_data)
+    puzzle.answer_a = solution.part_a()
+    puzzle.answer_b = solution.part_b()
+
+
+if __name__ == "__main__":
+    main()

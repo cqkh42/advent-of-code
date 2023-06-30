@@ -3,7 +3,7 @@ import itertools
 import numpy as np
 from scipy.ndimage import generic_filter
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def step(consortium):

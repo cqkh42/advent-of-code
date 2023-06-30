@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import parse
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 @dataclass

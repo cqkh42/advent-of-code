@@ -2,7 +2,7 @@ from collections import Counter
 
 import numpy as np
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def is_corrupt(line):

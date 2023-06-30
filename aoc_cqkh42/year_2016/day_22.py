@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import parse
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile(
     r'/dev/grid/node-x{test[x]:d}-y{test[y]:d}{:s}{test[size]:d}T{:s}{test[used]:d}T{:s}{test[avail]:d}T'

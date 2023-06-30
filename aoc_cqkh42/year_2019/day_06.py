@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def count_orbital_injections(object_1, object_2, orbits):

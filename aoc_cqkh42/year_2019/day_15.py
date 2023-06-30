@@ -1,7 +1,7 @@
 # TODO A* class?
 from collections import Counter
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.year_2019.computer import Computer
 
 

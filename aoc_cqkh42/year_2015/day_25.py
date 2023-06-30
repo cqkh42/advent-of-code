@@ -1,6 +1,7 @@
 import re
+from typing import Self
 
-from aoc_cqkh42 import BaseSolution
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
@@ -13,3 +14,6 @@ class Solution(BaseSolution):
         that_number = triangle_number * (triangle_number + 1) // 2
         my_number = that_number - row
         return (pow(252533, my_number, 33554393) * 20151125) % 33554393
+
+    def part_b(self: Self) -> None:
+        ...
