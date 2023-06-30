@@ -17,12 +17,10 @@ class BaseSolution(ABC):
     data: str
 
     def __post_init__(self: Self):
-        self.parsed_data = self._parse_data() or self.parse_data()
+        self.parsed_data = self._parse_data()
 
+    @abstractmethod
     def _parse_data(self: Self) -> Any:
-        return None
-
-    def parse_data(self: Self) -> Any:
         return self.data
 
     @cached_property

@@ -19,7 +19,7 @@ def iteration(lights):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         rows = [list(row) for row in self.lines]
         rows = np.array(rows)
         rows = rows == "#"

@@ -4,7 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         cols = zip(*self.lines)
         counters = [Counter(col) for col in cols]
         return [counter.most_common() for counter in counters]

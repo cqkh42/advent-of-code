@@ -28,7 +28,7 @@ def make_big_square(start):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         array = []
         for line in self.lines:
             line = [int(i) for i in line]

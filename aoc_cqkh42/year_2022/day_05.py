@@ -14,7 +14,7 @@ class Solution(BaseSolution):
         for count, from_, to in self.parser.findall(self.data):
             yield count, from_ - 1, to - 1
 
-    def parse_data(self):
+    def _parse_data(self):
         lines, _ = more_itertools.split_at(self.lines, lambda line: line == '')
         stacks = (stack for stack in zip(*lines) if stack[-1] != ' ')
         queues = [

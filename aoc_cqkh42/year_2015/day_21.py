@@ -37,7 +37,7 @@ RINGS = [
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         boss_health, *stats = self.numbers
         boss = np.array([0, *stats]) * -1
 

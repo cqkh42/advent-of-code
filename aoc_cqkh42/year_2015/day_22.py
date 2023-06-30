@@ -1,6 +1,7 @@
 # TODO abstract dijkstra
 # TODO abstract search
 from dataclasses import dataclass, replace
+from typing import Self
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.helpers.graph.dijkstra import dijkstra
@@ -14,6 +15,9 @@ class Solution(BaseSolution):
     def part_b(self):
         starting_state = StateB(PLAYER_HEALTH, *self.numbers, PLAYER_MANA)
         return dijkstra(starting_state)
+
+    def _parse_data(self: Self) -> str:
+        return self.data
 
 
 PLAYER_HEALTH = 50

@@ -43,7 +43,7 @@ class Solution(BaseSolution):
         self.directories[d.name] = d
         return d
 
-    def parse_data(self):
+    def _parse_data(self):
         self.directories[self.cur_dir.name] = self.cur_dir
         for line in self.lines[1:]:
             match line.split():

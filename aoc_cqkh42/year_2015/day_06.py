@@ -7,7 +7,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile("{:w} {:d},{:d} through {:d},{:d}")
 
-    def parse_data(self):
+    def _parse_data(self):
         tidied = self.data.replace("turn ", "")
         instructions = self.parser.findall(tidied)
         instructions = [

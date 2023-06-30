@@ -9,7 +9,7 @@ PARSER = parse.compile(r"{:w} would {:d} happiness units by sitting next to {:w}
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         graph = nx.Graph()
         data = self.data.replace("lose ", "-").replace("gain ", "")
         matches = PARSER.findall(data)

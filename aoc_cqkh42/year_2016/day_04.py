@@ -34,7 +34,7 @@ class Room:
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         rooms = list(parse.findall(r'{:D}-{:d}[{:w}]', self.data))
         rooms = [Room(*room) for room in rooms]
         checksummed = (room for room in rooms if room.valid_checksum())

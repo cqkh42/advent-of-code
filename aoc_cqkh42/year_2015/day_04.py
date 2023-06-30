@@ -17,7 +17,7 @@ class Solution(BaseSolution):
             if hash_.hexdigest().startswith(sequence):
                 return answer
 
-    def parse_data(self):
+    def _parse_data(self):
         return md5(self.data.encode())
 
     def part_a(self):

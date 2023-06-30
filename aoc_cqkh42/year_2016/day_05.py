@@ -5,7 +5,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         hashes = ''
         placed_hashes = [''] * 8
         base_hash = md5_builtin(self.data.encode())
@@ -15,7 +15,7 @@ class Solution(BaseSolution):
             hashed.update(b'%a' % index)
 
             digest = hashed.hexdigest()
-            if digest.startswith('0'*5):
+            if digest.startswith('0' * 5):
                 kk = int(digest[5], 16)
                 hashes += digest[5]
                 if kk < 8 and not placed_hashes[kk]:

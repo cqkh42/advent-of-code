@@ -42,7 +42,7 @@ def compare(left, right):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         pairs = self.data.split('\n\n')
         pairs = (pair.split('\n') for pair in pairs)
         pairs = [(Packet(left), Packet(right)) for left, right in pairs]

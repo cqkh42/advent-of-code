@@ -52,7 +52,7 @@ class Solution(BaseSolution):
     answer_a = None
     regex = re.compile(r"([a-z0-9]*) ?(\w*) ?([a-z0-9]*) -> (\w+)")
 
-    def parse_data(self):
+    def _parse_data(self):
         return self.regex.findall(self.data)
 
     def part_a(self):

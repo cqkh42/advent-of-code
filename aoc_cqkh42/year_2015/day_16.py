@@ -34,7 +34,7 @@ def _good_sue(sue):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         sue_list = PARSER.findall(self.data)
         sues = [zip(sue[::2], sue[1::2]) for sue in sue_list]
         return [dict(sue) for sue in sues]

@@ -28,12 +28,14 @@ class Solution(BaseSolution):
     instructions = {}
     outputs = {}
 
-    def parse_data(self):
+    def _parse_data(self):
         v = parse.findall('value {:d} goes to bot {:d}', self.data)
         for v_, b in v:
             self.bots[b].add(v_)
 
-        z = parse.findall('bot {bot:d} gives low to {low[bot]:w} {low[value]:d} and high to {high[bot]:w} {high[value]:d}', self.data)
+        z = parse.findall(
+            'bot {bot:d} gives low to {low[bot]:w} {low[value]:d} and high to {high[bot]:w} {high[value]:d}',
+            self.data)
         self.instructions = {i['bot']: i.named for i in z}
 
     def part_a(self):

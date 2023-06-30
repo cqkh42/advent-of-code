@@ -23,10 +23,12 @@ class Solution(BaseSolution):
     )
     beacons = set()
 
-    def parse_data(self):
+    def _parse_data(self):
         sensors = {}
-        for sensor_x, sensor_y, beacon_x, beacon_y in self.parser.findall(self.data):
-            sensors[(sensor_x, sensor_y)] = manhattan((sensor_x, sensor_y), (beacon_x, beacon_y))
+        for sensor_x, sensor_y, beacon_x, beacon_y in self.parser.findall(
+                self.data):
+            sensors[(sensor_x, sensor_y)] = manhattan((sensor_x, sensor_y),
+                                                      (beacon_x, beacon_y))
             self.beacons.add((beacon_x, beacon_y))
         return sensors
 

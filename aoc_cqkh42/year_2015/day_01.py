@@ -38,6 +38,9 @@ class Solution(BaseSolution):
         indexes = iter_index(accumulated, -1)
         return first(indexes) + 1
 
+    def _parse_data(self: Self) -> str:
+        return self.data
+
 
 def main() -> None:
     """Solve and submit answers for 2015 day 1."""

@@ -4,7 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         elves = more_itertools.split_at(self.lines, lambda line: line == '')
         elves = [sum(int(weight) for weight in elf) for elf in elves]
         return sorted(elves, reverse=True)

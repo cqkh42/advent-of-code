@@ -8,7 +8,7 @@ class Solution(BaseSolution):
     parser = parse.compile('{:d},{:d}')
     y_break = float('inf')
 
-    def parse_data(self) -> set:
+    def _parse_data(self) -> set:
         rocks = set()
         for row in self.lines:
             for (start_x, start_y), (end_x, end_y) in more_itertools.pairwise(

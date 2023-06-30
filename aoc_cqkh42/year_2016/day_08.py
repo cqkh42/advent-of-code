@@ -12,7 +12,7 @@ class Solution(BaseSolution):
     row_parser = parse.compile(r'rotate row y={:d} by {:d}')
     col_parser = parse.compile(r'rotate column x={:d} by {:d}')
 
-    def parse_data(self):
+    def _parse_data(self):
         screen = np.zeros((6, 50))
         for instruction in self.lines:
             if instruction.startswith('rect'):

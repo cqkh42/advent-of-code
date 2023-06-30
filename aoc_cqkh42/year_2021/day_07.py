@@ -16,7 +16,7 @@ def tri_cost_of_point(numbers, point):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         return tuple(int(num) for num in self.data.split(','))
 
     def part_a(self):

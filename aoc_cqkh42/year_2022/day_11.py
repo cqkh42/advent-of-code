@@ -29,7 +29,7 @@ class Solution(BaseSolution):
     If true: throw to monkey {true_monkey:d}
     If false: throw to monkey {false_monkey:d}""")
 
-    def parse_data(self):
+    def _parse_data(self):
         monkeys = []
         for monkey in self.parser.findall(self.data):
             items = [int(num) for num in monkey['items'].split(', ')]

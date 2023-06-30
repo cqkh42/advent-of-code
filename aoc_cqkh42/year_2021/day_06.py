@@ -4,7 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         numbers = [int(num) for num in self.data.split(',')]
         tracker = defaultdict(int)
         for num in numbers:

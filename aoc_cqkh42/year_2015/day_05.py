@@ -1,4 +1,5 @@
 import re
+from typing import Self
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -27,3 +28,6 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return sum(self._is_nice_b(string) for string in self.lines)
+
+    def _parse_data(self: Self) -> str:
+        return self.data

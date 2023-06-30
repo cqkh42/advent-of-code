@@ -17,3 +17,6 @@ class Solution(BaseSolution):
 
     def part_b(self: Self) -> None:
         ...
+
+    def _parse_data(self: Self) -> str:
+        return self.data

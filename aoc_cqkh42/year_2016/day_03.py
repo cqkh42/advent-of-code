@@ -27,7 +27,7 @@ def grouper(iterable, n):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         rows = list(parse.findall('{:>d} {:>d} {:>d}', self.data))
         return rows
 

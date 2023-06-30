@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         ords = [ord(char) - 97 for char in self.data]
         for index, char in enumerate(ords):
             if char in [8, 14, 11]:

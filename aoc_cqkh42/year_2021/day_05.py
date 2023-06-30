@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         horizontal = []
         vertical = []
         diagonal = []
@@ -15,7 +15,7 @@ class Solution(BaseSolution):
             if x1 == x2:
                 # horizontal line
                 start, end = sorted([y1, y2])
-                l = [(x1, y) for y in range(start, end+1)]
+                l = [(x1, y) for y in range(start, end + 1)]
                 horizontal.extend(l)
             elif y1 == y2:
                 # vertical line

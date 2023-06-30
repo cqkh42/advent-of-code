@@ -30,8 +30,9 @@ class Reindeer:
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
-        reindeer = [Reindeer(**data.named) for data in PARSER.findall(self.data)]
+    def _parse_data(self):
+        reindeer = [Reindeer(**data.named) for data in
+                    PARSER.findall(self.data)]
         return reindeer
 
     def part_a(self, time=TIME):

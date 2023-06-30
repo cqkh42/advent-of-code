@@ -51,7 +51,7 @@ class Puzzle:
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         return [Puzzle.from_line(line) for line in self.lines]
 
     def part_a(self):

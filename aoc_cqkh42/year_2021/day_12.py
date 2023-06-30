@@ -35,7 +35,7 @@ class Route:
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         self.maps = defaultdict(list)
         for row in self.lines:
             a, b = row.split('-')

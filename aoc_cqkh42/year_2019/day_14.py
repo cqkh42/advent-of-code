@@ -76,7 +76,7 @@ def fuel_with_ore(reactions, ore):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         return extract_conversions(self.data)
 
     def part_a(self):

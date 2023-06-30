@@ -24,8 +24,9 @@ def x_location(x, n):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
-        return parse.search(r'x={x_min:d}..{x_max:d}, y={y_min:d}..{y_max:d}', self.data)
+    def _parse_data(self):
+        return parse.search(r'x={x_min:d}..{x_max:d}, y={y_min:d}..{y_max:d}',
+                            self.data)
 
     def part_a(self):
         v = abs(self.parsed_data['y_min']) - 1

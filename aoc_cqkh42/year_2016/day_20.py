@@ -4,7 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         parser = parse.compile('{:d}-{:d}')
         rs = parser.findall(self.data)
         rs = sorted([(a, b) for a, b in rs], key=lambda x: x[0])

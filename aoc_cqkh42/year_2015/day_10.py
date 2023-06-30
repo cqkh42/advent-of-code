@@ -1,5 +1,6 @@
 import itertools
 from functools import cache
+from typing import Self
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -25,3 +26,6 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return self._sequence(10)
+
+    def _parse_data(self: Self) -> str:
+        return self.data

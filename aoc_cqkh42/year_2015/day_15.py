@@ -24,7 +24,7 @@ def get_ratios(num_ingredients):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         ingredients = PARSER.findall(self.data)
         ingredients = [np.array(list(i)) for i in ingredients]
         ingredients = np.stack(ingredients)

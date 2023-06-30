@@ -9,7 +9,7 @@ def _unique_coords(steps) -> np.array:
 
 
 class Solution(BaseSolution):
-    def parse_data(self) -> np.array:
+    def _parse_data(self) -> np.array:
         mapping_dict = {">": (1, 0), "<": (-1, 0), "^": (0, 1), "v": (0, -1)}
         changes = np.array(
             [[0, 0], *(mapping_dict[step] for step in self.data)]

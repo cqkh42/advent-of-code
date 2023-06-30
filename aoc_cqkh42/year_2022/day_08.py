@@ -28,7 +28,7 @@ def visible_row(row):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         forest = []
         for row in self.lines:
             r = [int(i) for i in row]

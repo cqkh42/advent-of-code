@@ -1,4 +1,5 @@
 import re
+from typing import Self
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -27,3 +28,6 @@ class Solution(BaseSolution):
                 2 * len(self.lines) + self.data.count('"') + self.data.count(
             "\\")
         )
+
+    def _parse_data(self: Self) -> str:
+        return self.data

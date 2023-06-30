@@ -20,7 +20,7 @@ class Node:
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         rows = list(PARSER.findall(self.data))
         nodes = [Node(**row.named['test']) for row in rows]
         return nodes

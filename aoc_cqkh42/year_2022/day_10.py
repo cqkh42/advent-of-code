@@ -7,7 +7,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         r = more_itertools.flatten(
             (0,) if row == 'noop' else (0, int(row.split()[1]))
             for row in self.lines

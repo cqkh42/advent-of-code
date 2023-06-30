@@ -1,5 +1,6 @@
 import functools
 from collections import Counter
+from typing import Self
 
 import more_itertools
 
@@ -20,3 +21,6 @@ class Solution(BaseSolution):
     def part_b(self, target=150):
         sizes = Counter(len(group) for group in valid(self.numbers, target))
         return sizes[min(sizes)]
+
+    def _parse_data(self: Self) -> str:
+        return self.data

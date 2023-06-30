@@ -37,7 +37,7 @@ class Solution(BaseSolution):
             node for node, data in self.parsed_data.nodes(data=True) if
             data.get('true_val') == 'E')
 
-    def parse_data(self):
+    def _parse_data(self):
         graph = nx.grid_2d_graph(
             len(self.lines), len(self.lines[0]), create_using=nx.DiGraph
         )

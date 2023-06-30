@@ -10,7 +10,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile(r"{:w} to {:w} = {:d}")
 
-    def parse_data(self):
+    def _parse_data(self):
         graph = Graph(
             (a, b, {"weight": c}) for a, b, c in self.parser.findall(self.data)
         )

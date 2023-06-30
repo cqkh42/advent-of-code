@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile('{:d}-{:d},{:d}-{:d}')
 
-    def parse_data(self):
+    def _parse_data(self):
         return [
             (set(range(a, b + 1)), set(range(c, d + 1)))
             for a, b, c, d in self.parser.findall(self.data)

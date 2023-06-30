@@ -5,7 +5,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         p = parse.findall(
             '{:n} positions; at time=0, it is at position {:n}.',
             self.data

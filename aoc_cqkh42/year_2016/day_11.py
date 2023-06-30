@@ -13,7 +13,7 @@ from aoc_cqkh42.helpers.graph import a_star
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         indices = re.findall(r' (\w+) generator', self.data)
 
         generators = np.zeros(len(indices), dtype=int)

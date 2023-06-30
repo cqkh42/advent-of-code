@@ -65,7 +65,7 @@ class Solution(BaseSolution):
     molecule = None
     rules = None
 
-    def parse_data(self):
+    def _parse_data(self):
         self.molecule = self.lines[-1]
         self.rules = MultiDict(
             ((v, k) for k, v in re.findall(r"(.+) => (.+)", input_)))

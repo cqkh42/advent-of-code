@@ -24,7 +24,7 @@ def sets_sum_to(set_, target, num):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         return frozenset(self.numbers)
 
     def solve(self, num_groups):

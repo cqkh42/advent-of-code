@@ -9,12 +9,12 @@ class Solution(BaseSolution):
     coord_parser = parse.compile(r'{:d},{:d}')
     fold_parser = parse.compile(r'fold along {}={:d}')
 
-    def parse_data(self):
+    def _parse_data(self):
         coords = self.coord_parser.findall(self.data)
         self.folds = [i for i in self.fold_parser.findall(self.data)]
         x = max(b for a, b in self.folds if a == 'x')
         y = max(b for a, b in self.folds if a == 'y')
-        sheet = np.zeros((y*2+1, x*2+1), dtype=bool)
+        sheet = np.zeros((y * 2 + 1, x * 2 + 1), dtype=bool)
         for a, b, in coords:
             sheet[b, a] = True
         return sheet

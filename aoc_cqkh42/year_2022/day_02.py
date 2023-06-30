@@ -8,7 +8,7 @@ class Solution(BaseSolution):
     score = {'rock': 1, 'paper': 2, 'scissors': 3}
     you_mapping = {'X': 'rock', 'Y': 'paper', 'Z': 'scissors'}
 
-    def parse_data(self):
+    def _parse_data(self):
         elf_mapping = {'A': 'rock', 'B': 'paper', 'C': 'scissors'}
         plays = (line.split() for line in self.lines)
         return [(elf_mapping[elf], you) for elf, you in plays]

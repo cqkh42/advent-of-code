@@ -26,7 +26,7 @@ class IP:
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
+    def _parse_data(self):
         ips = [IP(ip) for ip in self.lines]
         return ips
 
