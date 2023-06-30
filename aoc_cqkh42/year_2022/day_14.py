@@ -8,7 +8,7 @@ class Solution(BaseSolution):
     parser = parse.compile('{:d},{:d}')
     y_break = float('inf')
 
-    def _parse_data(self) -> set:
+    def _process_data(self) -> set:
         rocks = set()
         for row in self.lines:
             for (start_x, start_y), (end_x, end_y) in more_itertools.pairwise(
@@ -67,8 +67,8 @@ class Solution(BaseSolution):
                 return count
 
     def part_b(self):
-        to_add = {(x, self.y_break+2) for x in range(1001)}
-        self.parsed_data = self.parsed_data.union(to_add)
+        to_add = {(x, self.y_break + 2) for x in range(1001)}
+        self.parsed_data = self.processed.union(to_add)
         count = 0
         sand_pile = set()
         while True:

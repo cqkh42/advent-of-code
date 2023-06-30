@@ -23,7 +23,7 @@ class Solution(BaseSolution):
         Returns:
             Difference in counts of '(' and ')'
         """
-        return self.data.count("(") - self.data.count(")")
+        return self.input_.count("(") - self.input_.count(")")
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -33,13 +33,13 @@ class Solution(BaseSolution):
         """
         positive = "("
         accumulated = itertools.accumulate(
-            1 if item == positive else -1 for item in self.data
+            1 if item == positive else -1 for item in self.input_
         )
         indexes = iter_index(accumulated, -1)
         return first(indexes) + 1
 
-    def _parse_data(self: Self) -> str:
-        return self.data
+    def _process_data(self: Self) -> str:
+        return self.input_
 
 
 def main() -> None:

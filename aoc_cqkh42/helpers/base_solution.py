@@ -14,22 +14,22 @@ NUM_PARSER = parse.compile('{num:d}')
 
 @dataclass
 class BaseSolution(ABC):
-    data: str
+    input_: str
 
     def __post_init__(self: Self):
-        self.parsed_data = self._parse_data()
+        self.processed = self._process_data()
 
-    @abstractmethod
-    def _parse_data(self: Self) -> Any:
-        return self.data
+    def _process_data(self: Self) -> Any:
+        return self.input_
 
     @cached_property
     def lines(self: Self) -> list[str, ...]:
-        return self.data.split("\n")
+        return self.input_.split("\n")
 
     @cached_property
     def numbers(self: Self) -> tuple[int, ...]:
-        return tuple(result["num"] for result in NUM_PARSER.findall(self.data))
+        return tuple(
+            result["num"] for result in NUM_PARSER.findall(self.input_))
 
     @abstractmethod
     def part_a(self: Self) -> str | int:

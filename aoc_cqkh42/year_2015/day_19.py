@@ -65,14 +65,14 @@ class Solution(BaseSolution):
     molecule = None
     rules = None
 
-    def _parse_data(self):
+    def _process_data(self):
         self.molecule = self.lines[-1]
         self.rules = MultiDict(
             ((v, k) for k, v in re.findall(r"(.+) => (.+)", input_)))
 
     def part_a(self):
         new_strings = set()
-        for old, new in re.findall(r"(.+) => (.+)", self.data):
+        for old, new in re.findall(r"(.+) => (.+)", self.input_):
             replacements = {
                 self.molecule[:i.start()] + new + self.molecule[i.end():] for i
                 in re.finditer(old, self.molecule)}

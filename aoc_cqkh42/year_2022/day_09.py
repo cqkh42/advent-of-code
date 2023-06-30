@@ -52,19 +52,19 @@ class Solution(BaseSolution):
     parser = parse.compile('{:l} {:d}')
     tail = (0, 0)
 
-    def _parse_data(self):
+    def _process_data(self):
         movements = more_itertools.run_length.decode(
-            self.parser.findall(self.data))
+            self.parser.findall(self.input_))
         dicts = {'R': (1, 0), 'L': (-1, 0), 'U': (0, 1), 'D': (0, -1)}
         return list(itertools.accumulate((dicts[i] for i in movements),
                                          initial=np.array([0, 0])))
 
     def part_a(self):
-        places = chase(self.parsed_data)
+        places = chase(self.processed)
         return len(set(places))
 
     def part_b(self):
-        k = self.parsed_data
+        k = self.processed
         for i in range(9):
             k = chase(k)
         return len(set(k))

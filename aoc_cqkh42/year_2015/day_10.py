@@ -12,7 +12,7 @@ def _resolve(a, b):
 
 class Solution(BaseSolution):
     def _iteration(self):
-        g = itertools.groupby(self.data)
+        g = itertools.groupby(self.input_)
         d = (f"{len(list(b))}{a}" for a, b in g)
         self.data = "".join(d)
 
@@ -27,5 +27,5 @@ class Solution(BaseSolution):
     def part_b(self):
         return self._sequence(10)
 
-    def _parse_data(self: Self) -> str:
+    def _process_data(self: Self) -> str:
         return self.data

@@ -73,7 +73,7 @@ class Solution(BaseSolution):  # noqa: H601
         Returns:
             Total paper needed for all presents
         """
-        return sum(present.paper for present in self.parsed_data)
+        return sum(present.paper for present in self.processed)
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -81,9 +81,9 @@ class Solution(BaseSolution):  # noqa: H601
         Returns:
             Total ribbon needed for all presents
         """
-        return sum(present.ribbon for present in self.parsed_data)
+        return sum(present.ribbon for present in self.processed)
 
-    def _parse_data(self: Self) -> list[Present, ...]:
+    def _process_data(self: Self) -> list[Present, ...]:
         """Build a list of Presents from raw input data.
 
         Returns:
@@ -91,7 +91,7 @@ class Solution(BaseSolution):  # noqa: H601
         """
         return [
             Present(dims["dim_0"], dims["dim_1"], dims["dim_2"])
-            for dims in PARSER.findall(self.data)
+            for dims in PARSER.findall(self.input_)
         ]
 
 

@@ -37,7 +37,7 @@ RINGS = [
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         boss_health, *stats = self.numbers
         boss = np.array([0, *stats]) * -1
 
@@ -57,7 +57,9 @@ class Solution(BaseSolution):
         return player_turns_needed <= boss_turns_needed
 
     def part_a(self):
-        return min(cost for cost, *stats in self.parsed_data if self.winner(*stats))
+        return min(
+            cost for cost, *stats in self.processed if self.winner(*stats))
 
     def part_b(self):
-        return max(cost for cost, *stats in self.parsed_data if not self.winner(*stats))
+        return max(
+            cost for cost, *stats in self.processed if not self.winner(*stats))

@@ -10,9 +10,10 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile(r"{:w} to {:w} = {:d}")
 
-    def _parse_data(self):
+    def _process_data(self):
         graph = Graph(
-            (a, b, {"weight": c}) for a, b, c in self.parser.findall(self.data)
+            (a, b, {"weight": c}) for a, b, c in
+            self.parser.findall(self.input_)
         )
         distances = {
             sum(
@@ -24,7 +25,7 @@ class Solution(BaseSolution):
         return distances
 
     def part_a(self):
-        return min(self.parsed_data)
+        return min(self.processed)
 
     def part_b(self):
-        return max(self.parsed_data)
+        return max(self.processed)

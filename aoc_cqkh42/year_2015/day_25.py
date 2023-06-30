@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     def part_a(self):
-        row, col = re.findall(r"\d+", self.data)
+        row, col = re.findall(r"\d+", self.input_)
         row = int(row)
         col = int(col)
 
@@ -18,5 +18,5 @@ class Solution(BaseSolution):
     def part_b(self: Self) -> None:
         ...
 
-    def _parse_data(self: Self) -> str:
-        return self.data
+    def _process_data(self: Self) -> str:
+        return self.input_

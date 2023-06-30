@@ -1,5 +1,6 @@
 from collections import Counter
 from string import ascii_letters
+from typing import Self
 
 import more_itertools
 
@@ -28,3 +29,6 @@ class Solution(BaseSolution):
             for first, *others in more_itertools.chunked(self.lines, 3)
         )
         return count_total(intersections)
+
+    def _process_data(self: Self) -> str:
+        return self.input_

@@ -20,7 +20,7 @@ def calc_row(row):
 
 class Solution(BaseSolution):
     def part_a(self):
-        row = self.data
+        row = self.input_
         total = row.count('.')
         for step in range(39):
             row = calc_row(row)
@@ -28,7 +28,7 @@ class Solution(BaseSolution):
         return total
 
     def part_b(self):
-        row = self.data
+        row = self.input_
         total = row.count('.')
         for step in range(399_999):
             row = calc_row(row)

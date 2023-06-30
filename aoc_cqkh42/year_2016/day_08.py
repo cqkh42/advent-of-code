@@ -12,7 +12,7 @@ class Solution(BaseSolution):
     row_parser = parse.compile(r'rotate row y={:d} by {:d}')
     col_parser = parse.compile(r'rotate column x={:d} by {:d}')
 
-    def _parse_data(self):
+    def _process_data(self):
         screen = np.zeros((6, 50))
         for instruction in self.lines:
             if instruction.startswith('rect'):
@@ -27,7 +27,7 @@ class Solution(BaseSolution):
         return screen.astype(int)
 
     def part_a(self):
-        return self.parsed_data.sum()
+        return self.processed.sum()
 
     def part_b(self):
-        return word(itertools.chain.from_iterable(self.parsed_data))
+        return word(itertools.chain.from_iterable(self.processed))

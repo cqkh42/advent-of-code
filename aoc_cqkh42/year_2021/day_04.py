@@ -39,7 +39,7 @@ class Solution(BaseSolution):
                 mappings[int(item)] = (row_index, col_index)
         return Board(mappings)
 
-    def _parse_data(self):
+    def _process_data(self):
         numbers, _, *boards = self.lines
         self.numbers = [int(num) for num in numbers.split(',')]
         boards = [row.split() for row in boards if row]

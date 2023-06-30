@@ -16,8 +16,8 @@ class Solution(BaseSolution):
         starting_state = StateB(PLAYER_HEALTH, *self.numbers, PLAYER_MANA)
         return dijkstra(starting_state)
 
-    def _parse_data(self: Self) -> str:
-        return self.data
+    def _process_data(self: Self) -> str:
+        return self.input_
 
 
 PLAYER_HEALTH = 50

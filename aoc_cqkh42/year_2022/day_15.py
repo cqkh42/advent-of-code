@@ -23,10 +23,10 @@ class Solution(BaseSolution):
     )
     beacons = set()
 
-    def _parse_data(self):
+    def _process_data(self):
         sensors = {}
         for sensor_x, sensor_y, beacon_x, beacon_y in self.parser.findall(
-                self.data):
+                self.input_):
             sensors[(sensor_x, sensor_y)] = manhattan((sensor_x, sensor_y),
                                                       (beacon_x, beacon_y))
             self.beacons.add((beacon_x, beacon_y))
@@ -34,25 +34,25 @@ class Solution(BaseSolution):
 
     def part_a(self, y=2_000_000):
         unavailable = set()
-        for sensor, distance in self.parsed_data.items():
+        for sensor, distance in self.processed.items():
             try:
                 start, end = resolve_manhattan(sensor, distance, y)
             except ValueError:
                 continue
             else:
-                for num in range(start, end+1):
+                for num in range(start, end + 1):
                     unavailable.add(num)
         for beacon in self.beacons:
             if beacon[1] == y:
                 unavailable.remove(beacon[0])
-        for sensor in self.parsed_data:
+        for sensor in self.processed:
             if sensor[1] == y:
                 unavailable.remove(sensor[0])
         return len(unavailable)
 
     def part_b(self, limit=4_000_000):
         print()
-        for first, second in itertools.combinations(self.parsed_data, 2):
+        for first, second in itertools.combinations(self.processed, 2):
             distance_between = manhattan(first, second)
-            print(f'{first=}, {self.parsed_data[first]=}, {second=}, {self.parsed_data[second]=}, {distance_between=}')
-
+            print(
+                f'{first=}, {self.processed[first]=}, {second=}, {self.processed[second]=}, {distance_between=}')

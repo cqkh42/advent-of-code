@@ -19,20 +19,20 @@ def iteration(lights):
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         rows = [list(row) for row in self.lines]
         rows = np.array(rows)
         rows = rows == "#"
         return rows
 
     def part_a(self, steps=100):
-        light_arr = self.parsed_data.copy()
+        light_arr = self.processed.copy()
         for _ in range(steps):
             light_arr = iteration(light_arr)
         return light_arr.sum()
 
     def part_b(self, steps=100):
-        light_arr = self.parsed_data
+        light_arr = self.processed
         light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
 
         for _ in range(steps):

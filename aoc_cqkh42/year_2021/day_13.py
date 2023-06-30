@@ -9,9 +9,9 @@ class Solution(BaseSolution):
     coord_parser = parse.compile(r'{:d},{:d}')
     fold_parser = parse.compile(r'fold along {}={:d}')
 
-    def _parse_data(self):
-        coords = self.coord_parser.findall(self.data)
-        self.folds = [i for i in self.fold_parser.findall(self.data)]
+    def _process_data(self):
+        coords = self.coord_parser.findall(self.input_)
+        self.folds = [i for i in self.fold_parser.findall(self.input_)]
         x = max(b for a, b in self.folds if a == 'x')
         y = max(b for a, b in self.folds if a == 'y')
         sheet = np.zeros((y * 2 + 1, x * 2 + 1), dtype=bool)
@@ -21,11 +21,11 @@ class Solution(BaseSolution):
 
     def fold(self):
         axis, index = self.folds.pop(0)
-        fold_axis = axis=='x'
+        fold_axis = axis == 'x'
         if axis == 'y':
-            a, b = self.parsed_data[:index, :], self.parsed_data[index+1:, :]
+            a, b = self.processed[:index, :], self.processed[index + 1:, :]
         else:
-            a, b = self.parsed_data[:, :index], self.parsed_data[:, index+1:]
+            a, b = self.processed[:, :index], self.processed[:, index + 1:]
         b = np.flip(b, axis=fold_axis)
         self.parsed_data = a | b
 

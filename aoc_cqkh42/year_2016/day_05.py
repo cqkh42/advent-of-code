@@ -5,10 +5,10 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         hashes = ''
         placed_hashes = [''] * 8
-        base_hash = md5_builtin(self.data.encode())
+        base_hash = md5_builtin(self.input_.encode())
 
         for index in itertools.count():
             hashed = base_hash.copy()
@@ -24,9 +24,9 @@ class Solution(BaseSolution):
                     return hashes, placed_hashes
 
     def part_a(self):
-        hashes = self.parsed_data[0]
+        hashes = self.processed[0]
         return hashes[:8]
 
     def part_b(self):
-        hashes = self.parsed_data[1]
+        hashes = self.processed[1]
         return ''.join(hashes)

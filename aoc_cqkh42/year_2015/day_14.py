@@ -30,17 +30,18 @@ class Reindeer:
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         reindeer = [Reindeer(**data.named) for data in
-                    PARSER.findall(self.data)]
+                    PARSER.findall(self.input_)]
         return reindeer
 
     def part_a(self, time=TIME):
-        return max(deer.distance(time) for deer in self.parsed_data)
+        return max(deer.distance(time) for deer in self.processed)
 
     def part_b(self, time=TIME):
         for second in range(1, time + 1):
-            highest_score = max(deer.distance(second) for deer in self.parsed_data)
-            for deer in self.parsed_data:
+            highest_score = max(
+                deer.distance(second) for deer in self.processed)
+            for deer in self.processed:
                 deer.score += deer.distance(second) == highest_score
-        return max(self.parsed_data, key=lambda deer: deer.score).score
+        return max(self.processed, key=lambda deer: deer.score).score

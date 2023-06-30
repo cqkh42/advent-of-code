@@ -69,7 +69,7 @@ def run_it_all(numbers, iters):
 
 class Solution(BaseSolution):
     def part_a(self):
-        inputs = list(self.data)
+        inputs = list(self.input_)
         inputs = [int(num) for num in inputs]
         phased = run_phases(inputs, 100)[:8]
         r = [str(i) for i in phased]
@@ -78,9 +78,9 @@ class Solution(BaseSolution):
 
     def part_b(self):
         # return False
-        listed = [int(num) for num in self.data] * 10000
+        listed = [int(num) for num in self.input_] * 10000
 
-        skip = int(self.data[:7])
+        skip = int(self.input_[:7])
         post_skip = listed[skip:]
         result = int(run_it_all(post_skip, 100))
         return result

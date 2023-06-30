@@ -13,7 +13,7 @@ def iteration(nums):
 
 class Solution(BaseSolution):
     def part_a(self):
-        a = list(range(1, int(self.data) + 1))
+        a = list(range(1, int(self.input_) + 1))
         while len(a) > 1:
             a = iteration(a)
         return a[0]
@@ -26,13 +26,13 @@ class Solution(BaseSolution):
             last, current = one_wins_at[-2:]
             next_ = 4 * current - 3 * last
             one_wins_at.append(next_)
-            if next_ > int(self.data):
+            if next_ > int(self.input_):
                 break
         start, end = one_wins_at[-2:]
 
         inflection = ((start + end) / 2) - 1
-        if int(self.data) <= inflection:
-            return int(self.data) - start + 1
+        if int(self.input_) <= inflection:
+            return int(self.input_) - start + 1
         else:
             raise NotImplementedError
             # this actually now incrememnts by two

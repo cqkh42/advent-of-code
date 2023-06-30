@@ -14,7 +14,7 @@ class Solution(BaseSolution):
             if x == y == 3:
                 yield steps
                 continue
-            c = self.data + steps
+            c = self.input_ + steps
             digest = hashlib.md5(c.encode()).hexdigest()[:4]
             u, d, l, r = (char in 'bcdef' for char in digest)
             if u and y - 1 >= 0:

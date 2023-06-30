@@ -4,12 +4,12 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     def part_a(self):
         registers = {'a': 0, 'b': 0, 'c': 0, 'd': 0}
-        instructions = self.data.split('\n')
+        instructions = self.input_.split('\n')
         return run_program(instructions, registers)
 
     def part_b(self):
         registers = {'a': 0, 'b': 0, 'c': 1, 'd': 0}
-        instructions = self.data.split('\n')
+        instructions = self.input_.split('\n')
         return run_program(instructions, registers)
 
 

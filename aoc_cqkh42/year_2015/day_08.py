@@ -19,15 +19,16 @@ def _decode_str(string):
 
 class Solution(BaseSolution):
     def part_a(self):
-        code_len = len(self.data) - len(self.lines) + 1
+        code_len = len(self.input_) - len(self.lines) + 1
         decoded = (len(_decode_str(line)) for line in self.lines)
         return code_len - sum(decoded)
 
     def part_b(self):
         return (
-                2 * len(self.lines) + self.data.count('"') + self.data.count(
+                2 * len(self.lines) + self.input_.count(
+            '"') + self.input_.count(
             "\\")
         )
 
-    def _parse_data(self: Self) -> str:
-        return self.data
+    def _process_data(self: Self) -> str:
+        return self.input_

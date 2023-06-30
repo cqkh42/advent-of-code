@@ -43,7 +43,7 @@ class Solution(BaseSolution):
         self.directories[d.name] = d
         return d
 
-    def _parse_data(self):
+    def _process_data(self):
         self.directories[self.cur_dir.name] = self.cur_dir
         for line in self.lines[1:]:
             match line.split():
@@ -59,8 +59,8 @@ class Solution(BaseSolution):
         return [dir_.total_size() for dir_ in self.directories.values()]
 
     def part_a(self):
-        return sum(dir_ for dir_ in self.parsed_data if dir_ <= 100000)
+        return sum(dir_ for dir_ in self.processed if dir_ <= 100000)
 
     def part_b(self):
-        to_free = 30000000 - 70000000 + max(self.parsed_data)
-        return min(dir_ for dir_ in self.parsed_data if dir_ >= to_free)
+        to_free = 30000000 - 70000000 + max(self.processed)
+        return min(dir_ for dir_ in self.processed if dir_ >= to_free)

@@ -11,10 +11,10 @@ class Solution(BaseSolution):
 
     @property
     def instructions(self):
-        for count, from_, to in self.parser.findall(self.data):
+        for count, from_, to in self.parser.findall(self.input_):
             yield count, from_ - 1, to - 1
 
-    def _parse_data(self):
+    def _process_data(self):
         lines, _ = more_itertools.split_at(self.lines, lambda line: line == '')
         stacks = (stack for stack in zip(*lines) if stack[-1] != ' ')
         queues = [
@@ -24,7 +24,7 @@ class Solution(BaseSolution):
         return queues
 
     def move_boxes(self, lifo=True):
-        queues = deepcopy(self.parsed_data)
+        queues = deepcopy(self.processed)
         for count, from_, to in self.instructions:
             if lifo:
                 queues[to].extend(reversed(queues[from_][-count:]))

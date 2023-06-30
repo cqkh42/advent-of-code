@@ -22,8 +22,8 @@ class Solution(BaseSolution):
         return sum(self.numbers)
 
     def part_b(self):
-        data = [json.loads(self.data)]
+        data = [json.loads(self.input_)]
         return recursive_sum(data)
 
-    def _parse_data(self: Self) -> str:
-        return self.data
+    def _process_data(self: Self) -> str:
+        return self.input_

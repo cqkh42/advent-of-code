@@ -24,27 +24,27 @@ def x_location(x, n):
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         return parse.search(r'x={x_min:d}..{x_max:d}, y={y_min:d}..{y_max:d}',
-                            self.data)
+                            self.input_)
 
     def part_a(self):
-        v = abs(self.parsed_data['y_min']) - 1
+        v = abs(self.processed['y_min']) - 1
         return y_location(v, v)
 
     def part_b(self):
-        y_min = self.parsed_data['y_min']
-        y_max = self.parsed_data['y_max']
+        y_min = self.processed['y_min']
+        y_max = self.processed['y_max']
 
-        x_min = self.parsed_data['x_min']
-        x_max = self.parsed_data['x_max']
+        x_min = self.processed['x_min']
+        x_max = self.processed['x_max']
         # 3 columns for y
         # velocity, step, is_valid
 
-        steps = range(1, 2*abs(y_min)+1)
+        steps = range(1, 2 * abs(y_min) + 1)
         ys = (
             prod for prod in
-            itertools.product(range(y_min, abs(y_min)+2), steps)
+            itertools.product(range(y_min, abs(y_min) + 2), steps)
             if y_min <= y_location(*prod) <= y_max
         )
 

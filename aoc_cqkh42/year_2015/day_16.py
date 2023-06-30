@@ -34,15 +34,15 @@ def _good_sue(sue):
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        sue_list = PARSER.findall(self.data)
+    def _process_data(self):
+        sue_list = PARSER.findall(self.input_)
         sues = [zip(sue[::2], sue[1::2]) for sue in sue_list]
         return [dict(sue) for sue in sues]
 
     def part_a(self):
-        sue_is_good = [sue.items() <= AUNTIE.items() for sue in self.parsed_data]
+        sue_is_good = [sue.items() <= AUNTIE.items() for sue in self.processed]
         return sue_is_good.index(True) + 1
 
     def part_b(self):
-        is_good_sue = [_good_sue(sue) for sue in self.parsed_data]
+        is_good_sue = [_good_sue(sue) for sue in self.processed]
         return is_good_sue.index(True) + 1

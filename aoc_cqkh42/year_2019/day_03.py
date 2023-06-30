@@ -11,7 +11,7 @@ class Solution(BaseSolution):
     wire_1 = None
     wire_2 = None
 
-    def _parse_data(self):
+    def _process_data(self):
         self.wire_1 = self._build_route(self.lines[0])
         self.wire_2 = self._build_route(self.lines[1])
 

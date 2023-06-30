@@ -20,14 +20,14 @@ class Node:
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        rows = list(PARSER.findall(self.data))
+    def _process_data(self):
+        rows = list(PARSER.findall(self.input_))
         nodes = [Node(**row.named['test']) for row in rows]
         return nodes
 
     def part_a(self):
         viable = set()
-        for node_a, node_b in itertools.permutations(self.parsed_data, 2):
+        for node_a, node_b in itertools.permutations(self.processed, 2):
             if node_a.used and node_a.used <= node_b.avail:
                 s = frozenset((node_a, node_b))
                 viable.add(s)

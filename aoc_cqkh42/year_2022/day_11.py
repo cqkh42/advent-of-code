@@ -29,9 +29,9 @@ class Solution(BaseSolution):
     If true: throw to monkey {true_monkey:d}
     If false: throw to monkey {false_monkey:d}""")
 
-    def _parse_data(self):
+    def _process_data(self):
         monkeys = []
-        for monkey in self.parser.findall(self.data):
+        for monkey in self.parser.findall(self.input_):
             items = [int(num) for num in monkey['items'].split(', ')]
             divisor = monkey['test']
             true_ = monkey['true_monkey']
@@ -66,28 +66,28 @@ class Solution(BaseSolution):
         return monkeys
 
     def turn_b(self, lcm):
-        for monkey in self.parsed_data:
+        for monkey in self.processed:
             monkey.inspected += len(monkey.items)
             for item in monkey.items:
                 value = monkey.operation(item) % lcm
                 if value % monkey.test:
-                    self.parsed_data[monkey.false_].items.append(value)
+                    self.processed[monkey.false_].items.append(value)
                 else:
-                    self.parsed_data[monkey.true_].items.append(value)
+                    self.processed[monkey.true_].items.append(value)
             monkey.items = []
 
     def part_a(self):
-        monkeys = deepcopy(self.parsed_data)
+        monkeys = deepcopy(self.processed)
         for _ in range(20):
             monkeys = self.turn(monkeys)
         counts = sorted((monkey.inspected for monkey in monkeys), reverse=True)
         return math.prod(counts[:2])
 
     def part_b(self):
-        lcm = np.lcm.reduce([monkey.test for monkey in self.parsed_data])
+        lcm = np.lcm.reduce([monkey.test for monkey in self.processed])
         for _ in range(10000):
             self.turn_b(lcm)
         counts = sorted(
-            (monkey.inspected for monkey in self.parsed_data), reverse=True
+            (monkey.inspected for monkey in self.processed), reverse=True
         )
         return int(math.prod(counts[:2]))

@@ -35,7 +35,7 @@ class Route:
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         self.maps = defaultdict(list)
         for row in self.lines:
             a, b = row.split('-')
@@ -46,7 +46,7 @@ class Solution(BaseSolution):
     def part_a(self):
         successful = set()
         queue = SimpleQueue()
-        for start in self.parsed_data:
+        for start in self.processed:
             queue.put(start)
         while not queue.empty():
             route = queue.get()
@@ -61,7 +61,7 @@ class Solution(BaseSolution):
     def part_b(self):
         successful = set()
         queue = SimpleQueue()
-        for start in self.parsed_data:
+        for start in self.processed:
             queue.put(start)
         while not queue.empty():
             route = queue.get()

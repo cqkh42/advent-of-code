@@ -24,8 +24,8 @@ def get_ratios(num_ingredients):
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        ingredients = PARSER.findall(self.data)
+    def _process_data(self):
+        ingredients = PARSER.findall(self.input_)
         ingredients = [np.array(list(i)) for i in ingredients]
         ingredients = np.stack(ingredients)
 
@@ -33,9 +33,9 @@ class Solution(BaseSolution):
         return recipes.sum(-2)
 
     def part_a(self):
-        recipe = self.parsed_data[:, :-1]
+        recipe = self.processed[:, :-1]
         return recipe.clip(min=0).prod(1).max()
 
     def part_b(self):
-        recipe = self.parsed_data[self.parsed_data[:, -1] == 500, :-1]
+        recipe = self.processed[self.processed[:, -1] == 500, :-1]
         return recipe.clip(min=0).prod(1).max()

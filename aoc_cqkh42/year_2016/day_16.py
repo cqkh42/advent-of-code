@@ -22,16 +22,16 @@ def checksum(num):
 
 class Solution(BaseSolution):
     def _dragon_curve(self, length):
-        b = self.data[::-1].translate(TRANS)
-        self.data += '0' + b
-        if len(self.data) < length:
+        b = self.input_[::-1].translate(TRANS)
+        self.input_ += '0' + b
+        if len(self.input_) < length:
             return self._dragon_curve(length)
-        return self.data[:length]
+        return self.input_[:length]
 
     def part_a(self):
         b = self._dragon_curve(272)
         return checksum(b)
 
     def part_b(self):
-        b = dragon_curve(self.data, 35651584)
+        b = dragon_curve(self.input_, 35651584)
         return checksum(b)

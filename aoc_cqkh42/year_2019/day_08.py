@@ -22,7 +22,7 @@ def flatten_message(message, width, height):
 
 class Solution(BaseSolution):
     def part_a(self):
-        chunks = make_chunks(self.data, 25 * 6)
+        chunks = make_chunks(self.input_, 25 * 6)
         counters = [Counter(chunk) for chunk in chunks]
         scores = [(counter["0"], counter["1"] * counter["2"]) for counter in
                   counters]
@@ -32,5 +32,5 @@ class Solution(BaseSolution):
     def part_b(self):
         width = 25
         height = 6
-        result = flatten_message(self.data, width, height)
+        result = flatten_message(self.input_, width, height)
         return aocr.word(result, true='1')

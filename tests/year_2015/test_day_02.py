@@ -18,4 +18,4 @@ def test_part_b(data, answer):
 def test__parse_data():
     data = "2x3x4"
     solution = day_02.Solution(data)
-    assert solution.parsed_data == [day_02.Present(2, 3, 4)]
+    assert solution.processed == [day_02.Present(2, 3, 4)]

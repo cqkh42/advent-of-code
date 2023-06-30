@@ -9,9 +9,9 @@ PARSER = parse.compile(r"{:w} would {:d} happiness units by sitting next to {:w}
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
+    def _process_data(self):
         graph = nx.Graph()
-        data = self.data.replace("lose ", "-").replace("gain ", "")
+        data = self.input_.replace("lose ", "-").replace("gain ", "")
         matches = PARSER.findall(data)
         for a, change, b in matches:
             if graph.has_edge(a, b):
@@ -27,7 +27,7 @@ class Solution(BaseSolution):
         return [(sum(weight), min(weight)) for weight in weights]
 
     def part_a(self):
-        return max(self.parsed_data)[0]
+        return max(self.processed)[0]
 
     def part_b(self):
-        return max(weight - lowest for weight, lowest in self.parsed_data)
+        return max(weight - lowest for weight, lowest in self.processed)

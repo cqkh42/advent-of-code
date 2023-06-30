@@ -11,7 +11,7 @@ class Solution(BaseSolution):
     fiver = re.compile(r'(.)\1\1\1\1')
 
     def stretched_hash(self, salt, times):
-        a = md5(f'{self.data}{salt}'.encode())
+        a = md5(f'{self.input_}{salt}'.encode())
         a = a.hexdigest()
         for _ in range(times-1):
             a = md5(a.encode())

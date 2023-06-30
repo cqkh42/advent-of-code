@@ -29,5 +29,5 @@ class Solution(BaseSolution):
     def part_b(self):
         return sum(self._is_nice_b(string) for string in self.lines)
 
-    def _parse_data(self: Self) -> str:
-        return self.data
+    def _process_data(self: Self) -> str:
+        return self.input_

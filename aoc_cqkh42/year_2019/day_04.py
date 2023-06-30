@@ -8,12 +8,12 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     def part_a(self):
-        start, end = self.data.split('-')
+        start, end = self.input_.split('-')
         return sum(
             _is_valid(password) for password in range(int(start), int(end)))
 
     def part_b(self):
-        start, end = self.data.split('-')
+        start, end = self.input_.split('-')
         only_twice = (
             password for password in range(int(start), int(end))
             if _repeats_once(password)

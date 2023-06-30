@@ -60,12 +60,12 @@ class ShortestPath:
 
 class Solution(BaseSolution):
     def part_a(self):
-        state = Node(1, 1, int(self.data), 0)
+        state = Node(1, 1, int(self.input_), 0)
         a_star = ShortestPath(state)
         return a_star.run()
 
     def part_b(self):
-        state = Node(1, 1, int(self.data), 0)
+        state = Node(1, 1, int(self.input_), 0)
         a_star = ShortestPath(state, 50)
         a_star.run()
         return len(a_star.seen)

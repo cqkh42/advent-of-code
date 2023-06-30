@@ -30,10 +30,10 @@ def do_sub(string):
 
 class Solution(BaseSolution):
     def part_a(self):
-        return len(do_sub(self.data))
+        return len(do_sub(self.input_))
 
     def part_b(self):
-        c = {part: 1 for part in split(self.data)}
+        c = {part: 1 for part in split(self.input_)}
         total = 0
 
         while c:

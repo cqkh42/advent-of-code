@@ -26,7 +26,7 @@ def step(consortium):
 class Solution(BaseSolution):
     flashes = 0
 
-    def _parse_data(self):
+    def _process_data(self):
         return np.array([list(line) for line in self.lines]).astype(int)
 
     def step(self):
@@ -52,7 +52,7 @@ class Solution(BaseSolution):
         return self.flashes
 
     def part_b(self):
-        self.parsed_data = self._parse_data()
+        self.parsed_data = self._process_data()
         for step in itertools.count(1):
             self.step()
             if self.parsed_data.sum() == 0:

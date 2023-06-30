@@ -49,11 +49,11 @@ def winning_computer(data):
 
 class Solution(BaseSolution):
     def part_a(self):
-        c, result = winning_computer(self.data)
+        c, result = winning_computer(self.input_)
         return result
 
     def part_b(self):
-        c, result = winning_computer(self.data)
+        c, result = winning_computer(self.input_)
         intcode_at_zero = c.intcode
         pointer_at_zero = c.pointer
         relative_base_at_zero = c.relative_base

@@ -13,8 +13,8 @@ from aoc_cqkh42.helpers.graph import a_star
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        indices = re.findall(r' (\w+) generator', self.data)
+    def _process_data(self):
+        indices = re.findall(r' (\w+) generator', self.input_)
 
         generators = np.zeros(len(indices), dtype=int)
         chips = np.zeros(len(indices), dtype=int)
@@ -30,7 +30,7 @@ class Solution(BaseSolution):
 
     def part_a(self):
         # return None
-        z = a_star.AStar(self.parsed_data)
+        z = a_star.AStar(self.processed)
         return z.run()
 
     def part_b(self):

@@ -52,8 +52,8 @@ class Solution(BaseSolution):
     answer_a = None
     regex = re.compile(r"([a-z0-9]*) ?(\w*) ?([a-z0-9]*) -> (\w+)")
 
-    def _parse_data(self):
-        return self.regex.findall(self.data)
+    def _process_data(self):
+        return self.regex.findall(self.input_)
 
     def part_a(self):
         register = Register(self.lines)

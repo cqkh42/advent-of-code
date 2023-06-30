@@ -12,13 +12,13 @@ class Solution(BaseSolution):
 
     def _crack_hash(self, sequence):
         for answer in self.counter:
-            hash_ = self.parsed_data.copy()
+            hash_ = self.processed.copy()
             hash_.update(f"{answer}".encode())
             if hash_.hexdigest().startswith(sequence):
                 return answer
 
-    def _parse_data(self):
-        return md5(self.data.encode())
+    def _process_data(self):
+        return md5(self.input_.encode())
 
     def part_a(self):
         answer = self._crack_hash("0" * 5)

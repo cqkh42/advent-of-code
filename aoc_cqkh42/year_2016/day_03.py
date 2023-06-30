@@ -27,15 +27,15 @@ def grouper(iterable, n):
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        rows = list(parse.findall('{:>d} {:>d} {:>d}', self.data))
+    def _process_data(self):
+        rows = list(parse.findall('{:>d} {:>d} {:>d}', self.input_))
         return rows
 
     def part_a(self):
-        triangles = [Triangle(*row) for row in self.parsed_data]
+        triangles = [Triangle(*row) for row in self.processed]
         return sum(triangle.is_valid() for triangle in triangles)
 
     def part_b(self):
-        vertically = itertools.chain.from_iterable(zip(*self.parsed_data))
+        vertically = itertools.chain.from_iterable(zip(*self.processed))
         triangles = (Triangle(*row) for row in grouper(vertically, 3))
         return sum(triangle.is_valid() for triangle in triangles)

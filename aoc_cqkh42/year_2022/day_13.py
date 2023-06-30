@@ -42,8 +42,8 @@ def compare(left, right):
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        pairs = self.data.split('\n\n')
+    def _process_data(self):
+        pairs = self.input_.split('\n\n')
         pairs = (pair.split('\n') for pair in pairs)
         pairs = [(Packet(left), Packet(right)) for left, right in pairs]
         return pairs
@@ -51,13 +51,13 @@ class Solution(BaseSolution):
     def part_a(self):
         return sum(
             index
-            for index, (left, right) in enumerate(self.parsed_data, start=1)
+            for index, (left, right) in enumerate(self.processed, start=1)
             if left < right
         )
 
     def part_b(self):
         packets = sorted((
-            *more_itertools.flatten(self.parsed_data),
+            *more_itertools.flatten(self.processed),
             Packet('[[2]]'),
             Packet('[[6]]')
         ))

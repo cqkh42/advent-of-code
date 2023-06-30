@@ -6,8 +6,8 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _parse_data(self):
-        return list(parse.findall(r'{:l}{:d}', self.data))
+    def _process_data(self):
+        return list(parse.findall(r'{:l}{:d}', self.input_))
 
     current_direction = 'N'
 
@@ -21,7 +21,7 @@ class Solution(BaseSolution):
     def part_a(self):
         travelled = defaultdict(int)
 
-        for change, distance in self.parsed_data:
+        for change, distance in self.processed:
             self.update_direction(change)
             travelled[self.current_direction] += distance
 
@@ -33,7 +33,7 @@ class Solution(BaseSolution):
         travelled = defaultdict(int)
         self.current_direction = 'N'
 
-        for change, distance in self.parsed_data:
+        for change, distance in self.processed:
             self.update_direction(change)
             for _ in range(distance):
                 travelled[self.current_direction] += 1

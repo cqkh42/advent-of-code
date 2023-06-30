@@ -7,8 +7,8 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile("{:w} {:d},{:d} through {:d},{:d}")
 
-    def _parse_data(self):
-        tidied = self.data.replace("turn ", "")
+    def _process_data(self):
+        tidied = self.input_.replace("turn ", "")
         instructions = self.parser.findall(tidied)
         instructions = [
             (action, slice(x_start, x_end + 1), slice(y_start, y_end + 1))
@@ -18,7 +18,7 @@ class Solution(BaseSolution):
 
     def part_a(self):
         lights = np.zeros((1000, 1000), dtype=int)
-        for action, x_slice, y_slice in self.parsed_data:
+        for action, x_slice, y_slice in self.processed:
             match action:
                 case "on":
                     lights[x_slice, y_slice] = 1
@@ -30,7 +30,7 @@ class Solution(BaseSolution):
 
     def part_b(self):
         lights = np.zeros((1000, 1000), dtype=int)
-        for action, x_slice, y_slice in self.parsed_data:
+        for action, x_slice, y_slice in self.processed:
             match action:
                 case "on":
                     lights[x_slice, y_slice] += 1
