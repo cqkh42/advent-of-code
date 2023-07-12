@@ -1,10 +1,18 @@
+#!/usr/bin/python3
+"""Solutions for day 18 of 2015's Advent of Code.
+
+Read the full puzzle at https://adventofcode.com/2015/day/18
+"""
+__all__ = ["Solution"]
+from typing import Self
+
 import numpy as np
 from scipy.ndimage import generic_filter
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
-def iteration(lights):
+def _iteration(lights):
     f = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
 
     neighbours = generic_filter(
@@ -19,23 +27,24 @@ def iteration(lights):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
-        rows = [list(row) for row in self.lines]
-        rows = np.array(rows)
-        rows = rows == "#"
+    """Solutions for day 18 of 2015's Advent of Code."""
+    def _process_data(self: Self) -> np.ndarray[bool]:
+        flag = '#'
+        rows = np.array([list(row) for row in self.lines])
+        rows = rows == flag
         return rows
 
-    def part_a(self, steps=100):
+    def part_a(self: Self, steps: int = 100) -> int:
         light_arr = self.processed.copy()
         for _ in range(steps):
-            light_arr = iteration(light_arr)
+            light_arr = _iteration(light_arr)
         return light_arr.sum()
 
-    def part_b(self, steps=100):
+    def part_b(self: Self, steps: int = 100) -> int:
         light_arr = self.processed
         light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
 
         for _ in range(steps):
-            light_arr = iteration(light_arr)
+            light_arr = _iteration(light_arr)
             light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
         return light_arr.sum()

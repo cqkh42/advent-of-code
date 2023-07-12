@@ -25,7 +25,7 @@ class Solution(BaseSolution):
         return rocks
 
     def drop_grain(self, sand):
-        busy = self.parsed_data.union(sand)
+        busy = self.processed.union(sand)
         x, y = 500, 0
         while True:
             if y > self.y_break:
@@ -42,7 +42,7 @@ class Solution(BaseSolution):
                 return x, y
 
     def drop_grain_b(self, sand):
-        busy = self.parsed_data.union(sand)
+        busy = self.processed.union(sand)
         x, y = 500, 0
         while True:
             if (x, y+1) not in busy:
@@ -68,7 +68,7 @@ class Solution(BaseSolution):
 
     def part_b(self):
         to_add = {(x, self.y_break + 2) for x in range(1001)}
-        self.parsed_data = self.processed.union(to_add)
+        self.processed = self.processed.union(to_add)
         count = 0
         sand_pile = set()
         while True:

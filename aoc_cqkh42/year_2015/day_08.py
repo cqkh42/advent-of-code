@@ -1,6 +1,13 @@
+#!/usr/bin/python3
+"""Solutions for day 1 of 2015's Advent of Code.
+
+Read the full puzzle at https://adventofcode.com/2015/day/8
+"""
+__all__ = ["Solution"]
 import re
 from typing import Self
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -18,6 +25,8 @@ def _decode_str(string):
 
 
 class Solution(BaseSolution):
+    """Solutions for day 8 of 2015's Advent of Code."""
+
     def part_a(self):
         code_len = len(self.input_) - len(self.lines) + 1
         decoded = (len(_decode_str(line)) for line in self.lines)
@@ -25,10 +34,11 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return (
-                2 * len(self.lines) + self.input_.count(
-            '"') + self.input_.count(
-            "\\")
+            2 * len(self.lines)
+            + self.input_.count('"')
+            + self.input_.count("\\")
         )
 
-    def _process_data(self: Self) -> str:
-        return self.input_
+
+if __name__ == "__main__":
+    submit_answers(Solution, 2, 2015)

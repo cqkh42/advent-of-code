@@ -8,9 +8,9 @@ __all__ = ["Solution"]
 import itertools
 from typing import Self
 
-from aocd.models import Puzzle
 from more_itertools import first, iter_index
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -38,17 +38,6 @@ class Solution(BaseSolution):
         indexes = iter_index(accumulated, -1)
         return first(indexes) + 1
 
-    def _process_data(self: Self) -> str:
-        return self.input_
-
-
-def main() -> None:
-    """Solve and submit answers for 2015 day 1."""
-    puzzle = Puzzle(year=2015, day=1)
-    solution = Solution(puzzle.input_data)
-    puzzle.answer_a = solution.part_a()
-    puzzle.answer_b = solution.part_b()
-
 
 if __name__ == "__main__":
-    main()
+    submit_answers(Solution, 1, 2015)

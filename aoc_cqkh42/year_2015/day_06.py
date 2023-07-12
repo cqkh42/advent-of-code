@@ -1,20 +1,18 @@
+#!/usr/bin/python3
+"""Solutions for day 1 of 2015's Advent of Code.
+
+Read the full puzzle at https://adventofcode.com/2015/day/6
+"""
+__all__ = ["Solution"]
 import numpy as np
 import parse
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    parser = parse.compile("{:w} {:d},{:d} through {:d},{:d}")
-
-    def _process_data(self):
-        tidied = self.input_.replace("turn ", "")
-        instructions = self.parser.findall(tidied)
-        instructions = [
-            (action, slice(x_start, x_end + 1), slice(y_start, y_end + 1))
-            for action, x_start, y_start, x_end, y_end in instructions
-        ]
-        return instructions
+    """Solutions for day 6 of 2015's Advent of Code."""
 
     def part_a(self):
         lights = np.zeros((1000, 1000), dtype=int)
@@ -40,3 +38,17 @@ class Solution(BaseSolution):
                     lights[x_slice, y_slice] -= 1
                     lights = np.clip(lights, a_min=0, a_max=None)
         return lights.sum()
+
+    def _process_data(self):
+        parser = parse.compile("{:w} {:d},{:d} through {:d},{:d}")
+        tidied = self.input_.replace("turn ", "")
+        instructions = parser.findall(tidied)
+        instructions = [
+            (action, slice(x_start, x_end + 1), slice(y_start, y_end + 1))
+            for action, x_start, y_start, x_end, y_end in instructions
+        ]
+        return instructions
+
+
+if __name__ == "__main__":
+    submit_answers(Solution, 2, 2015)

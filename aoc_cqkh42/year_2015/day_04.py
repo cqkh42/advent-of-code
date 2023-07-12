@@ -1,41 +1,40 @@
-# TODO HASH
+#!/usr/bin/python3
+"""Solutions for day 4 of 2015's Advent of Code.
+
+Read the full puzzle at https://adventofcode.com/2015/day/4
+"""
+__all__ = ["Solution"]
 import itertools
-from _md5 import md5
+from hashlib import md5
+from typing import Self
 
-from aocd import get_data
-
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    counter = itertools.count()
+    """Solutions for day 4 of 2015's Advent of Code."""
 
-    def _crack_hash(self, sequence):
-        for answer in self.counter:
+    _counter = itertools.count()
+
+    def _crack_hash(self: Self, sequence: str) -> int:
+        for answer in self._counter:
             hash_ = self.processed.copy()
             hash_.update(f"{answer}".encode())
             if hash_.hexdigest().startswith(sequence):
-                return answer
+                break
+        return answer
 
-    def _process_data(self):
+    def _process_data(self: Self) -> md5:
         return md5(self.input_.encode())
 
-    def part_a(self):
+    def part_a(self: Self) -> int:
         answer = self._crack_hash("0" * 5)
         return answer
 
-    def part_b(self):
+    def part_b(self: Self) -> int:
         return self._crack_hash("0" * 6)
 
 
 if __name__ == "__main__":
-    data = get_data(
-        session="53616c7465645f5f7578abb37529958ea6c4839cbbeeb414870a119609f21ea219dd7295504325ddb3aa309f17baa02e1a0c67d897449610aa0d811e4d721457",
-        day=4,
-        year=2015,
-    )
-    solution = Solution(data).part_a()
-    # submit(solution.part_a(), part='a', day=4, year=2015,
-    #        session='53616c7465645f5f7578abb37529958ea6c4839cbbeeb414870a119609f21ea219dd7295504325ddb3aa309f17baa02e1a0c67d897449610aa0d811e4d721457')
-    # submit(solution.part_b(), part='b', day=4, year=2015,
-    #        session='53616c7465645f5f7578abb37529958ea6c4839cbbeeb414870a119609f21ea219dd7295504325ddb3aa309f17baa02e1a0c67d897449610aa0d811e4d721457')
+    submit_answers(Solution, 4, 2015)

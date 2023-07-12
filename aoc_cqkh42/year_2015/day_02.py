@@ -11,11 +11,9 @@ from dataclasses import dataclass
 from typing import Self
 
 import parse
-from aocd.models import Puzzle
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-
-PARSER = parse.compile("{dim_0:d}x{dim_1:d}x{dim_2:d}")
 
 
 @dataclass
@@ -64,7 +62,7 @@ class Present:
         return min(perms) * 2 + math.prod([self.dim_0, self.dim_1, self.dim_2])
 
 
-class Solution(BaseSolution):  # noqa: H601
+class Solution(BaseSolution):
     """Solutions for day 2 of 2015's Advent of Code."""
 
     def part_a(self: Self) -> int:
@@ -89,19 +87,13 @@ class Solution(BaseSolution):  # noqa: H601
         Returns:
             List of Presents
         """
+        parser = parse.compile("{dim_0:d}x{dim_1:d}x{dim_2:d}")
+
         return [
             Present(dims["dim_0"], dims["dim_1"], dims["dim_2"])
-            for dims in PARSER.findall(self.input_)
+            for dims in parser.findall(self.input_)
         ]
 
 
-def main() -> None:
-    """Solve and submit answers for 2015 day 2."""
-    puzzle = Puzzle(year=2015, day=2)
-    solution = Solution(puzzle.input_data)
-    puzzle.answer_a = solution.part_a()
-    puzzle.answer_b = solution.part_b()
-
-
 if __name__ == "__main__":
-    main()
+    submit_answers(Solution, 2, 2015)

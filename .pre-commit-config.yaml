@@ -92,7 +92,6 @@ repos:
 #          - flake8-builtins
 #          - flake8-comments
 #          - flake8-spellcheck
-#          - flake8-type-checking
 #          - pydoclint
 #          - flake8-eradicate
 #          - flake8-pytest
@@ -113,4 +112,3 @@ repos:
 #          - flake8-annotations-complexity
 #          - flake8-cognitive-complexity
 #          - flake8-expression-complexity
-#          - cohesion

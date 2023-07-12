@@ -1,7 +1,14 @@
+#!/usr/bin/python3
+"""Solutions for day 1 of 2015's Advent of Code.
+
+Read the full puzzle at https://adventofcode.com/2015/day/7
+"""
+__all__ = ["Solution"]
 import operator
 import re
 from dataclasses import dataclass
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 FUNC_MAP = {
@@ -49,6 +56,8 @@ class Register:
 
 
 class Solution(BaseSolution):
+    """Solutions for day 7 of 2015's Advent of Code."""
+
     answer_a = None
     regex = re.compile(r"([a-z0-9]*) ?(\w*) ?([a-z0-9]*) -> (\w+)")
 
@@ -64,3 +73,7 @@ class Solution(BaseSolution):
         register = Register(self.lines)
         register["b"] = self.answer_a
         return register.resolve("a")
+
+
+if __name__ == "__main__":
+    submit_answers(Solution, 2, 2015)
