@@ -1,5 +1,6 @@
 import parse
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile("{:w}: {:d}, {:w}: {:d}, {:w}: {:d}")
@@ -46,3 +47,6 @@ class Solution(BaseSolution):
     def part_b(self):
         is_good_sue = [_good_sue(sue) for sue in self.processed]
         return is_good_sue.index(True) + 1
+
+if __name__ == "__main__":
+    submit_answers(Solution, 16, 2015)

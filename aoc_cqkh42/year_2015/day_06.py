@@ -24,7 +24,7 @@ class Solution(BaseSolution):
                     lights[x_slice, y_slice] = 0
                 case _:
                     lights[x_slice, y_slice] ^= 1
-        return lights.sum()
+        return str(lights.sum())
 
     def part_b(self):
         lights = np.zeros((1000, 1000), dtype=int)
@@ -37,7 +37,7 @@ class Solution(BaseSolution):
                 case _:
                     lights[x_slice, y_slice] -= 1
                     lights = np.clip(lights, a_min=0, a_max=None)
-        return lights.sum()
+        return str(lights.sum())
 
     def _process_data(self):
         parser = parse.compile("{:w} {:d},{:d} through {:d},{:d}")
@@ -51,4 +51,4 @@ class Solution(BaseSolution):
 
 
 if __name__ == "__main__":
-    submit_answers(Solution, 2, 2015)
+    submit_answers(Solution, 6, 2015)

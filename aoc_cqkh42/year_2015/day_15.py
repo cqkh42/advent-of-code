@@ -3,6 +3,7 @@ import itertools
 import numpy as np
 import parse
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile(
@@ -34,8 +35,11 @@ class Solution(BaseSolution):
 
     def part_a(self):
         recipe = self.processed[:, :-1]
-        return recipe.clip(min=0).prod(1).max()
+        return str(recipe.clip(min=0).prod(1).max())
 
     def part_b(self):
         recipe = self.processed[self.processed[:, -1] == 500, :-1]
-        return recipe.clip(min=0).prod(1).max()
+        return str(recipe.clip(min=0).prod(1).max())
+
+if __name__ == "__main__":
+    submit_answers(Solution, 15, 2015)

@@ -3,6 +3,7 @@ import math
 
 import more_itertools
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -38,3 +39,6 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return self.solve(4)
+
+if __name__ == "__main__":
+    submit_answers(Solution, 24, 2015)

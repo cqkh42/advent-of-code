@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -57,3 +58,6 @@ class Solution(BaseSolution):
         r = Register(registers, self.processed)
         r.run()
         return r.reg[target]
+
+if __name__ == "__main__":
+    submit_answers(Solution, 23, 2015)

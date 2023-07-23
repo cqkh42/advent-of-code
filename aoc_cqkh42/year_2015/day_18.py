@@ -9,6 +9,7 @@ from typing import Self
 import numpy as np
 from scipy.ndimage import generic_filter
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -38,7 +39,7 @@ class Solution(BaseSolution):
         light_arr = self.processed.copy()
         for _ in range(steps):
             light_arr = _iteration(light_arr)
-        return light_arr.sum()
+        return str(light_arr.sum())
 
     def part_b(self: Self, steps: int = 100) -> int:
         light_arr = self.processed
@@ -47,4 +48,7 @@ class Solution(BaseSolution):
         for _ in range(steps):
             light_arr = _iteration(light_arr)
             light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
-        return light_arr.sum()
+        return str(light_arr.sum())
+
+if __name__ == "__main__":
+    submit_answers(Solution, 18, 2015)

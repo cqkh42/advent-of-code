@@ -15,24 +15,47 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     """Solutions for day 4 of 2015's Advent of Code."""
 
-    _counter = itertools.count()
+    _salt = itertools.count()
 
     def _crack_hash(self: Self, sequence: str) -> int:
-        for answer in self._counter:
+        """Iterate through salts until the hash's hex ends in `sequence`
+
+        Args:
+            sequence: str that the hex should end in
+
+        Returns:
+            int that creates a hash ending in `sequence`
+        """
+        for answer in self._salt:
             hash_ = self.processed.copy()
             hash_.update(f"{answer}".encode())
             if hash_.hexdigest().startswith(sequence):
-                break
-        return answer
+                return answer
+        return self._salt
 
     def _process_data(self: Self) -> md5:
+        """Create a md5 of the input data.
+
+        Returns:
+            an md5 of the input data
+        """
         return md5(self.input_.encode())
 
     def part_a(self: Self) -> int:
+        """Answer part a.
+
+        Returns:
+            First int that creates a hash ending in 5 zeroes.
+        """
         answer = self._crack_hash("0" * 5)
         return answer
 
     def part_b(self: Self) -> int:
+        """Answer part a.
+
+        Returns:
+            First int that creates a hash ending in 6 zeroes.
+        """
         return self._crack_hash("0" * 6)
 
 

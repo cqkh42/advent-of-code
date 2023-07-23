@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 import parse
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 TIME = 2503
@@ -45,3 +46,6 @@ class Solution(BaseSolution):
             for deer in self.processed:
                 deer.score += deer.distance(second) == highest_score
         return max(self.processed, key=lambda deer: deer.score).score
+
+if __name__ == "__main__":
+    submit_answers(Solution, 14, 2015)

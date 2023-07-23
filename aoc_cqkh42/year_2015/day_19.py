@@ -5,9 +5,9 @@ from functools import cached_property
 
 from multidict import MultiDict
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-
-from .day_19_help import input_
+from aoc_cqkh42.year_2015.day_19_help import input_
 
 
 ##TODO a mess
@@ -87,3 +87,6 @@ class Solution(BaseSolution):
         solution.run()
         solution.recur(0, solution.elements)
         return solution.counter
+
+if __name__ == "__main__":
+    submit_answers(Solution, 19, 2015)

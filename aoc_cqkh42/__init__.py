@@ -6,6 +6,7 @@ from aocd.models import Puzzle
 def submit_answers(solution, day, year):
     puzzle = Puzzle(year=year, day=day)
     solution = solution(puzzle.input_data)
+
     puzzle.answer_a = solution.part_a()
     puzzle.answer_b = solution.part_b()
 

@@ -3,6 +3,7 @@
 from dataclasses import dataclass, replace
 from typing import Self
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.helpers.graph.dijkstra import dijkstra
 
@@ -141,3 +142,6 @@ class StateB(State):
         if a.player_health <= 0:
             return []
         yield from a._n()
+
+if __name__ == "__main__":
+    submit_answers(Solution, 22, 2015)

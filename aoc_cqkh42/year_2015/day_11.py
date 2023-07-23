@@ -2,6 +2,7 @@ import itertools
 
 import more_itertools
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -46,3 +47,6 @@ def _is_valid(password):
     counts = [i >= 2 for i in counts]
     match_counts = sum(counts) >= 2
     return match_counts and match_triples and 8 not in password
+
+if __name__ == "__main__":
+    submit_answers(Solution, 11, 2015)

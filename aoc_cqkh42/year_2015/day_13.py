@@ -3,6 +3,7 @@ import itertools
 import networkx as nx
 import parse
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile(r"{:w} would {:d} happiness units by sitting next to {:w}.")
@@ -31,3 +32,6 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return max(weight - lowest for weight, lowest in self.processed)
+
+if __name__ == "__main__":
+    submit_answers(Solution, 13, 2015)

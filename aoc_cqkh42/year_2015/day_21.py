@@ -3,6 +3,7 @@ import math
 
 import numpy as np
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 WEAPONS = [
@@ -57,9 +58,12 @@ class Solution(BaseSolution):
         return player_turns_needed <= boss_turns_needed
 
     def part_a(self):
-        return min(
-            cost for cost, *stats in self.processed if self.winner(*stats))
+        return str(min(
+            cost for cost, *stats in self.processed if self.winner(*stats)))
 
     def part_b(self):
-        return max(
-            cost for cost, *stats in self.processed if not self.winner(*stats))
+        return str(max(
+            cost for cost, *stats in self.processed if not self.winner(*stats)))
+
+if __name__ == "__main__":
+    submit_answers(Solution, 21, 2015)

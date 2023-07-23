@@ -1,6 +1,7 @@
 import itertools
 from functools import cache
 
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -25,3 +26,7 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return self._sequence(10)
+
+
+if __name__ == "__main__":
+    submit_answers(Solution, 10, 2015)
