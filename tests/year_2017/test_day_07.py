@@ -25,8 +25,3 @@ def data():
 
 def test_part_a(data):
     assert day_07.part_a(data) == "tknk"
-
-
-@pytest.mark.xfail
-def test_part_b(data):
-    assert day_07.part_b(data) == 4

@@ -16,8 +16,8 @@ def solution():
 
 
 def test_part_a(solution):
-    assert solution.part_a() == 62_842_880
+    assert solution.part_a() == '62842880'
 
 
 def test_part_b(solution):
-    assert solution.part_b() == 57_600_000
+    assert solution.part_b() == '57600000'

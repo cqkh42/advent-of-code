@@ -19,8 +19,8 @@ def solution():
 
 
 def test_part_a(solution):
-    assert solution.part_a(steps=4) == 4
+    assert solution.part_a(steps=4) == '4'
 
 
 def test_part_b(solution):
-    assert solution.part_b(steps=5) == 17
+    assert solution.part_b(steps=5) == '17'
