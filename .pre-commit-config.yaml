@@ -7,108 +7,108 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-#  - repo: local
-#    hooks:
-#      - id: pylint
-#        name: pylint
-#        entry: pylint
-#        language: system
-#        types: [ python ]
-#        args:
-#          - --rcfile=pyproject.toml
-#          - --enable-all
-#      - id: pytest-check
-#        name: pytest-check
-#        entry: pytest
-#        language: system
-#        pass_filenames: false
-#        always_run: true
-#        args:
-#          - --cov-report=term
-#          - --cov-fail-under=100
-#          - --tb=no
-#          - --cov-branch
-#  - repo: https://github.com/DanielNoord/pydocstringformatter
-#    rev: v0.7.3
-#    hooks:
-#      - id: pydocstringformatter
-#        args:
-#          - --max-line-length=72
-#          - --linewrap-full-docstring
-#  - repo: https://github.com/PyCQA/bandit
-#    rev: 1.7.5
-#    hooks:
-#      - id: bandit
-#  - repo: https://github.com/psf/black
-#    rev: 22.10.0
-#    hooks:
-#      - id: black
-#        args:
-#          - --line-length=79
-#  - repo: https://github.com/pre-commit/pre-commit-hooks
-#    rev: v4.4.0
-#    hooks:
-#      - id: check-builtin-literals
-#      - id: trailing-whitespace
-#      - id: check-docstring-first
-#      - id: check-executables-have-shebangs
-#      - id: check-json
-#      - id: check-shebang-scripts-are-executable
-#      - id: check-toml
-#      - id: end-of-file-fixer
-#      - id: mixed-line-ending
-#      - id: name-tests-test
-#        args:
-#          - --pytest-test-first
-#      - id: requirements-txt-fixer
-#  - repo: https://github.com/pycqa/flake8
-#    rev: 6.0.0
-#    hooks:
-#      - id: flake8
-#        additional_dependencies:
-#          - flake8-pyproject
-#          - flake8-docstrings
-#          - dlint
-#          - simplify
-#          - flake8-dunder-all
-#          - flake8-encodings
-#          - flake8-requirements
-#          - flake8-secure-coding-standard
-#          - flake8-string-format
-#          - flake8-unused-arguments
-#          - flake8-useless-assert
-#          - flake8-warnings
-#          - flake8-class-attributes-order
-#          - flake8-clean-block
-#          - flake8-comprehensions
-#          - flake8-literal
-#          - flake8-implicit-str-concat
-#          - flake8-newspaper-style
-#          - flake8-picky-parentheses
-#          - flake8-quotes
-#          - flake8-return
-#          - flake8-print
-#          - flake8-use-fstring
-#          - flake8-builtins
-#          - flake8-comments
-#          - flake8-spellcheck
-#          - pydoclint
-#          - flake8-eradicate
-#          - flake8-pytest
-#          - flake8-bandit
-#          - flake8-annotations-coverage
-#          - flake8-annotations
-#          - flake8-new-union-types
-#          - flake8-pep585
-#          - flake8-executable
-#          - flake8-docstring-checker
-#          - flake8-docstrings
-#          - flake8-docstrings-complete
-#          - flake8-functions
-#          - flake8-noqa
-#          - flake8-length
-#          - flake8-variables-names
-#          - pep8-naming
-#          - flake8-annotations-complexity
-#          - flake8-cognitive-complexity
-#          - flake8-expression-complexity
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [ python ]
+        args:
+          - --rcfile=pyproject.toml
+          - --enable-all
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
+        args:
+          - --cov-report=term
+          - --cov-fail-under=100
+          - --tb=no
+          - --cov-branch
+  - repo: https://github.com/DanielNoord/pydocstringformatter
+    rev: v0.7.3
+    hooks:
+      - id: pydocstringformatter
+        args:
+          - --max-line-length=72
+          - --linewrap-full-docstring
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+  - repo: https://github.com/psf/black
+    rev: 22.10.0
+    hooks:
+      - id: black
+        args:
+          - --line-length=79
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-builtin-literals
+      - id: trailing-whitespace
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+      - id: name-tests-test
+        args:
+          - --pytest-test-first
+      - id: requirements-txt-fixer
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.0.0
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-pyproject
+          - flake8-docstrings
+          - dlint
+          - simplify
+          - flake8-dunder-all
+          - flake8-encodings
+          - flake8-requirements
+          - flake8-secure-coding-standard
+          - flake8-string-format
+          - flake8-unused-arguments
+          - flake8-useless-assert
+          - flake8-warnings
+          - flake8-class-attributes-order
+          - flake8-clean-block
+          - flake8-comprehensions
+          - flake8-literal
+          - flake8-implicit-str-concat
+          - flake8-newspaper-style
+          - flake8-picky-parentheses
+          - flake8-quotes
+          - flake8-return
+          - flake8-print
+          - flake8-use-fstring
+          - flake8-builtins
+          - flake8-comments
+          - flake8-spellcheck
+          - pydoclint
+          - flake8-eradicate
+          - flake8-pytest
+          - flake8-bandit
+          - flake8-annotations-coverage
+          - flake8-annotations
+          - flake8-new-union-types
+          - flake8-pep585
+          - flake8-executable
+          - flake8-docstring-checker
+          - flake8-docstrings
+          - flake8-docstrings-complete
+          - flake8-functions
+          - flake8-noqa
+          - flake8-length
+          - flake8-variables-names
+          - pep8-naming
+          - flake8-annotations-complexity
+          - flake8-cognitive-complexity
+          - flake8-expression-complexity
