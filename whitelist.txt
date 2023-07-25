@@ -1,6 +1,9 @@
 aoc
 cqkh42
 aocd
+aocr
 numpy
 coords
 cumsum
+astype
+NUM

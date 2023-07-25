@@ -26,10 +26,18 @@ https://img.shields.io/badge/linting-pylint-yellowgreen
 
 1. Install this package using `pip install -e .`
 
-2. [Configure aocd](https://github.com/wimglenn/advent-of-code-data#quickstart) 
+2. [Configure aocd](https://github.com/wimglenn/advent-of-code-data#quickstart)
 pylint:
 ```
 pylint ./aoc_cqkh42 --load-plugins=pylint.extensions.mccabe
 
 ```
 read more about other pylint extensions
+
+
+need to add coverage to pre-commit
+check for complexity in pre-commit
+
+# TODO do I need to abstract out binary search?
+# TODO how many places can we use more_itertools
+# todo make parse data an internal function
