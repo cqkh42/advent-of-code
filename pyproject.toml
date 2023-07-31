@@ -6,6 +6,8 @@ skip_glob = ["venv/*", "venv11/*"]
 inline-quotes = 'double'
 literal-inline-quotes = 'double'
 requirements-file = "requirements.txt"
+omit = "tests"
+exclude = ["tests"]
 
 [tool.flake8.known-modules]
 advent-of-code-data = ["aocd"]
