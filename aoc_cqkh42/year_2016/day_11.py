@@ -5,9 +5,9 @@
 import dataclasses
 import itertools
 import re
+from functools import cached_property
 
-import numpy as np
-
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.helpers.graph import a_star
 
@@ -16,8 +16,8 @@ class Solution(BaseSolution):
     def _process_data(self):
         indices = re.findall(r' (\w+) generator', self.input_)
 
-        generators = np.zeros(len(indices), dtype=int)
-        chips = np.zeros(len(indices), dtype=int)
+        generators = [0 for _ in range(len(indices))]
+        chips = [0 for _ in range(len(indices))]
 
         for floor_num, info in enumerate(self.lines):
             for gen in re.findall(r' (\w+) generator', info):
@@ -26,99 +26,95 @@ class Solution(BaseSolution):
             for chip in re.findall(r' (\w+)-compatible', info):
                 index = indices.index(chip)
                 chips[index] = floor_num
-        return Node(generators, chips, 0, 0)
+        generators = tuple(generators)
+        chips = tuple(chips)
+        g = Node(generators, chips, 0, 0)
+        return g
 
     def part_a(self):
+        target = Node((3, 3, 3, 3, 3), (3, 3, 3, 3, 3), 3, 0)
         # return None
-        z = a_star.AStar(self.processed)
+        # return 1
+        z = a_star.AStar(self.processed, target)
         return z.run()
 
     def part_b(self):
-        return None
-        # new = np.zeros((4, 2, 2), dtype=int)
-        # new[0] = 1
-        # arr = np.concatenate([self.parsed_data.arr, new], axis=1)
-        # state = State(arr, np.array([1, 0, 0, 0]), 0)
-        # print(arr[:,:,0])
-        # print(arr[:,:,1])
-        # z = a_star.AStar(state)
-        # return z.run()
+        return 1
 
 
-def roll_array(array, slicer, num):
-    arr = array.copy()
-    arr[slicer] = np.roll(arr[slicer], num, axis=0)
-    return arr
-
-
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Node(a_star.AStarBaseNode):
-    generators: np.array
-    chips: np.array
+    generators: tuple
+    chips: tuple
     lift: int
     distance: int = dataclasses.field(compare=False, hash=False)
-
-    def __hash__(self):
-        return hash((self.generators.tostring(), self.chips.tostring(), self.lift))
-
-    def is_target(self):
-        return (self.generators == 3).all() and (self.chips == 3).all()
-
-    def __eq__(self, other):
-        return (
-            (self.generators == other.generators).all() and
-            (self.chips == other.chips).all() and
-            self.lift == other.lift
-        )
 
     def is_valid(self):
         if not 0 <= self.lift <= 3:
             return False
-        loose_chips = {chip for gen, chip in zip(self.generators, self.chips) if gen != chip}
+
+        if max(*self.chips, *self.generators) > 3:
+            return False
+        if min(*self.chips, *self.generators) < 0:
+            return False
+
+        # any loose chips on the same floor as a generator are toast
+        loose_chips = {
+            chip for gen, chip in zip(self.generators, self.chips)
+            if gen != chip
+        }
+        # are any loose chips on the same floor as generators
         bad_gen = loose_chips.intersection(self.generators)
-        return not bad_gen
-
-        print(loose_chips, self.generators, bad_gen)
-        # prin
-        # print(self.chips, self.generators)
-        # return True
-        # if a chip is with another RTG and not its own, it will be fried
-        # return any(chip in self.generators for chip in loose_chips)
-
-        for gen, chip in zip(self.generators, self.chips):
-            if gen != chip and chip in self.generators:
-                return False
-        return True
+        return not bad_gen  # if non-zero, return true
 
     def neighbours(self):
-        a = {i for i in self._neighbours() if i.is_valid()}
+        a = {i for i in self._neighbours() if i.is_valid() and i != self}
         yield from a
 
     def _neighbours(self):
         # we can go up or down
         # we can move 1 or 2
 
-        available_gens = np.flatnonzero(self.generators == self.lift)
-        available_chips = np.flatnonzero(self.chips == self.lift)
+        available_gens = [index for index, floor in enumerate(self.generators) if floor == self.lift]
+        available_chips = [index for index, floor in enumerate(self.chips) if floor == self.lift]
 
-        double_gens = (list(indices) for indices in itertools.combinations(available_gens, 2))
-        for index, change in itertools.product((*available_gens, *double_gens), (-1, 1)):
-            g = self.generators.copy()
-            g[index] += change
-            yield Node(g, self.chips, self.lift + change, self.distance + 1)
+        if self.lift == 0:
+            floors = [1]
+        elif self.lift == 3:
+            floors = [-1]
+        else:
+            floors = [-1, 1]
 
-        double_chips = (list(indices) for indices in itertools.combinations(available_chips, 2))
-        for index, change in itertools.product((*available_chips, *double_chips), (-1, 1)):
-            c = self.chips.copy()
-            c[index] += change
-            yield Node(self.generators, c, self.lift + change, self.distance + 1)
+        double_gens = itertools.product(available_gens, repeat=2)
+        double_gens = (c for c in double_gens if c[0] != c[1])
+        for index, change in itertools.product((*([i] for i in available_gens), *double_gens), floors):
+            g = list(self.generators)
+            for i in index:
+                g[i] += change
+            if max(g) <= 3:
+                yield Node(tuple(g), self.chips, self.lift + change, self.distance + 1)
 
-        for gen_index, chip_index, change in itertools.product(available_gens, available_chips, (-1, 1)):
-            c = self.chips.copy()
-            g = self.generators.copy()
+        double_chips = itertools.product(available_chips, repeat=2)
+        double_chips = (c for c in double_chips if c[0] != c[1])
+        for index, change in itertools.product((*([i] for i in available_chips), *double_chips), floors):
+            c = list(self.chips)
+            for i in index:
+                c[i] += change
+            if max(c) <= 3:
+                yield Node(self.generators, tuple(c), self.lift + change, self.distance + 1)
+
+        for gen_index, chip_index, change in itertools.product(available_gens, available_chips, floors):
+            c = list(self.chips)
+            g = list(self.generators)
             c[chip_index] += change
             g[gen_index] += change
-            yield Node(g, c, self.lift + change, self.distance + 1)
+            if max(*g, *c) <= 3:
+                yield Node(tuple(g), tuple(c), self.lift + change, self.distance + 1)
 
+    @cached_property
     def h(self):
-        return 0
+        return 3 - self.lift
+
+
+if __name__ == "__main__":
+    submit_answers(Solution, 11, 2016)

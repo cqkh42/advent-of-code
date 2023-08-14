@@ -6,14 +6,6 @@ class AStarBaseNode(ABC):
     distance = NotImplemented
 
     @abstractmethod
-    def h(self):
-        raise NotImplementedError
-
-    @abstractmethod
-    def is_target(self):
-        raise NotImplementedError
-
-    @abstractmethod
     def __hash__(self):
         raise NotImplementedError
 
@@ -29,27 +21,31 @@ class AStarBaseNode(ABC):
     def is_valid(self):
         raise NotImplementedError
 
+    def __repr__(self):
+        return self.__str__()
+
     def __gt__(self, other):
         # PriorityQueue returns the lowest value item first
-        return self.distance + self.h() >= (other.distance + other.h())
+        return self.distance + self.h >= (other.distance + other.h)
 
 
 class AStar:
-    def __init__(self, start):
+    def __init__(self, start, target):
         # f(n) = g(n) + h(n)
         # where g(n) is current distance and h(n) is the heuristic
         self.frontier = queue.PriorityQueue()
         self.visited = set()
         self.frontier.put(start)
+        self.target = target
 
     def run(self):
         while not self.frontier.empty():
             state = self.frontier.get()
-            if state.is_target():
+            if state == self.target:
                 return state.distance
             if state in self.visited:
                 continue
             self.visited.add(state)
-            new_states = state.neighbours()
+            new_states = [i for i in state.neighbours() if i not in self.visited]
             for new_state in new_states:
                 self.frontier.put(new_state)
