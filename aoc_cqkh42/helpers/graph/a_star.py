@@ -41,6 +41,7 @@ class AStar:
     def run(self):
         while not self.frontier.empty():
             state = self.frontier.get()
+            # print(state.distance + state.h)
             if state == self.target:
                 return state.distance
             if state in self.visited:

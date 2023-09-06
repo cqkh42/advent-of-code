@@ -4,6 +4,7 @@
 # TODO this runs but takes forever
 import dataclasses
 import itertools
+import math
 import re
 from functools import cached_property
 
@@ -39,6 +40,15 @@ class Solution(BaseSolution):
         return z.run()
 
     def part_b(self):
+        target = Node((3, 3, 3, 3, 3,3,3), (3, 3, 3, 3, 3,3,3), 3, 0)
+        # return None
+        # return 1
+        start_gens = (*self.processed.generators, 0, 0)
+        start_chips = (*self.processed.chips, 0, 0)
+        start = Node(start_gens, start_chips, 0, 0)
+        z = a_star.AStar(start, target)
+        return z.run()
+
         return 1
 
 
@@ -48,6 +58,9 @@ class Node(a_star.AStarBaseNode):
     chips: tuple
     lift: int
     distance: int = dataclasses.field(compare=False, hash=False)
+
+    def __repr__(self):
+        return f"Node(generators={self.generators}, chips={self.chips}, lift={self.lift}, distance={self.lift}, h={self.h})"
 
     def is_valid(self):
         if not 0 <= self.lift <= 3:
@@ -113,6 +126,34 @@ class Node(a_star.AStarBaseNode):
 
     @cached_property
     def h(self):
+        # trying to beat 157723, 157127, 157827
+        steps = 0
+        lift = self.lift
+        things_on_zero_floor = [*self.chips, *self.generators].count(0)
+        things_on_one_floor = [*self.chips, *self.generators].count(1) + things_on_zero_floor
+        things_on_two_floor = [*self.chips, *self.generators].count(2) + things_on_one_floor
+
+        if things_on_zero_floor:
+            # take the lift down
+            steps += (lift)
+            trips = math.ceil(things_on_zero_floor / 2)
+            steps += (2*(trips-1)) + 1
+            lift = 1
+
+        if things_on_one_floor:
+            steps += abs(lift-1)
+            trips = math.ceil(things_on_one_floor / 2)
+            steps += (2 * (trips - 1)) + 1
+            lift = 2
+
+        if things_on_two_floor:
+            steps += abs(lift-2)
+            trips = math.ceil(things_on_two_floor / 2)
+            steps += (2 * (trips - 1)) + 1
+            lift = 3
+
+        return steps
+
         return 3 - self.lift
 
 
