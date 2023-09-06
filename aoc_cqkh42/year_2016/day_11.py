@@ -29,38 +29,39 @@ class Solution(BaseSolution):
                 chips[index] = floor_num
         generators = tuple(generators)
         chips = tuple(chips)
-        g = Node(generators, chips, 0, 0)
+        pairs = tuple(sorted((g, c) for g, c in zip(generators, chips)))
+        g = Node(pairs, 0, 0)
         return g
 
     def part_a(self):
-        target = Node((3, 3, 3, 3, 3), (3, 3, 3, 3, 3), 3, 0)
-        # return None
-        # return 1
+        pairs = tuple((3, 3) for _ in range(5))
+        target = Node(pairs, 3, 0)
         z = a_star.AStar(self.processed, target)
         return z.run()
 
     def part_b(self):
-        target = Node((3, 3, 3, 3, 3,3,3), (3, 3, 3, 3, 3,3,3), 3, 0)
-        # return None
-        # return 1
-        start_gens = (*self.processed.generators, 0, 0)
-        start_chips = (*self.processed.chips, 0, 0)
-        start = Node(start_gens, start_chips, 0, 0)
+        pairs = tuple((3, 3) for _ in range(7))
+        target = Node(pairs, 3, 0)
+
+        start_pairs = [*self.processed.pairs, (0, 0), (0, 0)]
+        start_pairs = tuple(sorted(start_pairs))
+        start = Node(start_pairs, 0, 0)
         z = a_star.AStar(start, target)
         return z.run()
 
-        return 1
-
-
 @dataclasses.dataclass(frozen=True)
 class Node(a_star.AStarBaseNode):
-    generators: tuple
-    chips: tuple
+    pairs: tuple[tuple[int, int]]
     lift: int
     distance: int = dataclasses.field(compare=False, hash=False)
 
-    def __repr__(self):
-        return f"Node(generators={self.generators}, chips={self.chips}, lift={self.lift}, distance={self.lift}, h={self.h})"
+    @cached_property
+    def generators(self):
+        return tuple(i[0] for i in self.pairs)
+
+    @cached_property
+    def chips(self):
+        return tuple(i[1] for i in self.pairs)
 
     def is_valid(self):
         if not 0 <= self.lift <= 3:
@@ -105,7 +106,8 @@ class Node(a_star.AStarBaseNode):
             for i in index:
                 g[i] += change
             if max(g) <= 3:
-                yield Node(tuple(g), self.chips, self.lift + change, self.distance + 1)
+                pairs = tuple(sorted((a, b) for a, b in zip(g, self.chips)))
+                yield Node(pairs, self.lift + change, self.distance + 1)
 
         double_chips = itertools.product(available_chips, repeat=2)
         double_chips = (c for c in double_chips if c[0] != c[1])
@@ -114,7 +116,8 @@ class Node(a_star.AStarBaseNode):
             for i in index:
                 c[i] += change
             if max(c) <= 3:
-                yield Node(self.generators, tuple(c), self.lift + change, self.distance + 1)
+                pairs = tuple(sorted((a, b) for a, b in zip(self.generators, c)))
+                yield Node(pairs, self.lift + change, self.distance + 1)
 
         for gen_index, chip_index, change in itertools.product(available_gens, available_chips, floors):
             c = list(self.chips)
@@ -122,7 +125,8 @@ class Node(a_star.AStarBaseNode):
             c[chip_index] += change
             g[gen_index] += change
             if max(*g, *c) <= 3:
-                yield Node(tuple(g), tuple(c), self.lift + change, self.distance + 1)
+                pairs = tuple(sorted((a, b) for a, b in zip(g, c)))
+                yield Node(pairs, self.lift + change, self.distance + 1)
 
     @cached_property
     def h(self):
