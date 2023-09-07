@@ -1,7 +1,10 @@
 import parse
-from sympy.ntheory.modular import crt
+import sympy
+# from sympy.ntheory.modular import crt
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
+
 
 
 class Solution(BaseSolution):
@@ -15,12 +18,16 @@ class Solution(BaseSolution):
         return list(firsts), list(seconds)
 
     def part_a(self):
-        p = crt(*self.processed)
+        p = sympy.ntheory.modular.crt(*self.processed)
         return p[1] - p[0]
 
     def part_b(self):
         first, second = self.processed
         first.append(11)
         second.append(len(second) + 1)
-        p = crt(first, second)
+        p = sympy.ntheory.modular.crt(first, second)
         return p[1] - p[0]
+
+
+if __name__ == "__main__":
+    submit_answers(Solution, 15, 2016)
