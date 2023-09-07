@@ -110,7 +110,7 @@ class Node(a_star.AStarBaseNode):
             floors = [-1, 1]
 
         double_gens = itertools.combinations(available_gens, 2)
-        yield from (self.move_generators(index, change) for index, change in itertools.product(available_gens, floors) if node.is_valid())
+        yield from (self.move_generators(index, change) for index, change in itertools.product(available_gens, floors))
         yield from (self.move_generators(index, change) for index, change in itertools.product(double_gens, floors))
 
         double_chips = itertools.product(available_chips, repeat=2)
