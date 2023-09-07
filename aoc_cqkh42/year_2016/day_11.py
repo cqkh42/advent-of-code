@@ -85,12 +85,22 @@ class Node(a_star.AStarBaseNode):
         a = {i for i in self._neighbours() if i.is_valid() and i != self}
         yield from a
 
+    def move_generators(self, indices, delta):
+        t = [[g, c] for g,c in self.pairs]
+        if isinstance(indices, int):
+            t[indices][0] += delta
+        else:
+            for index in indices:
+                t[index][0] += delta
+        t = tuple(sorted((g, c) for g, c in t))
+        return Node(t, self.lift + delta, self.distance+1)
+
     def _neighbours(self):
         # we can go up or down
         # we can move 1 or 2
 
-        available_gens = [index for index, floor in enumerate(self.generators) if floor == self.lift]
-        available_chips = [index for index, floor in enumerate(self.chips) if floor == self.lift]
+        available_gens = [index for index, (gen, chip) in enumerate(self.pairs) if gen == self.lift]
+        available_chips = [index for index, (gen, chip) in enumerate(self.pairs) if chip == self.lift]
 
         if self.lift == 0:
             floors = [1]
@@ -99,15 +109,9 @@ class Node(a_star.AStarBaseNode):
         else:
             floors = [-1, 1]
 
-        double_gens = itertools.product(available_gens, repeat=2)
-        double_gens = (c for c in double_gens if c[0] != c[1])
-        for index, change in itertools.product((*([i] for i in available_gens), *double_gens), floors):
-            g = list(self.generators)
-            for i in index:
-                g[i] += change
-            if max(g) <= 3:
-                pairs = tuple(sorted((a, b) for a, b in zip(g, self.chips)))
-                yield Node(pairs, self.lift + change, self.distance + 1)
+        double_gens = itertools.combinations(available_gens, 2)
+        yield from (self.move_generators(index, change) for index, change in itertools.product(available_gens, floors) if node.is_valid())
+        yield from (self.move_generators(index, change) for index, change in itertools.product(double_gens, floors))
 
         double_chips = itertools.product(available_chips, repeat=2)
         double_chips = (c for c in double_chips if c[0] != c[1])
