@@ -37,7 +37,7 @@ class Solution(BaseSolution):
         """Create a md5 of the input data.
 
         Returns:
-            an md5 of the input data
+            md5 of the input data
         """
         return md5(self.input_.encode())
 

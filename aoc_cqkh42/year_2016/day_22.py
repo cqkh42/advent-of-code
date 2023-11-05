@@ -26,9 +26,12 @@ class Solution(BaseSolution):
         return nodes
 
     def part_a(self):
-        viable = set()
-        for node_a, node_b in itertools.permutations(self.processed, 2):
-            if node_a.used and node_a.used <= node_b.avail:
-                s = frozenset((node_a, node_b))
-                viable.add(s)
-        return len(viable)
+        viable = (
+            (node_a.used and node_a.used <= node_b.avail) or
+            (node_b.used and node_b.used <= node_a.avail)
+            for node_a, node_b in itertools.combinations(self.processed, 2)
+        )
+        return sum(viable)
+
+    def part_b(self):
+        return False

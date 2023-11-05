@@ -18,6 +18,3 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return self.solve(14)
-
-    def _process_data(self: Self) -> str:
-        return self.input_

@@ -27,18 +27,15 @@ def compare(left, right):
         if left == right:
             return None
         return left < right
-    elif isinstance(left, int) and isinstance(right, list):
-        return compare([left], right)
-    elif isinstance(left, list) and isinstance(right, int):
-        return compare(left, [right])
-    elif isinstance(left, list) and isinstance(right, list):
-        for a, b in zip(left, right):
-            result = compare(a, b)
-            if result is not None:
-                return result
-        if len(left) == len(right):
-            return None
-        return len(left) < len(right)
+    left = list(more_itertools.always_iterable(left))
+    right = list(more_itertools.always_iterable(right))
+    k = (compare(a, b) for a, b in zip(left, right))
+    k = more_itertools.first_true((i for i in k if i is not None), pred=lambda x: x is not None)
+    if k is not None:
+        return k
+    if len(left) == len(right):
+        return None
+    return len(left) < len(right)
 
 
 class Solution(BaseSolution):

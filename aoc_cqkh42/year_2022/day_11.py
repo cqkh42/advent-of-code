@@ -41,53 +41,40 @@ class Solution(BaseSolution):
                     operation = lambda x: x ** 2
                 else:
                     operation = lambda x: x * 2
-                m = Monkey(items, operation, divisor, true_, false_)
             else:
                 operation_num = int(monkey['operation_num'])
                 if monkey['operation'] == '*':
                     operation = functools.partial(operator.mul, operation_num)
                 else:
                     operation = functools.partial(operator.add, operation_num)
-                m = Monkey(items, operation, divisor, true_, false_)
+            m = Monkey(items, operation, divisor, true_, false_)
             monkeys.append(m)
         return monkeys
 
-    def turn(self, monkeys):
-        for monkey in monkeys:
+    def generic_turn(self, container, op):
+        for monkey in container:
             monkey.inspected += len(monkey.items)
             for item in monkey.items:
-                value = monkey.operation(item) // 3
+                value = op(monkey.operation(item))
                 if value % monkey.test:
                     # we failed
-                    monkeys[monkey.false_].items.append(value)
+                    container[monkey.false_].items.append(value)
                 else:
-                    monkeys[monkey.true_].items.append(value)
+                    container[monkey.true_].items.append(value)
             monkey.items = []
-        return monkeys
+        return container
 
-    def turn_b(self, lcm):
-        for monkey in self.processed:
-            monkey.inspected += len(monkey.items)
-            for item in monkey.items:
-                value = monkey.operation(item) % lcm
-                if value % monkey.test:
-                    self.processed[monkey.false_].items.append(value)
-                else:
-                    self.processed[monkey.true_].items.append(value)
-            monkey.items = []
+    def generic_part(self, iters, func):
+        monkeys = deepcopy(self.processed)
+        for _ in range(iters):
+            monkeys = self.generic_turn(monkeys, func)
+        counts = sorted((monkey.inspected for monkey in monkeys),
+                        reverse=True)
+        return math.prod(counts[:2])
 
     def part_a(self):
-        monkeys = deepcopy(self.processed)
-        for _ in range(20):
-            monkeys = self.turn(monkeys)
-        counts = sorted((monkey.inspected for monkey in monkeys), reverse=True)
-        return math.prod(counts[:2])
+        return self.generic_part(20, lambda x: x // 3)
 
     def part_b(self):
         lcm = np.lcm.reduce([monkey.test for monkey in self.processed])
-        for _ in range(10000):
-            self.turn_b(lcm)
-        counts = sorted(
-            (monkey.inspected for monkey in self.processed), reverse=True
-        )
-        return int(math.prod(counts[:2]))
+        return self.generic_part(10_000, lambda x: x % lcm)

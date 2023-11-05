@@ -18,13 +18,8 @@ class Directory:
         return self.name[:-1]
 
     def total_size(self):
-        return (
-                self.file_size() +
-                sum(
-                    dir_.total_size()
-                    for dir_ in self.children
-                )
-        )
+        child_size = sum(dir_.total_size() for dir_ in self.children)
+        return self.file_size() + child_size
 
 
 class Solution(BaseSolution):
