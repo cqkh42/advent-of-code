@@ -31,7 +31,7 @@ def _parse_string(string, include_strings=True):
 
 
 class Solution(BaseSolution):
-    """Solutions for day 1 of 2018's Advent of Code."""
+    """Solutions for day 1 of 2023's Advent of Code."""
 
     def part_a(self: Self) -> int:
         return sum(_parse_string(line, False) for line in self.lines)

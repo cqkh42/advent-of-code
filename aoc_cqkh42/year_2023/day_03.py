@@ -17,7 +17,6 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 import numpy as np
-import parse
 
 
 @dataclass
@@ -27,18 +26,8 @@ class Number:
     x_min: int
     x_max: int
 
-    def above(self):
-        return max(0, self.x_min-1), min(139, self.x_max+1)
-
-    def above_new(self):
+    def x_span(self):
         return slice(max(0, self.x_min-1), min(139, self.x_max+1))
-
-    def below(self):
-        return max(0, self.x_min - 1), min(139, self.x_max + 1)
-
-    def left(self):
-        if self.x == 0:
-            yield
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -49,31 +38,26 @@ class Number:
             return other + self.num
 
 
-
-
 class Solution(BaseSolution):
     """Solutions for day 3 of 2018's Advent of Code."""
     def _process_data(self: Self) -> list[Number, ...]:
         num_regex = re.compile(r'(\d+)')
         numbers = []
         for y, line in enumerate(self.lines):
-            found = list(num_regex.finditer(line))
-            line_numbers = [Number(int(num.group()), int(y), *num.span()) for
-                            num in found]
+            line_numbers = [
+                Number(int(num.group()), y, *num.span())
+                for num in num_regex.finditer(line)
+            ]
             numbers.extend(line_numbers)
         return numbers
 
     def valid_slice(self, y, x_slice):
-        if not 0 <= y <= 139:
+        if not 0 <= y <= 139 or x_slice.start < 0 or x_slice.stop > 140:
             return False
-        if x_slice.start < 0:
-            return False
-        if x_slice.stop > 140: return False
         valid = self.lines[y][x_slice]
         valid = (not i.isnumeric() and not i == '.' for i in valid)
         return any(valid)
 
-    # def star_in_slice(self):
     def find_stars(self, y, x_slice):
         if not 0 <= y <= 139 or x_slice.start < 0 or x_slice.stop > 140:
             yield from []
@@ -84,22 +68,20 @@ class Solution(BaseSolution):
                 value == '*'
             ]
 
-
-
     def part_a(self: Self) -> int:
         return sum(num for num in self.processed if (
-            self.valid_slice(num.y - 1, num.above_new()) or
-            self.valid_slice(num.y + 1, num.above_new()) or
-            self.valid_slice(num.y, slice(num.x_min - 1, num.x_min)) or
-            self.valid_slice(num.y, slice(num.x_max, num.x_max + 1))
+                self.valid_slice(num.y - 1, num.x_span()) or
+                self.valid_slice(num.y + 1, num.x_span()) or
+                self.valid_slice(num.y, slice(num.x_min - 1, num.x_min)) or
+                self.valid_slice(num.y, slice(num.x_max, num.x_max + 1))
         ))
 
     def part_b(self: Self) -> int:
         gears = defaultdict(list)
         for num in self.processed:
             around = (
-                self.find_stars(num.y - 1, num.above_new()),
-                self.find_stars(num.y + 1, num.above_new()),
+                self.find_stars(num.y - 1, num.x_span()),
+                self.find_stars(num.y + 1, num.x_span()),
                 self.find_stars(num.y, slice(num.x_min - 1, num.x_min)),
                 self.find_stars(num.y, slice(num.x_max, num.x_max + 1))
             )
