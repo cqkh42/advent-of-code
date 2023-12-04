@@ -16,14 +16,15 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 @functools.cache
-def _play_card(row_num, intersection, all_rows):
+def _play_intersection(row_num, intersection, all_rows):
     new_slice = slice(
         row_num + 1,
         min(row_num + 1 + intersection, len(all_rows))
     )
     new_cards = enumerate(all_rows[new_slice], start=row_num + 1)
     return sum(
-        _play_card(num, matches, all_rows) for num, matches in new_cards
+        _play_intersection(num, matches, all_rows)
+        for num, matches in new_cards
     ) + 1
 
 
@@ -46,13 +47,14 @@ class Solution(BaseSolution):
 
     def part_a(self: Self) -> int:
         return sum(
-            2 ** (card - 1) for card in self.processed if card
+            2 ** (intersection - 1)
+            for intersection in self.processed if intersection
         )
 
     def part_b(self: Self) -> int:
         return sum(
-            _play_card(num, card, self.processed)
-            for num, card in
+            _play_intersection(num, intersection, self.processed)
+            for num, intersection in
             more_itertools.always_reversible(enumerate(self.processed))
         )
 
