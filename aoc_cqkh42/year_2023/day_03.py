@@ -11,6 +11,8 @@ from dataclasses import dataclass
 from typing import Self
 import re
 
+import more_itertools
+
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -71,7 +73,16 @@ class Solution(BaseSolution):
         valid = (not i.isnumeric() and not i == '.' for i in valid)
         return any(valid)
 
-    def star_in_slice(self):
+    # def star_in_slice(self):
+    def find_stars(self, y, x_slice):
+        if not 0 <= y <= 139 or x_slice.start < 0 or x_slice.stop > 140:
+            yield from []
+        else:
+            valid = self.lines[y][x_slice]
+            yield from [
+                (y, index) for index, value in enumerate(valid, x_slice.start) if
+                value == '*'
+            ]
 
 
 
@@ -86,29 +97,17 @@ class Solution(BaseSolution):
     def part_b(self: Self) -> int:
         gears = defaultdict(list)
         for num in self.processed:
-            if num.y != 0:
-                k = num.above()
-                valid = self.lines[num.y-1][k[0]: k[1]]
-                valid = [index for index, value in enumerate(valid, k[0]) if value == '*']
-                for x in valid:
-                    gears[(num.y-1, x)].append(num)
-            if num.y != 139:
-                k = num.above()
-                valid = self.lines[num.y + 1][k[0]: k[1]]
-                valid = [index for index, value in enumerate(valid, k[0]) if
-                         value == '*']
-                for x in valid:
-                    gears[(num.y + 1, x)].append(num)
-            if num.x_min != 0:
-                valid = self.lines[num.y][num.x_min-1]
-                if valid == '*':
-                    gears[num.y, num.x_min-1].append(num)
-            if num.x_max != 140:
-                valid = self.lines[num.y][num.x_max]
-                if valid == '*':
-                    gears[num.y, num.x_max].append(num)
+            around = (
+                self.find_stars(num.y - 1, num.above_new()),
+                self.find_stars(num.y + 1, num.above_new()),
+                self.find_stars(num.y, slice(num.x_min - 1, num.x_min)),
+                self.find_stars(num.y, slice(num.x_max, num.x_max + 1))
+            )
+            for coords in more_itertools.flatten(around):
+                gears[coords].append(num)
+
         return sum(np.prod(nums) for nums in gears.values() if len(nums) == 2)
 
 
 if __name__ == "__main__":
-    submit_answers(Solution, 2, 2023)
+    submit_answers(Solution, 3, 2023)
