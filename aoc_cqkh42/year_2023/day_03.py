@@ -5,18 +5,16 @@ Read the full puzzle at https://adventofcode.com/2023/day/3
 """
 __all__ = ["Solution"]
 
-import itertools
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Self
-import re
 
 import more_itertools
+import numpy as np
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-
-import numpy as np
 
 
 @dataclass
@@ -27,7 +25,7 @@ class Number:
     x_max: int
 
     def x_span(self):
-        return slice(max(0, self.x_min-1), min(139, self.x_max+1))
+        return slice(max(0, self.x_min - 1), min(139, self.x_max + 1))
 
     def __mul__(self, other):
         if isinstance(other, Number):
@@ -40,6 +38,7 @@ class Number:
 
 class Solution(BaseSolution):
     """Solutions for day 3 of 2018's Advent of Code."""
+
     def _process_data(self: Self) -> list[Number, ...]:
         num_regex = re.compile(r'(\d+)')
         numbers = []
@@ -64,8 +63,8 @@ class Solution(BaseSolution):
         else:
             valid = self.lines[y][x_slice]
             yield from [
-                (y, index) for index, value in enumerate(valid, x_slice.start) if
-                value == '*'
+                (y, index) for index, value in enumerate(valid, x_slice.start)
+                if value == '*'
             ]
 
     def part_a(self: Self) -> int:

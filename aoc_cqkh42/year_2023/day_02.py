@@ -4,15 +4,16 @@
 Read the full puzzle at https://adventofcode.com/2023/day/2
 """
 __all__ = ["Solution"]
+
+import re
 from dataclasses import dataclass
 from typing import Self
-import re
-
-from aoc_cqkh42 import submit_answers
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 import numpy as np
 import parse
+
+from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 @dataclass
@@ -44,6 +45,7 @@ def parse_line(line):
 
 class Solution(BaseSolution):
     """Solutions for day 2 of 2023's Advent of Code."""
+
     def _process_data(self):
         return [parse_line(line) for line in self.lines]
 

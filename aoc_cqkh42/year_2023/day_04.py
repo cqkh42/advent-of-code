@@ -5,15 +5,14 @@ Read the full puzzle at https://adventofcode.com/2023/day/4
 """
 __all__ = ["Solution"]
 
-from typing import Self
 import functools
+from typing import Self
 
 import more_itertools
+import parse
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-
-import parse
 
 
 @functools.cache
@@ -41,12 +40,13 @@ def parse_line(line):
 
 class Solution(BaseSolution):
     """Solutions for day 4 of 2023's Advent of Code."""
+
     def _process_data(self: Self) -> tuple[int, ...]:
         return tuple(parse_line(line) for line in self.lines)
 
     def part_a(self: Self) -> int:
         return sum(
-            2**(card-1) for card in self.processed if card
+            2 ** (card - 1) for card in self.processed if card
         )
 
     def part_b(self: Self) -> int:
