@@ -1,74 +1,61 @@
 #!/usr/bin/python3
 """Solutions for day 4 of 2023's Advent of Code.
 
-Read the full puzzle at https://adventofcode.com/2023/day/3
+Read the full puzzle at https://adventofcode.com/2023/day/4
 """
 __all__ = ["Solution"]
 
-import itertools
-from collections import defaultdict
-from dataclasses import dataclass
 from typing import Self
-import queue
-import re
+import functools
 
 import more_itertools
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-import numpy as np
 import parse
 
 
-@dataclass
-class Card:
-    num: int
-    numbers: set[int, ...]
-    winning: set[int, ...]
-
-    @property
-    def matches(self):
-        return len(self.winning.intersection(self.numbers))
+@functools.cache
+def _play_card(row_num, intersection, all_rows):
+    new_slice = slice(
+        row_num + 1,
+        min(row_num + 1 + intersection, len(all_rows))
+    )
+    new_cards = enumerate(all_rows[new_slice], start=row_num + 1)
+    return sum(
+        _play_card(num, matches, all_rows) for num, matches in new_cards
+    ) + 1
 
 
 BASE_PARSER = parse.compile('{num:d}')
 ID_FINDER = parse.compile('{:d}:')
-class Solution(BaseSolution):
-    """Solutions for day 4 of 2018's Advent of Code."""
-    def _process_data(self: Self) -> list[Card, ...]:
-        cards = []
-        for card_num, line in enumerate(self.lines):
-            line = line[10:]
-            winning, numbers = line.split('|')
-            winning = BASE_PARSER.findall(winning)
-            numbers = BASE_PARSER.findall(numbers)
-            card = Card(
-                card_num,
-                {n.named["num"] for n in numbers},
-                {n.named["num"] for n in winning}
-            )
-            cards.append(card)
-        return cards
 
+
+def parse_line(line):
+    winning, numbers = line[10:].split('|')
+    numbers = {n.named["num"] for n in BASE_PARSER.findall(numbers)}
+    winning = {n.named["num"] for n in BASE_PARSER.findall(winning)}
+    return len(numbers.intersection(winning))
+
+
+class Solution(BaseSolution):
+    """Solutions for day 4 of 2023's Advent of Code."""
+    def _process_data(self: Self) -> tuple[int, ...]:
+        return tuple(parse_line(line) for line in self.lines)
 
     def part_a(self: Self) -> int:
-        k = sum(2**(card.matches-1) for card in self.processed if card.matches)
-        return int(k)
+        return sum(
+            2**(card-1) for card in self.processed if card
+        )
 
     def part_b(self: Self) -> int:
-        cards = queue.Queue()
-        for card in self.processed:
-            cards.put(card)
-        total = 0
+        return sum(
+            _play_card(num, card, self.processed)
+            for num, card in
+            more_itertools.always_reversible(enumerate(self.processed))
+        )
 
-        while not cards.empty():
-            card = cards.get()
-            total += 1
-            to_get = slice(card.num+1, min(card.num+1+card.matches, len(self.lines)))
-            for new_card in self.processed[to_get]:
-                cards.put(new_card)
-        return total
 
 if __name__ == "__main__":
     submit_answers(Solution, 4, 2023)
