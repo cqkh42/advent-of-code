@@ -35,9 +35,6 @@ class NewCYKRunner:
             remainders = self.elements - start_point
             for remainder in range(remainders):
                 for i in range(start_point + 1):
-                    new_need = itertools.product(self.cyk[i][remainder],
-                                                 self.cyk[start_point - i][
-                                                     remainder + i + 1])
                     need = [t[0] + t[1] for t in
                             itertools.product(self.cyk[i][remainder],
                                               self.cyk[start_point - i][
