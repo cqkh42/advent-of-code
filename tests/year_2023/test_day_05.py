@@ -43,3 +43,9 @@ humidity-to-location map:
 def test_part_a(data):
     solution = day_05.Solution(data)
     assert solution.part_a() == 35
+
+
+def test_part_b(data):
+    solution = day_05.Solution(data)
+    assert solution.part_b() == 46
+
