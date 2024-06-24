@@ -10,7 +10,6 @@ from collections import defaultdict
 from dataclasses import dataclass
 from typing import Self
 
-import more_itertools
 import numpy as np
 
 from aoc_cqkh42 import submit_answers
@@ -50,43 +49,31 @@ class Solution(BaseSolution):
             numbers.extend(line_numbers)
         return numbers
 
-    def valid_slice(self, y, x_slice):
+    def _validate(self, y, x_slice):
         if not 0 <= y <= 139 or x_slice.start < 0 or x_slice.stop > 140:
-            return False
-        valid = self.lines[y][x_slice]
-        valid = (not i.isnumeric() and not i == '.' for i in valid)
-        return any(valid)
+            return []
+        k = self.lines[y][x_slice]
+        return [(y, index) for index, i in enumerate(k, x_slice.start) if not i.isnumeric() and not i == '.']
 
-    def find_stars(self, y, x_slice):
-        if not 0 <= y <= 139 or x_slice.start < 0 or x_slice.stop > 140:
-            yield from []
-        else:
-            valid = self.lines[y][x_slice]
-            yield from [
-                (y, index) for index, value in enumerate(valid, x_slice.start)
-                if value == '*'
-            ]
+    def _validate_2(self, num):
+        for y, span in (
+                (num.y - 1, num.x_span()),
+                (num.y + 1, num.x_span()),
+                (num.y, slice(num.x_min - 1, num.x_min)),
+                (num.y, slice(num.x_max, num.x_max + 1))
+        ):
+            yield from self._validate(y, span)
 
     def part_a(self: Self) -> int:
-        return sum(num for num in self.processed if (
-                self.valid_slice(num.y - 1, num.x_span()) or
-                self.valid_slice(num.y + 1, num.x_span()) or
-                self.valid_slice(num.y, slice(num.x_min - 1, num.x_min)) or
-                self.valid_slice(num.y, slice(num.x_max, num.x_max + 1))
-        ))
+        return sum(
+            num for num in self.processed if any(self._validate_2(num))
+        )
 
     def part_b(self: Self) -> int:
         gears = defaultdict(list)
         for num in self.processed:
-            around = (
-                self.find_stars(num.y - 1, num.x_span()),
-                self.find_stars(num.y + 1, num.x_span()),
-                self.find_stars(num.y, slice(num.x_min - 1, num.x_min)),
-                self.find_stars(num.y, slice(num.x_max, num.x_max + 1))
-            )
-            for coords in more_itertools.flatten(around):
+            for coords in self._validate_2(num):
                 gears[coords].append(num)
-
         return sum(np.prod(nums) for nums in gears.values() if len(nums) == 2)
 
 

@@ -75,7 +75,6 @@ class Solution(BaseSolution):
             replacements = {
                 self.molecule[:i.start()] + new + self.molecule[i.end():] for i
                 in re.finditer(old, self.molecule)}
-
             new_strings.update(replacements)
         return len(new_strings)
 
@@ -84,6 +83,7 @@ class Solution(BaseSolution):
         solution.run()
         solution.recur(0, solution.elements)
         return solution.counter
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 19, 2015)
