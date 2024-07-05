@@ -15,3 +15,16 @@ def test_part_a(data, answer, transformations):
     solution = day_19.Solution(data)
     assert solution.part_a() == answer
 
+
+def test_input_parser():
+    input_ = {
+        "Al": "ThF",
+        "Al": "ThRnFAr",
+    }
+    assert day_19._input_parser(input_) == {
+        "Al": "ThF",
+        "Al": "ThRnFAr",
+        "Zaa": "RnFAr",
+        "Zab": "FAr"
+    }
+

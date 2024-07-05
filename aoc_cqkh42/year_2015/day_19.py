@@ -2,72 +2,115 @@ import collections
 import itertools
 import re
 from functools import cached_property
+import string
 
+import more_itertools
 from multidict import MultiDict
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42.year_2015.day_19_help import input_
 
 
-##TODO a mess
-class NewCYKRunner:
+class CYKRunner:
     def __init__(self, rules, molecule):
         self.rules = rules
 
         self.molecule = molecule
-        self.cyk = collections.defaultdict(
-            lambda: collections.defaultdict(list))
+        self.cyk: dict[int, list] = collections.defaultdict(
+            lambda: [[] for _ in range(1000)])
         self.backref = collections.defaultdict(
-            lambda: collections.defaultdict(list))
+            lambda: [[] for _ in range(1000)])
         self.counter = 0
+        self.run()
 
     @cached_property
-    def elements(self):
+    def num_elements(self):
         return sum(char.isupper() for char in self.molecule) - 1
 
+    def get_trio(self):
+        for start in range(self.num_elements):
+            for remainder in range(self.num_elements - start):
+                for i in range(start+1):
+                    yield start, remainder, i
+
     def run(self):
-        for index, element in enumerate(
-                re.findall(r'[A-Z][a-z]?', self.molecule)):
-            self.cyk[0][index] = [element]
+        self.cyk[0] = [
+            [element] for element in re.findall(r'[A-Z][a-z]?', self.molecule)
+        ]
 
-        for start_point in range(self.elements):
-            remainders = self.elements - start_point
-            for remainder in range(remainders):
-                for i in range(start_point + 1):
-                    need = [t[0] + t[1] for t in
-                            itertools.product(self.cyk[i][remainder],
-                                              self.cyk[start_point - i][
-                                                  remainder + i + 1])]
-                    for n in need:
-                        for blah in self.rules.getall("".join(n), []):
-                            if blah not in self.cyk[(start_point + 1)][
-                                remainder]:
-                                self.cyk[start_point + 1][remainder].append(
-                                    blah)
-                                self.backref[start_point + 1][
-                                    remainder].append(
-                                    ((remainder, i),
-                                     (remainder + i + 1, start_point - i), n))
+        for start_point, remainder, i in self.get_trio():
+            needed_elements = [
+                more_itertools.flatten(t)
+                for t in
+                itertools.product(
+                    self.cyk[i][remainder],
+                    self.cyk[start_point - i][remainder + i + 1]
+                )
+            ]
+            for needed_element in needed_elements:
+                missing_rules = (
+                    rule for rule in
+                    self.rules.getall("".join(needed_element), [])
+                    if rule not in self.cyk[(start_point + 1)][remainder]
+                )
+                for rule in missing_rules:
+                    self.cyk[start_point + 1][remainder].append(
+                        rule)
+                    self.backref[start_point + 1][
+                        remainder].append((
+                            (remainder, i),
+                            (remainder + i + 1, start_point - i),
+                            needed_element
+                    ))
 
-    def recur(self, x, y):
-        if y == 0:
+    def solve(self):
+        self._solve(0, self.num_elements)
+        return self.counter
+
+    def _solve(self, x, y):
+        if not y:
             return
         l, r, n = self.backref[y][x][0]
         self.counter += not self.cyk[y][x][0].startswith('Z')
-        self.recur(*l)
-        self.recur(*r)
+        self._solve(*l)
+        self._solve(*r)
+
+
+def get_new_letter():
+    for first in string.ascii_lowercase:
+        for second in string.ascii_lowercase:
+            yield 'Z' + first + second
+
+def input_parser(lines):
+    a= [right for left, right in lines]
+    a = [sum(char.isupper() for char in right) for right in a]
+    if max(a) == 2:
+        return lines
+    else:
+        letters = get_new_letter()
+        new = []
+        for left, right in lines:
+            parts = re.findall('[A-Z][a-z]?', right)
+
+            if len(parts) > 2:
+                letter = next(letters)
+                new_right = parts[0] + letter
+                new.append((left, new_right))
+                new.append((letter, ''.join(parts[1:])))
+            else:
+                new.append((left, right))
+        return input_parser(new)
 
 
 class Solution(BaseSolution):
-    new_maps = input_
     molecule = None
     rules = None
 
     def _process_data(self):
         self.molecule = self.lines[-1]
+        a = input_parser(re.findall(r"(.+) => (.+)", self.input_))
         self.rules = MultiDict(
-            ((v, k) for k, v in re.findall(r"(.+) => (.+)", input_)))
+            ((v, k) for k, v in a))
 
     def part_a(self):
         new_strings = set()
@@ -79,10 +122,8 @@ class Solution(BaseSolution):
         return len(new_strings)
 
     def part_b(self):
-        solution = NewCYKRunner(self.rules, self.molecule)
-        solution.run()
-        solution.recur(0, solution.elements)
-        return solution.counter
+        solution = CYKRunner(self.rules, self.molecule)
+        return solution.solve()
 
 
 if __name__ == "__main__":
