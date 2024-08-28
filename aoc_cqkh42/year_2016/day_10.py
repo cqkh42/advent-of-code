@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 import parse
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
+
 
 
 @dataclass
@@ -60,4 +62,9 @@ class Solution(BaseSolution):
             if instruction[end]['bot'] == 'bot':
                 self.bots[who].add(getattr(holding, end))
             else:
+
                 self.outputs[who] = getattr(holding, end)
+
+
+if __name__ == "__main__":
+    submit_answers(Solution, 10, 2016)
