@@ -63,4 +63,4 @@ class Solution(BaseSolution):
         return sum(a)
 
     def part_b(self):
-        return sum(puzzle.solve() for puzzle in self.processed)
+        return sum(puzzle._solve() for puzzle in self.processed)
