@@ -1,3 +1,4 @@
+from dataclasses import dataclass, asdict
 from functools import cached_property
 import itertools
 
@@ -14,39 +15,58 @@ PARSER = parse.compile(
 )
 
 
+@dataclass(frozen=True)
+class Node:
+    x: int
+    y: int
+    size: int
+    used: int
+
+    def __iter__(self):
+        yield from asdict(self).items()
+
+    @cached_property
+    def available(self):
+        return self.size - self.used
+
+
 class Solution(BaseSolution):
     def _process_data(self):
         rows = PARSER.findall(self.input_)
-        cells = {
-            (cell['x'], cell['y']): {'size': cell['size'], 'used': cell['used']}
+        cells = [
+            Node(**cell)
             for cell in [(row.named['data']) for row in rows]
-        }
-
-        possible_combinations = [
-            (node_a_k, node_b_k)
-            for (node_a_k, node_a_v), (node_b_k, node_b_v) in itertools.permutations(cells.items(), 2) if
-            (node_a_v['used'] and node_a_v['used'] <= node_b_v['size'] - node_b_v['used'])
         ]
 
-        in_game_nodes = set(more_itertools.flatten(possible_combinations))
-        x_s = max(i[0] + 1 for i in cells)
-        y_s = max(i[1] + 1 for i in cells)
-        graph = networkx.grid_graph((y_s, x_s))
-        nx.set_node_attributes(graph, cells)
-        not_in_name_nodes = set(graph.nodes).difference(in_game_nodes)
+        valid_cells = more_itertools.flatten(
+            (node_a, node_b)
+            for (node_a), (node_b) in itertools.permutations(cells, 2) if
+            0 < node_a.used <= node_b.available
+            )
+
+        in_scope_nodes = {(node.x, node.y): node for node in valid_cells}
+
+        graph = networkx.grid_graph(
+            (
+                max(cells, key=lambda cell: cell.y).y + 1,
+                max(cells, key=lambda cell: cell.x).x + 1,
+            )
+        )
+        nx.set_node_attributes(graph, in_scope_nodes)
+        not_in_name_nodes = set(graph.nodes).difference(in_scope_nodes)
         graph.remove_nodes_from(not_in_name_nodes)
         return graph
 
     def part_a(self):
-        return len(self.processed) -1
+        return len(self.processed) - 1  # we exclude the empty node here
 
     def part_b(self):
         max_x = max(self.processed, key=lambda x: x[0])[0]
-        empty = more_itertools.only(k for k, v in self.processed.nodes.items() if v['used'] == 0)
+        empty = more_itertools.only(
+            k for k, v in self.processed.nodes.items() if v['used'] == 0
+        )
         a = networkx.shortest_path_length(self.processed, empty, (max_x, 0))
-        part_a = a
-        part_b = (max_x-1)*5
-        return part_a + part_b
+        return a + ((max_x-1)*5)
 
 
 if __name__ == "__main__":

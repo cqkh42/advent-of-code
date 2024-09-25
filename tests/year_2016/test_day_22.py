@@ -1,7 +1,6 @@
 from aoc_cqkh42.year_2016.day_22 import Solution
 
 from pytest import fixture
-import frozendict
 
 
 @fixture
