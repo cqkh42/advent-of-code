@@ -1,6 +1,8 @@
-from aoc_cqkh42.year_2016 import day_22
+from aoc_cqkh42.year_2016.day_22 import Solution
 
 from pytest import fixture
+import frozendict
+
 
 @fixture
 def data():
@@ -18,8 +20,8 @@ def data():
 
 
 def test_part_a(data):
-    assert day_22.Solution(data).part_a() == 7
+    assert Solution(data).part_a() == 7
 
 
 def test_part_b(data):
-    assert day_22.Solution(data).part_b() == 7
+    assert Solution(data).part_b() == 7
