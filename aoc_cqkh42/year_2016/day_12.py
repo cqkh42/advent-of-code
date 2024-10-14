@@ -1,3 +1,6 @@
+import more_itertools
+import functools
+
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
 
@@ -14,6 +17,33 @@ class Solution(BaseSolution):
         c.registers['c'] = 1
         c.run()
         return c.registers['a']
+
+def compile_instruction(instructions):
+    commands = [i[0] for i in instructions]
+    if commands[:3] == ['inc', 'dec', 'jnz']:
+        from_ = instructions[1][1]
+        to_ = instructions[0][1]
+        new_instruction = ['add_a', to_, from_]
+        return new_instruction
+    elif commands[:3] == ['dec', 'inc', 'jnz']:
+        from_ = instructions[0][1]
+        to_ = instructions[1][1]
+        new_instruction = ['add_b', from_, to_]
+        return new_instruction
+    if commands[:6] == ['cpy', 'add_a', 'dec', 'jnz', 'dec', 'jnz']:
+        mul_1 = instructions[0][1]
+        mul_2 = instructions[4][1]
+        to_ = instructions[1][1]
+        nulling = instructions[0][2]
+        new_instruction = ['mul', mul_1, nulling, mul_2, to_]
+        return new_instruction
+    if commands[:6] == ['cpy', 'add_b', 'inc', 'jnz', 'dec', 'jnz']:
+        mul_1 = instructions[0][1]
+        mul_2 = instructions[4][1]
+        to_ = instructions[2][1]
+        nulling = instructions[0][2]
+        new_instruction = ['mul', mul_1, nulling, mul_2, to_]
+        return new_instruction
 
 
 class Computer:
@@ -37,33 +67,9 @@ class Computer:
 
     def compile_instructions(self):
         for index in range(len(self.instructions)):
-            instructions = self.instructions[index:]
-            commands = [i[0] for i in instructions]
-            if commands[:3] == ['inc', 'dec', 'jnz']:
-                from_ = instructions[1][1]
-                to_ = instructions[0][1]
-                new_instruction = ['add_a', to_, from_]
-                self.instructions[index] = new_instruction
-            elif commands[:3] == ['dec', 'inc', 'jnz']:
-                from_ = instructions[0][1]
-                to_ = instructions[1][1]
-                new_instruction = ['add_b', from_, to_]
-                self.instructions[index] = new_instruction
-            if commands[:6] == ['cpy', 'add_a', 'dec', 'jnz', 'dec', 'jnz']:
-                mul_1 = instructions[0][1]
-                mul_2 = instructions[4][1]
-                to_ = instructions[1][1]
-                nulling = instructions[0][2]
-                # new_instruction = ['mul', to_, mul_1, mul_2, nulling]
-                new_instruction = ['mul', mul_1, nulling, mul_2, to_]
-                self.instructions[index] = new_instruction
-            if commands[:6] == ['cpy', 'add_b', 'inc', 'jnz', 'dec', 'jnz']:
-                mul_1 = instructions[0][1]
-                mul_2 = instructions[4][1]
-                to_ = instructions[2][1]
-                nulling = instructions[0][2]
-                # new_instruction = ['mul', to_, mul_1, mul_2, nulling]
-                new_instruction = ['mul', mul_1, nulling, mul_2, to_]
+            instructions = tuple(self.instructions[index:index+6])
+            new_instruction = compile_instruction(instructions)
+            if new_instruction:
                 self.instructions[index] = new_instruction
         return self.instructions
 
@@ -103,9 +109,6 @@ class Computer:
                 pass
             else:
                 self.instructions = self.compile_instructions()
-
-        else:
-            raise
         self.index += incr
 
     def run(self):
