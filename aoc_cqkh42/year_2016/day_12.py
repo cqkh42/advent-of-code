@@ -21,65 +21,88 @@ class Computer:
         self.instructions = [
             instruction.split() for instruction in instructions.split('\n')
         ]
-        # for i in self.instructions:
-        #     print(i)
-        # print()
-        self.compile_instructions()
-        # for i in self.instructions:
-        #     print(i)
-        # raise
+        self.instructions = self.compile_instructions()
         self.registers = {'a': 0, 'b': 0, 'c': 0, 'd': 0}
         self.index = 0
 
+    def __getitem__(self, item):
+        value = self.registers.get(item, item)
+        try:
+            return int(value)
+        except TypeError:
+            return value
+
+    def __setitem__(self, key, value):
+        self.registers[key] = value
+
     def compile_instructions(self):
         for index in range(len(self.instructions)):
-            instructions = self.instructions[index:index+3]
+            instructions = self.instructions[index:]
             commands = [i[0] for i in instructions]
-            if commands == ['inc', 'dec', 'jnz']:
+            if commands[:3] == ['inc', 'dec', 'jnz']:
                 from_ = instructions[1][1]
                 to_ = instructions[0][1]
-                new_instruction = ['mul', from_, to_]
+                new_instruction = ['add_a', to_, from_]
                 self.instructions[index] = new_instruction
-            elif commands == ['dec', 'inc', 'jnz']:
+            elif commands[:3] == ['dec', 'inc', 'jnz']:
                 from_ = instructions[0][1]
                 to_ = instructions[1][1]
-                new_instruction = ['mul', from_, to_]
+                new_instruction = ['add_b', from_, to_]
                 self.instructions[index] = new_instruction
+            if commands[:6] == ['cpy', 'add_a', 'dec', 'jnz', 'dec', 'jnz']:
+                mul_1 = instructions[0][1]
+                mul_2 = instructions[4][1]
+                to_ = instructions[1][1]
+                nulling = instructions[0][2]
+                # new_instruction = ['mul', to_, mul_1, mul_2, nulling]
+                new_instruction = ['mul', mul_1, nulling, mul_2, to_]
+                self.instructions[index] = new_instruction
+            if commands[:6] == ['cpy', 'add_b', 'inc', 'jnz', 'dec', 'jnz']:
+                mul_1 = instructions[0][1]
+                mul_2 = instructions[4][1]
+                to_ = instructions[2][1]
+                nulling = instructions[0][2]
+                # new_instruction = ['mul', to_, mul_1, mul_2, nulling]
+                new_instruction = ['mul', mul_1, nulling, mul_2, to_]
+                self.instructions[index] = new_instruction
+        return self.instructions
 
 
     def run_step(self):
         cmd, input_1, *values = self.instructions[self.index]
         incr = 1
         if cmd == 'cpy':
-            val = self.registers.get(input_1, input_1)
-            self.registers[values[0]] = int(val)
+            self[values[0]] = self[input_1]
         elif cmd == 'inc':
-            self.registers[input_1] += 1
+            self[input_1] += 1
         elif cmd == 'dec':
-            self.registers[input_1] -= 1
+            self[input_1] -= 1
         elif cmd == 'jnz':
-            val_1 = self.registers.get(input_1, input_1)
-            val_2 = self.registers.get(values[0], values[0])
-            if int(val_1):
-                incr = int(val_2)
-        elif cmd == 'mul':
-            from_ = self.registers.get(input_1, input_1)
-            self.registers[values[0]] += int(from_)
-            self.registers[input_1] = 0
+            if self[input_1]:
+                incr = self[values[0]]
+        elif cmd == 'add_a':
+            self[input_1] += self[values[0]]
+            self[values[0]] = 0
             incr=3
-        elif cmd == 'inv_mul':
-            from_ = self.registers.get(values[0], values[0])
-            self.registers[input_1] += int(from_)
-            self.registers[values[0]] = 0
-            incr = 3
+        elif cmd == 'add_b':
+            self[values[0]] += self[input_1]
+            self[input_1] = 0
+            incr=3
+        elif cmd == 'mul':
+            self[values[2]] += (self[input_1] * self[values[1]])
+            self[values[0]] = 0
+            incr = 6
+
         elif cmd == 'tgl':
-            val = self.registers.get(input_1, input_1)
-            focus = self.index + val
+            focus = self.index + self[input_1]
             try:
-                self.instructions[focus] = process_toggle(
+                toggled = process_toggle(
                     self.instructions[focus])
+                self.instructions[focus] = toggled
             except IndexError:
                 pass
+            else:
+                self.instructions = self.compile_instructions()
 
         else:
             raise
@@ -101,8 +124,9 @@ def process_toggle(instruction):
         'jnz': 'cpy',
         'cpy': 'jnz',
         'tgl': 'inc',
-        'mul': 'inv_mul',
-        'inv_mul': 'mul'
+        'add_a': 'dec',
+        'add_b': 'inc',
+        'mul': 'jnz'
     }
     return mapping[cmd], input_1, *values
 

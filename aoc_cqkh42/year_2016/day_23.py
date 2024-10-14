@@ -13,6 +13,7 @@ class Solution(BaseSolution):
         return c.registers['a']
 
     def part_b(self):
+        # return
         c = Computer(self.input_)
         c.registers['a'] = 12
         c.run()
