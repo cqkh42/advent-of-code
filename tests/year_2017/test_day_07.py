@@ -24,4 +24,8 @@ def data():
 
 
 def test_part_a(data):
-    assert day_07.part_a(data) == "tknk"
+    assert day_07.Solution(data).part_a() == "tknk"
+
+def test_part_b(data):
+    assert day_07.Solution(data).part_b() == 60
+
