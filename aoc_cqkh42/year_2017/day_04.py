@@ -1,21 +1,24 @@
-from collections import Counter
+from typing import Self
+
+import more_itertools
+
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
+
+def sort_words(phrase):
+    return [sorted(word) for word in phrase]
+
+class Solution(BaseSolution):
+    def _process_data(self: Self) -> list[list[str]]:
+        return [line.split() for line in self.lines]
+
+    def part_a(self):
+        return sum(more_itertools.all_unique(line) for line in self.processed)
+
+    def part_b(self):
+        sorted_ = (sort_words(phrase) for phrase in self.processed)
+        return sum(more_itertools.all_unique(line) for line in sorted_)
 
 
-def _valid_passphrase_a(phrase):
-    words = phrase.split()
-    return len(words) == len(set(words))
-
-
-def _valid_passphrase_b(phrase):
-    sorted_strings = [tuple(sorted(word)) for word in phrase.split()]
-    return len(sorted_strings) == len(set(sorted_strings))
-
-
-def part_a(data):
-    valid = (_valid_passphrase_a(phrase) for phrase in data.split('\n'))
-    return sum(valid)
-
-
-def part_b(data, **_):
-    valid = (_valid_passphrase_b(phrase) for phrase in data.split('\n'))
-    return sum(valid)
+if __name__ == "__main__":
+    submit_answers(Solution, 4, 2017)

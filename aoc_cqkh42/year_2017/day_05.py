@@ -1,27 +1,32 @@
+import functools
+
 import itertools
 
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
 
-def part_a(data):
-    jumps = [int(num) for num in data.split('\n')]
-    index = 0
-    for step in itertools.count(0):
-        try:
-            new_index = index + jumps[index]
-        except IndexError:
-            return step
-        else:
-            jumps[index] += 1
-            index = new_index
+@functools.cache
+def part_b_rule(num):
+    return (-1) ** (num >= 3)
+
+class Solution(BaseSolution):
+    def do_run(self, func, index=0):
+        jumps = list(self.numbers)
+        for step in itertools.count():
+            if index >= len(jumps):
+                return step
+            else:
+                new_index = index + jumps[index]
+                jumps[index] += func(jumps[index])
+                index = new_index
+
+    def part_a(self):
+        func = lambda index: 1
+        return self.do_run(func)
+
+    def part_b(self):
+        return self.do_run(part_b_rule)
 
 
-def part_b(data, **_):
-    jumps = [int(num) for num in data.split('\n')]
-    index = 0
-    for step in itertools.count(0):
-        try:
-            new_index = index + jumps[index]
-        except IndexError:
-            return step
-        else:
-            jumps[index] += (-1) ** (jumps[index] >= 3)
-            index = new_index
+if __name__ == "__main__":
+    submit_answers(Solution, 5, 2017)

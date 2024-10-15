@@ -1,19 +1,21 @@
-def _compare_indices(string, jump):
-    index_ahead = (
-        int((index + jump) % len(string))
-        for index in range(len(string))
-    )
-    matches = (
-        int(string[i]) for i, v in enumerate(index_ahead)
-        if string[i] == string[v]
-    )
-    return sum(matches)
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
 
+class Solution(BaseSolution):
+    def _process_data(self):
+        return [int(num) for num in self.input_]
 
-def part_a(data):
-    return _compare_indices(data, 1)
+    def solve_captcha(self, jump=1):
+        jumped = self.processed[jump:] + self.processed[:jump]
+        return sum(left for left, right in zip(self.processed, jumped) if
+                   left == right)
 
+    def part_a(self):
+        return self.solve_captcha()
 
-def part_b(data, **_):
-    jump = len(data) / 2
-    return _compare_indices(data, jump)
+    def part_b(self):
+        jump = len(self.input_) // 2
+        return self.solve_captcha(jump)
+
+if __name__ == "__main__":
+    submit_answers(Solution, 1, 2017)

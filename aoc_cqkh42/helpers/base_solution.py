@@ -28,7 +28,7 @@ class BaseSolution(ABC):
         self.processed: Any = self._process_data()
 
     @cached_property
-    def lines(self: Self) -> list[str, ...]:
+    def lines(self: Self) -> list[str]:
         """Iterate through all lines in the input data.
 
         Returns:
