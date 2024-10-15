@@ -54,6 +54,7 @@ class Computer:
         self.instructions = self.compile_instructions()
         self.registers = {'a': 0, 'b': 0, 'c': 0, 'd': 0}
         self.index = 0
+        self.outputs = [1]
 
     def __getitem__(self, item):
         value = self.registers.get(item, item)
@@ -98,7 +99,6 @@ class Computer:
             self[values[2]] += (self[input_1] * self[values[1]])
             self[values[0]] = 0
             incr = 6
-
         elif cmd == 'tgl':
             focus = self.index + self[input_1]
             try:
@@ -109,6 +109,10 @@ class Computer:
                 pass
             else:
                 self.instructions = self.compile_instructions()
+        elif cmd == 'out':
+            if self[input_1] not in {0, 1} or self[input_1] == self.outputs[-1] or len(self.outputs) > 12:
+                incr = float('inf')
+            self.outputs.append(self[input_1])
         self.index += incr
 
     def run(self):
