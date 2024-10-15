@@ -1,7 +1,3 @@
-# TODO this is a mess
-# TODO 2016 got to here and is broken
-
-# TODO this runs but takes forever
 import dataclasses
 import itertools
 import math
