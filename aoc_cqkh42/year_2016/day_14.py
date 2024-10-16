@@ -2,8 +2,11 @@ import itertools
 import re
 from collections import defaultdict
 from hashlib import md5
+from more_itertools import ilen, first
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
+
 
 
 class Solution(BaseSolution):
@@ -20,9 +23,12 @@ class Solution(BaseSolution):
 
     def hash(self, num, triples, keys, times):
         a = self.stretched_hash(num, times)
-        if match := self.triple_re.search(a):
-            char = match.groups(0)[0]
-            triples[char].add(num)
+
+        z = itertools.groupby(a)
+        y = ((x, ilen(y)) for x, y in z)
+        xx = (a for a, b in y if b >= 3)
+        if match := first(xx, default=None):
+            triples[match].add(num)
         if match := self.fiver.search(a):
             char = match.groups(0)[0]
             #     # did we see a triple in the last 1000:
@@ -48,3 +54,5 @@ class Solution(BaseSolution):
                 return sorted(keys)[63]
 
 
+if __name__ == "__main__":
+    submit_answers(Solution, 14, 2016)
