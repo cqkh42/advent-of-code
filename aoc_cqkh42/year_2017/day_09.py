@@ -5,24 +5,6 @@ from aoc_cqkh42 import submit_answers
 
 import re
 
-import json
-def count(string: re.Match):
-    return '[' + str(string.group(0).count('1')) + ']'
-
-def tidy(string):
-    text = string.group(0)
-    a = text.rfind('{')
-    left = text[:a]
-    right = text[a:]
-    return left+'1'
-
-def tidy_2(string):
-    text = string.group(0)
-    a = text.rfind('{')
-    numbers = sum(int(i) for i in text[a+1:-1].split(',') if i)
-    return text[:a] + '[' + str(numbers) + ']'
-
-
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:
         first = re.sub(r'!.', '', self.input_)
