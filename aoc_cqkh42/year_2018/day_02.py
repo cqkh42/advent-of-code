@@ -18,7 +18,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     """Solutions for day 2 of 2018's Advent of Code."""
 
-    def _process_data(self: Self) -> list[dict[str, int], ...]:
+    def _process_data(self: Self) -> dict[str, collections.Counter]:
         return {line:collections.Counter(line) for line in self.lines}
 
     def part_a(self: Self) -> int:

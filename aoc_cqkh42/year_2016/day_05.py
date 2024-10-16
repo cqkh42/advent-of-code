@@ -1,5 +1,6 @@
 import itertools
 from _md5 import md5 as md5_builtin
+from collections import defaultdict
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -7,21 +8,22 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     def _process_data(self):
         hashes = ''
-        placed_hashes = [''] * 8
-        base_hash = md5_builtin(self.input_.encode())
+        # placed_hashes = [''] * 8
+        placed_hashes = defaultdict(list)
+        strings = (
+            (self.input_ + str(index)).encode()
+            for index in range(100_000_000)
+        )
+        h = (md5_builtin(s).hexdigest() for s in strings)
+        valid_hashes = (digest[5:7] for digest in h if digest.startswith('00000'))
 
-        for index in itertools.count():
-            hashed = base_hash.copy()
-            hashed.update(b'%a' % index)
-
-            digest = hashed.hexdigest()
-            if digest.startswith('0' * 5):
-                kk = int(digest[5], 16)
-                hashes += digest[5]
-                if kk < 8 and not placed_hashes[kk]:
-                    placed_hashes[kk] = digest[6]
-                if all(placed_hashes):
-                    return hashes, placed_hashes
+        for l, r in valid_hashes:
+            hashes += l
+            kk = int(l, 16)
+            if kk < 8:
+                placed_hashes[kk].append(r)
+            if len(placed_hashes) == 8:
+                return hashes, placed_hashes
 
     def part_a(self):
         hashes = self.processed[0]
@@ -29,4 +31,4 @@ class Solution(BaseSolution):
 
     def part_b(self):
         hashes = self.processed[1]
-        return ''.join(hashes)
+        return ''.join(hashes[index][0] for index in range(8))

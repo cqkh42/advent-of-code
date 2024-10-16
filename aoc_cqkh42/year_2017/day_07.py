@@ -51,7 +51,6 @@ class Solution(BaseSolution):
         return more_itertools.one(difference)
 
     def part_b(self):
-        print()
         stack_weights = {program: stack_weight(program, self.processed) for program in self.processed}
         for program in sorted(self.processed, key=lambda program: len(self.processed[program].dependencies), reverse=True):
             d = defaultdict(list)
