@@ -12,8 +12,46 @@ from operator import xor
 
 
 class KnotHash:
-    def __init__(self):
-        pass
+    def __init__(self, numbers, iterations=64, ordify=True):
+        self.rope = list(range(256))
+        self.position = 0
+        self.skip_size = 0
+        self.iterations = iterations
+        if ordify:
+            self.numbers = ordify_sequence(numbers)
+        else:
+            self.numbers = numbers
+
+    def do_twist(self, length):
+        based_at_position = np.roll(self.rope, -self.position)[:length][::-1]
+        if self.position + length <= len(self.rope):
+            self.rope[self.position:self.position + length] = based_at_position[:length]
+        else:
+            a = len(self.rope[self.position:])
+            self.rope[self.position:] = based_at_position[:a]
+            self.rope[:length - a] = based_at_position[a:]
+        return self.rope
+
+    def do_run(self):
+        for length in self.numbers:
+            self.do_twist(length)
+            self.position += length + self.skip_size
+            self.position %= len(self.rope)
+            self.skip_size += 1
+        return self.rope, self.position, self.skip_size
+
+    def do_runs(self):
+        for _ in range(self.iterations):
+            self.do_run()
+
+    def make_hash(self):
+        self.do_runs()
+        chunks = more_itertools.chunked(self.rope, 16)
+        chunks = [reduce_xor(chunk) for chunk in chunks]
+        chunks = [f'{i:x}' for i in chunks]
+        chunks = [f'{i:0>2}' for i in chunks]
+        return ''.join(chunks)
+
 
 def ordify_sequence(sequence):
     return [ord(i) for i in sequence] + [17, 31, 73, 47, 23]
@@ -21,46 +59,20 @@ def ordify_sequence(sequence):
 def reduce_xor(sequence):
     return reduce(xor, sequence)
 
-def do_twist(rope, length, position):
-    based_at_position = np.roll(rope, -position)[:length][::-1]
-    if position + length <= len(rope):
-        rope[position:position + length] = based_at_position[:length]
-    else:
-        a = len(rope[position:])
-        rope[position:] = based_at_position[:a]
-        rope[:length-a] = based_at_position[a:]
-    return rope
-
-def do_run(rope, numbers, position=0, skip_size=0):
-    for length in numbers:
-        do_twist(rope, length, position)
-        position += length + skip_size
-        position %= len(rope)
-        skip_size += 1
-    return rope, position, skip_size
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:
         ...
 
     def part_a(self, size=256):
-        rope = list(range(256))
-        rope, *_ = do_run(rope, self.numbers)
+        hasher = KnotHash(self.numbers, 1, ordify=False)
+        hasher.make_hash()
+        rope = hasher.rope
         return int(rope[0] * rope[1])
 
-
     def part_b(self):
-        numbers = ordify_sequence(self.input_)
-        rope = list(range(256))
-        position = 0
-        skip_size=0
-        for _ in range(64):
-            rope, position, skip_size = do_run(rope, numbers, position, skip_size)
-        chunks = more_itertools.chunked(rope, 16)
-        chunks=[reduce_xor(chunk) for chunk in chunks]
-        chunks = [f'{i:x}' for i in chunks]
-        chunks = [f'{i:0>2}' for i in chunks]
-        return ''.join(chunks)
+        hasher = KnotHash(self.input_)
+        return hasher.make_hash()
 
 
 if __name__ == "__main__":
