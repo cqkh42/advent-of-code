@@ -1,6 +1,3 @@
-import more_itertools
-import functools
-
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
 

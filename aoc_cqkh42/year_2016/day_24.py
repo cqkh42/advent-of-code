@@ -1,9 +1,10 @@
 from collections import defaultdict
 import itertools
 import more_itertools
-from typing import Self
+from typing import Self, Any
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42 import submit_answers
 
 import numpy as np
 import networkx as nx
@@ -14,66 +15,41 @@ def calc_distance(path, distances):
 
 
 class Solution(BaseSolution):
-    def parse_data(self):
-        a = [list(line) for line in self.input_.split()]
-        a = np.array(a)
+    def _process_data(self: Self) -> Any:
+        a = np.array([list(line) for line in self.input_.split()])
 
-        return self.input_
-    def part_a(self: Self) -> int:
-        a = [list(line) for line in self.input_.split()]
-        # print(a)
-        a = np.array(a)
-        # print(a.shape)
-        locations = {}
-        x = a.shape
-        g = nx.grid_graph([x[1],x[0]])
-        hashes = np.transpose((a == '#').nonzero())
-        hashes = [tuple(i) for i in hashes.tolist()]
-        # print(np.where(a == '#'))
-        # print()
-        # can use a complete graph here
-        g.remove_nodes_from(hashes)
-
-        for num in range(10):
-            if str(num) in a:
-                # print(num)
-                location = tuple(np.transpose((a == f'{num}').nonzero())[0].tolist())
-                locations[num] = location
-        # print(locations)
-
-        paths = defaultdict(dict)
-        for a, b in itertools.combinations(locations, 2):
-            distance = nx.shortest_path_length(g, locations[a], locations[b])
-            paths[a][b] = distance
-            paths[b][a] = distance
-
-        possible_paths = itertools.permutations(locations, len(locations))
-        return min(calc_distance(path, paths) for path in possible_paths)
-
-
-    def part_b(self: Self) -> str | int:
-        a = [list(line) for line in self.input_.split()]
-        a = np.array(a)
-        locations = {}
         x = a.shape
         g = nx.grid_graph([x[1], x[0]])
         hashes = np.transpose((a == '#').nonzero())
         hashes = [tuple(i) for i in hashes.tolist()]
         g.remove_nodes_from(hashes)
 
+
+        self.locations = [None for _ in range(10)]
         for num in range(10):
             if str(num) in a:
-                location = tuple(
-                    np.transpose((a == f'{num}').nonzero())[0].tolist())
-                locations[num] = location
+                # print(num)
+                location = tuple(np.transpose((a == f'{num}').nonzero())[0].tolist())
+                self.locations[num] = location
+        self.locations = [i for i in self.locations if i is not None]
 
-        paths = defaultdict(dict)
-        non_zero_locations = {k: v for k, v in locations.items() if k != 0}
-        for a, b in itertools.combinations(locations, 2):
-            distance = nx.shortest_path_length(g, locations[a], locations[b])
-            paths[a][b] = distance
-            paths[b][a] = distance
+        self.paths = defaultdict(dict)
+        for a, b in itertools.combinations(range(len(self.locations)), 2):
+            distance = nx.shortest_path_length(g, self.locations[a], self.locations[b])
+            self.paths[a][b] = distance
+            self.paths[b][a] = distance
+        return np.array(a)
 
-        possible_paths = itertools.permutations(non_zero_locations, len(non_zero_locations))
+    def part_a(self: Self) -> int:
+        possible_paths = itertools.permutations(range(len(self.locations)), len(self.locations))
+        return min(calc_distance(path, self.paths) for path in possible_paths)
+
+
+    def part_b(self: Self) -> str | int:
+        non_zero_locations = self.locations[1:]
+        possible_paths = itertools.permutations(range(1, len(self.locations)), len(non_zero_locations))
         possible_paths = [[0, *path, 0] for path in possible_paths]
-        return min(calc_distance(path, paths) for path in possible_paths)
+        return min(calc_distance(path, self.paths) for path in possible_paths)
+
+if __name__ == "__main__":
+    submit_answers(Solution, 24, 2016)

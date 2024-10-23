@@ -139,7 +139,7 @@ class Node(a_star.AStarBaseNode):
 
         if things_on_zero_floor:
             # take the lift down
-            steps += (lift)
+            steps += lift
             trips = math.ceil(things_on_zero_floor / 2)
             steps += (2*(trips-1)) + 1
             lift = 1
@@ -154,12 +154,8 @@ class Node(a_star.AStarBaseNode):
             steps += abs(lift-2)
             trips = math.ceil(things_on_two_floor / 2)
             steps += (2 * (trips - 1)) + 1
-            lift = 3
 
         return steps
-
-        return 3 - self.lift
-
 
 if __name__ == "__main__":
     submit_answers(Solution, 11, 2016)

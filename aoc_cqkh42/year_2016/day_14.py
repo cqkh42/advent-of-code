@@ -32,7 +32,6 @@ class Solution(BaseSolution):
 
         z = itertools.groupby(a)
         y = ((x, ilen(y)) for x, y in z)
-        xx = (a for a, b in y if b == 5)
         if match := self.fiver.search(a):
             char = match.groups(0)[0]
             #     # did we see a triple in the last 1000:

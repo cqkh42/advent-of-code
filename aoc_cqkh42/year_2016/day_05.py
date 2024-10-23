@@ -1,4 +1,3 @@
-import itertools
 from _md5 import md5 as md5_builtin
 from collections import defaultdict
 
