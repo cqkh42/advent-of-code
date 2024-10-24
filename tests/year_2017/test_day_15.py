@@ -11,4 +11,6 @@ def test_part_a(data):
     assert Solution(data).part_a() == 597
 
 def test_part_b(data):
+    s = Solution(data)
+    s.part_a()
     assert Solution(data).part_b() == 309

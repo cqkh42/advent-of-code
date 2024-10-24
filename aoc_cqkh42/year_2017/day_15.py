@@ -1,11 +1,7 @@
-import functools
 from typing import Self, Any
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42.year_2017.day_10 import KnotHash
 from aoc_cqkh42 import submit_answers
-import networkx as nx
-import more_itertools
 import parse
 
 class Solution(BaseSolution):
@@ -13,8 +9,6 @@ class Solution(BaseSolution):
     b_outputs = []
     def _process_data(self: Self) -> Any:
         a, b = parse.findall('{:d}', self.input_)
-        print(a[0], b[0])
-
         return a[0], b[0]
 
     def part_a(self):
@@ -30,7 +24,7 @@ class Solution(BaseSolution):
                 total += 1
             if not a % 4:
                 self.a_outputs.append(a)
-            if not b % 4:
+            if not b % 8:
                 self.b_outputs.append(b)
         return total
 
