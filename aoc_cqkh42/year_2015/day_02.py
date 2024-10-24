@@ -5,10 +5,11 @@ Read the full puzzle at https://adventofcode.com/2015/day/2
 """
 __all__ = ["Solution"]
 
+import collections
 import itertools
 import math
 from dataclasses import dataclass
-from typing import Self
+from typing import Self, List
 
 import parse
 
@@ -32,7 +33,6 @@ class Present:
     dim_1: int
     dim_2: int
 
-    @property
     def _pairs(self: Self) -> itertools.combinations:
         """Pairs of dimensions.
 
@@ -48,7 +48,7 @@ class Present:
         Returns:
             int: the amount of paper needed for the present
         """
-        sides = [math.prod(corner) for corner in self._pairs]
+        sides = [math.prod(corner) for corner in self._pairs()]
         return min(sides) + sum(sides) * 2
 
     @property
@@ -58,7 +58,7 @@ class Present:
         Returns:
             int: the amount of ribbon needed for the present
         """
-        perms = (sum(corner) for corner in self._pairs)
+        perms = (sum(corner) for corner in self._pairs())
         return min(perms) * 2 + math.prod([self.dim_0, self.dim_1, self.dim_2])
 
 
@@ -81,7 +81,7 @@ class Solution(BaseSolution):
         """
         return sum(present.ribbon for present in self.processed)
 
-    def _process_data(self: Self) -> list[Present, ...]:
+    def _process_data(self: Self) -> list[Present]:
         """Build a list of Presents from raw input data.
 
         Returns:

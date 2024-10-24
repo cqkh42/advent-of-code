@@ -1,6 +1,6 @@
 import pytest
 
-from aoc_cqkh42.year_2015 import day_19, day_19_help
+from aoc_cqkh42.year_2015 import day_19
 
 
 @pytest.fixture
