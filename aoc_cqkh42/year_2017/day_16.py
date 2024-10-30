@@ -43,15 +43,21 @@ class Solution(BaseSolution):
         return ''.join(chars)
 
     def part_b(self):
-        print(self.programs)
         return
-        mapping = {}
-        for index, char in enumerate(ascii_lowercase[:16]):
-            mapping[index] = self.programs.index(char)
-        for _ in range(1_000_000_000):
-            pass
+        mappings = {1: dict(enumerate(self.programs))}
+        target = 1_000_000_000
+        num_iters = 1
+        while num_iters <= target:
+            max_possible = max(i for i in mappings if i <= (target - num_iters))
+            mapping = mappings[mapping]
+
+        print(self.programs, mapping)
+        for _ in range(1_000_000_000 -1):
+            self.programs = [mapping[i] for i in self.programs]
+        chars = [ascii_lowercase[i] for i in self.programs]
+        return ''.join(chars)
 
 
 
 if __name__ == "__main__":
-    submit_answers(Solution, 15, 2017)
+    submit_answers(Solution, 16, 2017)
