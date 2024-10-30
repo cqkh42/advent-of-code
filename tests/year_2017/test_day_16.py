@@ -11,6 +11,4 @@ def test_part_a(data):
 
 
 def test_part_b(data):
-    assert Solution(data).part_b(5, 2) == 'ceadb'
-    s.part_a()
-    assert Solution(data).part_b() == 309
+    assert False
