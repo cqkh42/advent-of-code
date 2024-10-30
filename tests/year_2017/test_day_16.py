@@ -1,6 +1,6 @@
 import pytest
 
-from aoc_cqkh42.year_2017.day_16 import Solution, swap
+from aoc_cqkh42.year_2017.day_16 import Solution
 
 @pytest.fixture
 def data():
@@ -10,10 +10,7 @@ def test_part_a(data):
     assert Solution(data).part_a(5) == 'baedc'
 
 
-def test_swap():
-    assert swap('abcde', 3) == 'cdeab'
-
 def test_part_b(data):
-    s = Solution(data)
+    assert Solution(data).part_b(5, 2) == 'ceadb'
     s.part_a()
     assert Solution(data).part_b() == 309
