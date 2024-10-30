@@ -37,6 +37,7 @@ def swap_characters(programs, characters):
 
 class Solution(BaseSolution):
     programs = list(ascii_lowercase[:16])
+    program_history = [ascii_lowercase[:16]]
     num_iterations = 0
 
     def _process_data(self: Self) -> dict[int, list[int]]:
@@ -60,6 +61,7 @@ class Solution(BaseSolution):
     def _do_iterations(self):
         for instruction in self.processed:
             self.programs = instruction(self.programs)
+        self.program_history.append(''.join(self.programs))
         self.num_iterations += 1
 
     def part_a(self, num_programs=16):
@@ -67,20 +69,10 @@ class Solution(BaseSolution):
         return ''.join(self.programs)
 
     def part_b(self, num_programs=16, num_iters=1_000_000_000):
-        # while self.programs != list(ascii_lowercase[:16]):
-        #     self._do_iterations()
-
-
-        seen = defaultdict(list)
-        seen[tuple(ascii_lowercase[:16])].append(0)
-        seen[tuple(self.programs)].append(1)
-        for i in range(2, 49):
-            for instruction in self.processed:
-                self.programs = instruction(self.programs)
-            if tuple(self.programs) in seen:
-                raise
-            seen[tuple(self.programs)].append(i)
-        return ''.join(self.programs)
+        while self.programs != list(ascii_lowercase[:16]):
+            self._do_iterations()
+        l_o = num_iters % self.num_iterations
+        return ''.join(self.program_history[l_o])
 
 
 if __name__ == "__main__":
