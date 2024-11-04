@@ -20,8 +20,6 @@ class Solution(BaseSolution):
         return int(self.input_)+1
 
     def _do_step(self, step):
-        # a(modx) + b(mody) = a + b(modgcd(x, y))
-
         self.index += self.processed
         self.index %= step
 
