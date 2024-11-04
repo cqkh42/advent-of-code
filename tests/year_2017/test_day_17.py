@@ -1,3 +1,5 @@
+import pytest
+
 from aoc_cqkh42.year_2017.day_17 import Solution
 
 def test_part_a():
