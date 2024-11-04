@@ -1,13 +1,4 @@
-import functools
-import math
-from collections import defaultdict
 from typing import Self, Any
-from string import ascii_lowercase
-
-import more_itertools
-import numpy as np
-import parse
-from bidict import bidict
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
@@ -17,7 +8,7 @@ class Solution(BaseSolution):
     index = 0
 
     def _process_data(self: Self) -> Any:
-        return int(self.input_)+1
+        return int(self.input_) + 1
 
     def _do_step(self, step):
         self.index += self.processed
