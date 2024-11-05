@@ -64,8 +64,7 @@ class ProgramA(BaseProgram):
         super().__init__(instructions)
 
     def rcv(self, v):
-        if self[v]:
-            self.awaiting_input = True
+        self.awaiting_input = bool(self[v])
         return 1
 
 @dataclass
@@ -74,19 +73,17 @@ class ProgramB(BaseProgram):
         super().__init__(instructions)
 
     def rcv(self, v):
-        if not self.inputs_:
-            self.awaiting_input = True
-            step = 0
-        else:
-            self.awaiting_input = False
+        self.awaiting_input = not self.inputs_
+        step = bool(self.inputs_)
+        if self.inputs_:
             next_value = self.inputs_.pop(0)
             self[v] = next_value
-            step = 1
         return step
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:
         return [line.split() for line in self.lines]
+
     def part_a(self: Self) -> int:
         computer = ProgramA(self.processed)
         while True:
@@ -95,7 +92,6 @@ class Solution(BaseSolution):
                 return computer.outputs[-1]
 
     def part_b(self: Self):
-
         program_0 = ProgramB(self.processed)
         program_0['p'] = 0
 
