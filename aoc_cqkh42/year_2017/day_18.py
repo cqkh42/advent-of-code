@@ -19,17 +19,15 @@ func_map = {
     # ''
 }
 
-@dataclass
-class ProgramA:
-    instructions: list[str]
-    index: 0 = 0
-    registers: defaultdict = field(default_factory=lambda: defaultdict(int))
-    played: list = field(default_factory=list)
-    has_received = False
-    still_running = True
-    just_sent = False
-    queue = []
-
+class BaseProgram:
+    def __init__(self, instructions):
+        self.instructions = instructions
+        self.index = 0
+        self.registers = defaultdict(int)
+        self.outputs = []
+        self.inputs_ = []
+        self.awaiting_input: bool = False
+        self.output_count: int = 0
 
     def __getitem__(self, item: str):
         if item.isalpha():
@@ -39,17 +37,17 @@ class ProgramA:
     def __setitem__(self, key, value):
         self.registers[key] = value
 
+    def snd(self, v):
+        self.outputs.append(self[v])
+        self.output_count += 1
+
     def run_line(self):
         command, *variables = self.instructions[self.index]
         step = 1
         if command == 'snd':
-            v = variables[0]
-            self.played.append(self[v])
-            self.just_sent = True
+            self.snd(variables[0])
         elif command == 'rcv':
-            v = variables[0]
-            if self[v]:
-                self.has_received = True
+            step = self.rcv(variables[0])
 
         elif command in {'set', 'add', 'mul', 'mod'}:
             x, y = variables
@@ -60,51 +58,31 @@ class ProgramA:
                 step = self[y]
         self.index += step
 
+
+class ProgramA(BaseProgram):
+    def __init__(self, instructions):
+        super().__init__(instructions)
+
+    def rcv(self, v):
+        if self[v]:
+            self.awaiting_input = True
+        return 1
+
 @dataclass
-class ProgramB:
-    instructions: list[str]
-    index: int = 0
-    registers: defaultdict = field(default_factory=lambda: defaultdict(int))
-    outputs: list = field(default_factory=list)
-    inputs_: list = field(default_factory=list)
-    awaiting_input: bool = False
-    output_count: int = 0
+class ProgramB(BaseProgram):
+    def __init__(self, instructions):
+        super().__init__(instructions)
 
-
-    def __getitem__(self, item: str):
-        if item.isalpha():
-            return self.registers[item]
-        return int(item)
-
-    def __setitem__(self, key, value):
-        self.registers[key] = value
-
-    def run_line(self):
-        command, *variables = self.instructions[self.index]
-        step = 1
-        if command == 'snd':
-            v = variables[0]
-            self.outputs.append(self[v])
-            self.output_count += 1
-        elif command == 'rcv':
-            v = variables[0]
-            if not self.inputs_:
-                self.awaiting_input = True
-                step = 0
-            else:
-                self.awaiting_input = False
-                next_value = self.inputs_.pop(0)
-                self[v] = next_value
-
-
-        elif command in {'set', 'add', 'mul', 'mod'}:
-            x, y = variables
-            self[x] = func_map[command](self[x], self[y])
-        elif command == 'jgz':
-            x, y = variables
-            if self[x] > 0:
-                step = self[y]
-        self.index += step
+    def rcv(self, v):
+        if not self.inputs_:
+            self.awaiting_input = True
+            step = 0
+        else:
+            self.awaiting_input = False
+            next_value = self.inputs_.pop(0)
+            self[v] = next_value
+            step = 1
+        return step
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:
@@ -113,14 +91,14 @@ class Solution(BaseSolution):
         computer = ProgramA(self.processed)
         while True:
             computer.run_line()
-            if computer.has_received:
-                return computer.played[-1]
+            if computer.awaiting_input:
+                return computer.outputs[-1]
 
     def part_b(self: Self):
-        # ...
+
         program_0 = ProgramB(self.processed)
         program_0['p'] = 0
-        #
+
         program_1 = ProgramB(self.processed)
         program_1['p'] = 1
 
@@ -132,20 +110,6 @@ class Solution(BaseSolution):
             if program_1.outputs:
                 program_0.inputs_.append(program_1.outputs.pop(0))
         return program_1.output_count
-
-
-
-        #
-        # while program_0.still_running or program_1.still_running:
-        #     program_0.run_line()
-        #     if program_0.just_sent:
-        #         p = program_0.played.pop()
-        #         program_1.queue.append(p)
-        #         program_0.just_sent = False
-        #     if program_0.
-
-
-
 
 
 if __name__ == "__main__":
