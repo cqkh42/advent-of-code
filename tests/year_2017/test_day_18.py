@@ -19,5 +19,12 @@ def test_part_a(data):
     assert Solution(data).part_a() == 4
 
 
-# def test_part_b():
-#     assert Solution('3').part_b() == 638
+def test_part_b():
+    data = """snd 1
+snd 2
+snd p
+rcv a
+rcv b
+rcv c
+rcv d"""
+    assert Solution(data).part_b() == 3
