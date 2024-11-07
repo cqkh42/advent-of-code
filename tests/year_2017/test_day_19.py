@@ -15,5 +15,5 @@ def test_part_a(data):
     assert Solution(data).part_a() == 'ABCDEF'
 
 
-def test_part_b():
-    assert Solution('123').part_b() == 3
+def test_part_b(data):
+    assert Solution(data).part_b() == 38

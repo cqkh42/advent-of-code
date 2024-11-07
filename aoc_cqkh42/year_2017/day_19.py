@@ -1,3 +1,4 @@
+import itertools
 from collections import defaultdict
 from typing import Self, Any
 
@@ -42,7 +43,22 @@ class Solution(BaseSolution):
         return ''.join(i for i in a if i.isalpha())
 
     def part_b(self):
-        return
+        # return
+        x = self.lines[0].index('|')
+        paths = (nx.single_source_shortest_path(self.processed, (0, x)))
+        longest = max(paths.values(), key=len)
+        edge_dict = {}
+        for a,b,c in self.processed.edges(data=True):
+            edge_dict[(a,b)] = c['weight']
+            edge_dict[(b,a)] = c['weight']
+        # edges = {sorted(a,b):  c['weight'] for a,b,c in self.processed.edges(data=True)}
+        # edges =
+        # print(edges[0])
+        distance = 0
+        for a, b in itertools.pairwise(longest):
+            distance += edge_dict[(a, b)]
+        return distance
+        print
 
 if __name__ == "__main__":
     submit_answers(Solution, 19, 2017)
