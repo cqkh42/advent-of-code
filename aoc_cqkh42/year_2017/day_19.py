@@ -33,32 +33,25 @@ class Solution(BaseSolution):
                 g.add_edge((y, x), (y, x+1), weight=1)
             elif char in valid_horizontals and chars[y,x+2] in valid_horizontals and chars[y,x+1] == '|':
                 g.add_edge((y, x), (y, x+2), weight=2)
-        return g
+
+        x = self.lines[0].index('|')
+        paths = (nx.single_source_shortest_path(g, (0, x)))
+        longest = max(paths.values(), key=len)
+        self.graph = g
+        return longest
 
     def part_a(self):
-        x = self.lines[0].index('|')
-        paths = (nx.single_source_shortest_path(self.processed, (0,x)))
-        longest = max(paths.values(), key=len)
-        a = [self.chars[i] for i in longest]
-        return ''.join(i for i in a if i.isalpha())
+        return ''.join(self.chars[i] for i in self.processed if self.chars[i].isalpha())
 
     def part_b(self):
-        # return
-        x = self.lines[0].index('|')
-        paths = (nx.single_source_shortest_path(self.processed, (0, x)))
-        longest = max(paths.values(), key=len)
         edge_dict = {}
-        for a,b,c in self.processed.edges(data=True):
+        for a,b,c in self.graph.edges(data=True):
             edge_dict[(a,b)] = c['weight']
             edge_dict[(b,a)] = c['weight']
-        # edges = {sorted(a,b):  c['weight'] for a,b,c in self.processed.edges(data=True)}
-        # edges =
-        # print(edges[0])
         distance = 0
-        for a, b in itertools.pairwise(longest):
+        for a, b in itertools.pairwise(self.processed):
             distance += edge_dict[(a, b)]
         return distance
-        print
 
 if __name__ == "__main__":
     submit_answers(Solution, 19, 2017)
