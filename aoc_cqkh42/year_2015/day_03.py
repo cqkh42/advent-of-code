@@ -8,7 +8,6 @@ from collections.abc import Iterable
 from typing import Self
 
 import numpy as np
-# from numpy.typing import Su
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
