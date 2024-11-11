@@ -17,16 +17,23 @@ class Node:
     def valid(self):
         if self.x < 0 or self.y < 0:
             return False
-        calc = self.x**2 + 3*self.x + 2*self.x*self.y + self.y + self.y**2 + self.fav_number
-        ones = bin(calc).count('1')
-        return not(ones % 2)
+        calc = (
+            self.x**2
+            + 3 * self.x
+            + 2 * self.x * self.y
+            + self.y
+            + self.y**2
+            + self.fav_number
+        )
+        ones = bin(calc).count("1")
+        return not (ones % 2)
 
     def terminate(self):
         return self.x == 31 and self.y == 39
 
     def next_moves(self):
         for x, y in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            new_state = replace(self, x=self.x+x, y=self.y+y, steps=self.steps+1)
+            new_state = replace(self, x=self.x + x, y=self.y + y, steps=self.steps + 1)
             if new_state.valid():
                 yield new_state
 
@@ -38,7 +45,7 @@ class Node:
 
 
 class ShortestPath:
-    def __init__(self, state, cutoff=float('inf')):
+    def __init__(self, state, cutoff=float("inf")):
         self.states = queue.PriorityQueue()
         self.states.put(state)
         self.cutoff = cutoff

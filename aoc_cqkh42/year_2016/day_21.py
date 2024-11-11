@@ -32,10 +32,7 @@ class Scrambler:
         if not x:
             return self.password
         x %= len(self.password)
-        self.password = (
-                self.password[-x:] +
-                self.password[:len(self.password) - x]
-        )
+        self.password = self.password[-x:] + self.password[: len(self.password) - x]
         return self.password
 
     def rotate_based_on(self, x):
@@ -45,8 +42,9 @@ class Scrambler:
 
     def reverse(self, x, y):
         self.password = (
-                self.password[:x] +
-                list(reversed(self.password[x:y+1])) + self.password[y+1:]
+            self.password[:x]
+            + list(reversed(self.password[x : y + 1]))
+            + self.password[y + 1 :]
         )
         return self.password
 
@@ -59,31 +57,31 @@ class Scrambler:
 class Solution(BaseSolution):
     def scramble(self, scrambler, line):
         match line.split():
-            case ['move', _, x, *_, y]:
+            case ["move", _, x, *_, y]:
                 scrambler.move(int(x), int(y))
-            case ['rotate', 'right', steps, _]:
+            case ["rotate", "right", steps, _]:
                 scrambler.rotate_right(int(steps))
-            case ['rotate', 'left', steps, _]:
+            case ["rotate", "left", steps, _]:
                 scrambler.rotate_left(int(steps))
-            case ['rotate', *_, letter]:
+            case ["rotate", *_, letter]:
                 scrambler.rotate_based_on(letter)
-            case ['swap', 'position', x, *_, y]:
+            case ["swap", "position", x, *_, y]:
                 scrambler.swap_position(int(x), int(y))
-            case ['swap', 'letter', x, *_, y]:
+            case ["swap", "letter", x, *_, y]:
                 scrambler.swap_letter(x, y)
-            case ['reverse', _, x, _, y]:
+            case ["reverse", _, x, _, y]:
                 scrambler.reverse(int(x), int(y))
             case _:
                 raise NotImplementedError(line)
         return scrambler
 
-    def part_a(self, password='abcdefgh'):
+    def part_a(self, password="abcdefgh"):
         scrambler = Scrambler(list(password))
         for line in self.lines:
             scrambler = self.scramble(scrambler, line)
-        return ''.join(scrambler.password)
+        return "".join(scrambler.password)
 
     def part_b(self):
-        for password in itertools.permutations('abcdefgh'):
-            if self.part_a(password) == 'fbgdceah':
-                return ''.join(password)
+        for password in itertools.permutations("abcdefgh"):
+            if self.part_a(password) == "fbgdceah":
+                return "".join(password)

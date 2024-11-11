@@ -11,8 +11,8 @@ class Solution(BaseSolution):
 
     def part_a(self):
         a = [col[0][0] for col in self.processed]
-        return ''.join(a)
+        return "".join(a)
 
     def part_b(self):
         a = [col[-1][0] for col in self.processed]
-        return ''.join(a)
+        return "".join(a)

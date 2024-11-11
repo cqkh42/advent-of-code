@@ -11,7 +11,7 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile(
-    r'/dev/grid/node-x{data[x]:d}-y{data[y]:d}{:s}{data[size]:d}T{:s}{data[used]:d}'
+    r"/dev/grid/node-x{data[x]:d}-y{data[y]:d}{:s}{data[size]:d}T{:s}{data[used]:d}"
 )
 
 
@@ -33,16 +33,13 @@ class Node:
 class Solution(BaseSolution):
     def _process_data(self):
         rows = PARSER.findall(self.input_)
-        cells = [
-            Node(**cell)
-            for cell in [(row.named['data']) for row in rows]
-        ]
+        cells = [Node(**cell) for cell in [(row.named["data"]) for row in rows]]
 
         valid_cells = more_itertools.flatten(
             (node_a, node_b)
-            for (node_a), (node_b) in itertools.permutations(cells, 2) if
-            0 < node_a.used <= node_b.available
-            )
+            for (node_a), (node_b) in itertools.permutations(cells, 2)
+            if 0 < node_a.used <= node_b.available
+        )
 
         in_scope_nodes = {(node.x, node.y): node for node in valid_cells}
 
@@ -63,10 +60,10 @@ class Solution(BaseSolution):
     def part_b(self):
         max_x = max(self.processed, key=lambda x: x[0])[0]
         empty = more_itertools.only(
-            k for k, v in self.processed.nodes.items() if v['used'] == 0
+            k for k, v in self.processed.nodes.items() if v["used"] == 0
         )
         a = networkx.shortest_path_length(self.processed, empty, (max_x, 0))
-        return a + ((max_x-1)*5)
+        return a + ((max_x - 1) * 5)
 
 
 if __name__ == "__main__":

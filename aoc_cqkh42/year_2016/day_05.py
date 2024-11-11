@@ -6,15 +6,12 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     def _process_data(self):
-        hashes = ''
+        hashes = ""
         # placed_hashes = [''] * 8
         placed_hashes = defaultdict(list)
-        strings = (
-            (self.input_ + str(index)).encode()
-            for index in range(100_000_000)
-        )
+        strings = ((self.input_ + str(index)).encode() for index in range(100_000_000))
         h = (md5_builtin(s).hexdigest() for s in strings)
-        valid_hashes = (digest[5:7] for digest in h if digest.startswith('00000'))
+        valid_hashes = (digest[5:7] for digest in h if digest.startswith("00000"))
 
         for l, r in valid_hashes:
             hashes += l
@@ -30,4 +27,4 @@ class Solution(BaseSolution):
 
     def part_b(self):
         hashes = self.processed[1]
-        return ''.join(hashes[index][0] for index in range(8))
+        return "".join(hashes[index][0] for index in range(8))

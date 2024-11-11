@@ -11,16 +11,16 @@ from aoc_cqkh42.helpers.graph import a_star
 
 class Solution(BaseSolution):
     def _process_data(self):
-        indices = re.findall(r' (\w+) generator', self.input_)
+        indices = re.findall(r" (\w+) generator", self.input_)
 
         generators = [0 for _ in range(len(indices))]
         chips = [0 for _ in range(len(indices))]
 
         for floor_num, info in enumerate(self.lines):
-            for gen in re.findall(r' (\w+) generator', info):
+            for gen in re.findall(r" (\w+) generator", info):
                 index = indices.index(gen)
                 generators[index] = floor_num
-            for chip in re.findall(r' (\w+)-compatible', info):
+            for chip in re.findall(r" (\w+)-compatible", info):
                 index = indices.index(chip)
                 chips[index] = floor_num
         generators = tuple(generators)
@@ -44,6 +44,7 @@ class Solution(BaseSolution):
         start = Node(start_pairs, 0, 0)
         z = a_star.AStar(start, target)
         return z.run()
+
 
 @dataclasses.dataclass(frozen=True)
 class Node(a_star.AStarBaseNode):
@@ -70,8 +71,7 @@ class Node(a_star.AStarBaseNode):
 
         # any loose chips on the same floor as a generator are toast
         loose_chips = {
-            chip for gen, chip in zip(self.generators, self.chips)
-            if gen != chip
+            chip for gen, chip in zip(self.generators, self.chips) if gen != chip
         }
         # are any loose chips on the same floor as generators
         bad_gen = loose_chips.intersection(self.generators)
@@ -82,21 +82,25 @@ class Node(a_star.AStarBaseNode):
         yield from a
 
     def move_generators(self, indices, delta):
-        t = [[g, c] for g,c in self.pairs]
+        t = [[g, c] for g, c in self.pairs]
         if isinstance(indices, int):
             t[indices][0] += delta
         else:
             for index in indices:
                 t[index][0] += delta
         t = tuple(sorted((g, c) for g, c in t))
-        return Node(t, self.lift + delta, self.distance+1)
+        return Node(t, self.lift + delta, self.distance + 1)
 
     def _neighbours(self):
         # we can go up or down
         # we can move 1 or 2
 
-        available_gens = [index for index, (gen, chip) in enumerate(self.pairs) if gen == self.lift]
-        available_chips = [index for index, (gen, chip) in enumerate(self.pairs) if chip == self.lift]
+        available_gens = [
+            index for index, (gen, chip) in enumerate(self.pairs) if gen == self.lift
+        ]
+        available_chips = [
+            index for index, (gen, chip) in enumerate(self.pairs) if chip == self.lift
+        ]
 
         if self.lift == 0:
             floors = [1]
@@ -106,12 +110,20 @@ class Node(a_star.AStarBaseNode):
             floors = [-1, 1]
 
         double_gens = itertools.combinations(available_gens, 2)
-        yield from (self.move_generators(index, change) for index, change in itertools.product(available_gens, floors))
-        yield from (self.move_generators(index, change) for index, change in itertools.product(double_gens, floors))
+        yield from (
+            self.move_generators(index, change)
+            for index, change in itertools.product(available_gens, floors)
+        )
+        yield from (
+            self.move_generators(index, change)
+            for index, change in itertools.product(double_gens, floors)
+        )
 
         double_chips = itertools.product(available_chips, repeat=2)
         double_chips = (c for c in double_chips if c[0] != c[1])
-        for index, change in itertools.product((*([i] for i in available_chips), *double_chips), floors):
+        for index, change in itertools.product(
+            (*([i] for i in available_chips), *double_chips), floors
+        ):
             c = list(self.chips)
             for i in index:
                 c[i] += change
@@ -119,7 +131,9 @@ class Node(a_star.AStarBaseNode):
                 pairs = tuple(sorted((a, b) for a, b in zip(self.generators, c)))
                 yield Node(pairs, self.lift + change, self.distance + 1)
 
-        for gen_index, chip_index, change in itertools.product(available_gens, available_chips, floors):
+        for gen_index, chip_index, change in itertools.product(
+            available_gens, available_chips, floors
+        ):
             c = list(self.chips)
             g = list(self.generators)
             c[chip_index] += change
@@ -134,28 +148,33 @@ class Node(a_star.AStarBaseNode):
         steps = 0
         lift = self.lift
         things_on_zero_floor = [*self.chips, *self.generators].count(0)
-        things_on_one_floor = [*self.chips, *self.generators].count(1) + things_on_zero_floor
-        things_on_two_floor = [*self.chips, *self.generators].count(2) + things_on_one_floor
+        things_on_one_floor = [*self.chips, *self.generators].count(
+            1
+        ) + things_on_zero_floor
+        things_on_two_floor = [*self.chips, *self.generators].count(
+            2
+        ) + things_on_one_floor
 
         if things_on_zero_floor:
             # take the lift down
             steps += lift
             trips = math.ceil(things_on_zero_floor / 2)
-            steps += (2*(trips-1)) + 1
+            steps += (2 * (trips - 1)) + 1
             lift = 1
 
         if things_on_one_floor:
-            steps += abs(lift-1)
+            steps += abs(lift - 1)
             trips = math.ceil(things_on_one_floor / 2)
             steps += (2 * (trips - 1)) + 1
             lift = 2
 
         if things_on_two_floor:
-            steps += abs(lift-2)
+            steps += abs(lift - 2)
             trips = math.ceil(things_on_two_floor / 2)
             steps += (2 * (trips - 1)) + 1
 
         return steps
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 11, 2016)

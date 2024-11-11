@@ -8,7 +8,7 @@ class Solution(BaseSolution):
     def part_a(self: Self) -> str | int:
         for i in range(190):
             c = Computer(self.input_)
-            c['a'] = i
+            c["a"] = i
             c.run()
             if sum(c.outputs) == (len(c.outputs) / 2):
                 return i

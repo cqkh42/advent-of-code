@@ -5,7 +5,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     def _process_data(self):
-        parser = parse.compile('{:d}-{:d}')
+        parser = parse.compile("{:d}-{:d}")
         rs = parser.findall(self.input_)
         rs = sorted([(a, b) for a, b in rs], key=lambda x: x[0])
         ranges = []

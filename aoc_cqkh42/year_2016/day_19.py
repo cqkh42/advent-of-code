@@ -8,9 +8,6 @@ def iteration(nums):
     return new
 
 
-
-
-
 class Solution(BaseSolution):
     def part_a(self):
         a = list(range(1, int(self.input_) + 1))

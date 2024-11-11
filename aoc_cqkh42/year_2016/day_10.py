@@ -30,14 +30,15 @@ class Solution(BaseSolution):
     outputs = {}
 
     def _process_data(self):
-        v = parse.findall('value {:d} goes to bot {:d}', self.input_)
+        v = parse.findall("value {:d} goes to bot {:d}", self.input_)
         for v_, b in v:
             self.bots[b].add(v_)
 
         z = parse.findall(
-            'bot {bot:d} gives low to {low[bot]:w} {low[value]:d} and high to {high[bot]:w} {high[value]:d}',
-            self.input_)
-        self.instructions = {i['bot']: i.named for i in z}
+            "bot {bot:d} gives low to {low[bot]:w} {low[value]:d} and high to {high[bot]:w} {high[value]:d}",
+            self.input_,
+        )
+        self.instructions = {i["bot"]: i.named for i in z}
 
     def part_a(self):
         for bot, instruction in itertools.cycle(self.instructions.items()):
@@ -56,12 +57,11 @@ class Solution(BaseSolution):
         holding = self.bots[bot_id]
         if len(holding.holding) < 2:
             return
-        for end in ['low', 'high']:
-            who = instruction[end]['value']
-            if instruction[end]['bot'] == 'bot':
+        for end in ["low", "high"]:
+            who = instruction[end]["value"]
+            if instruction[end]["bot"] == "bot":
                 self.bots[who].add(getattr(holding, end))
             else:
-
                 self.outputs[who] = getattr(holding, end)
 
 
