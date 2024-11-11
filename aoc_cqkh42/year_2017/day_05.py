@@ -9,6 +9,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 def part_b_rule(num):
     return (-1) ** (num >= 3)
 
+
 class Solution(BaseSolution):
     def do_run(self, func, index=0):
         jumps = list(self.numbers)

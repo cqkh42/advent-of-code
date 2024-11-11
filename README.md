@@ -4,15 +4,13 @@ Python based solutions to the annual Advent of Code challenge, with
 scaffolding heavily supplied by
 [advent-of-code-data](https://github.com/wimglenn/advent-of-code-data).
 
-https://img.shields.io/badge/linting-pylint-yellowgreen
-
 ![2015](https://img.shields.io/badge/2015-50%2F50-brightgreen)
 
-![2016](https://img.shields.io/badge/2016-43%2F50-brightgreen)
+![2016](https://img.shields.io/badge/2016-50%2F50-brightgreen)
 
-![2017](https://img.shields.io/badge/2017-13%2F50-brightgreen)
+![2017](https://img.shields.io/badge/2017-40%2F50-brightgreen)
 
-![2018](https://img.shields.io/badge/2018-0%2F50-brightgreen)
+![2018](https://img.shields.io/badge/2018-06%2F50-brightgreen)
 
 ![2019](https://img.shields.io/badge/2019-35%2F50-brightgreen)
 
@@ -20,7 +18,9 @@ https://img.shields.io/badge/linting-pylint-yellowgreen
 
 ![2021](https://img.shields.io/badge/2021-32%2F50-brightgreen)
 
-![2022](https://img.shields.io/badge/2022-22%2F50-brightgreen)
+![2022](https://img.shields.io/badge/2022-29%2F50-brightgreen)
+
+![2023](https://img.shields.io/badge/2023-09%2F50-brightgreen)
 
 ## Setup
 

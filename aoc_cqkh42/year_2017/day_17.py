@@ -19,8 +19,7 @@ class Solution(BaseSolution):
         for step in range(1, 2018):
             self._do_step(step)
             array.insert(self.index, step)
-        return array[self.index+1]
-
+        return array[self.index + 1]
 
     def part_b(self):
         last_step = 0

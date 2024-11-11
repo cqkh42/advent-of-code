@@ -8,8 +8,7 @@ class Solution(BaseSolution):
 
     def solve_captcha(self, jump=1):
         jumped = self.processed[jump:] + self.processed[:jump]
-        return sum(left for left, right in zip(self.processed, jumped) if
-                   left == right)
+        return sum(left for left, right in zip(self.processed, jumped) if left == right)
 
     def part_a(self):
         return self.solve_captcha()
@@ -17,6 +16,7 @@ class Solution(BaseSolution):
     def part_b(self):
         jump = len(self.input_) // 2
         return self.solve_captcha(jump)
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 1, 2017)

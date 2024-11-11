@@ -29,17 +29,17 @@ class Solution(BaseSolution):
 
 def _square_before(num):
     for square in itertools.count(1):
-        if num < square ** 2:
+        if num < square**2:
             return square - 1
 
 
 def _x(num, square_before, maximum, odd_square, travelled):
-    if _square_before(num+1)**2 == num:
+    if _square_before(num + 1) ** 2 == num:
         # it is a square number
 
         multiplier = (-1) ** (not (num % 2))
-        out = num ** 0.5 // 2
-        return multiplier * (out - (not (multiplier+1)))
+        out = num**0.5 // 2
+        return multiplier * (out - (not (multiplier + 1)))
 
     multiplier = (-1) ** (not odd_square)
     maximum += odd_square
@@ -48,12 +48,12 @@ def _x(num, square_before, maximum, odd_square, travelled):
 
 
 def _y(num, square_before, maximum, odd_square, travelled):
-    if _square_before(num+1)**2 == num:
+    if _square_before(num + 1) ** 2 == num:
         multiplier = (-1) ** (num % 2)
-        out = num ** 0.5 // 2
+        out = num**0.5 // 2
         return multiplier * out
 
-    if num - square_before ** 2 > square_before:
+    if num - square_before**2 > square_before:
         maximum += odd_square
         multiplier = (-1) ** (not odd_square)
         past_second_corner = min(travelled - square_before, 0)
@@ -62,13 +62,14 @@ def _y(num, square_before, maximum, odd_square, travelled):
         multiplier = (-1) ** odd_square
         return multiplier * (maximum - travelled)
 
+
 @functools.cache
 def _coords(num):
     if num == 1:
         return 0, 0
     square_before = _square_before(num)
     maximum = square_before // 2
-    squared_before = square_before ** 2
+    squared_before = square_before**2
     odd_square = bool(square_before % 2)
     travelled = num - squared_before - 1
     x = _x(num, square_before, maximum, odd_square, travelled)
@@ -77,7 +78,8 @@ def _coords(num):
 
 
 def _around_point(x, y):
-    return itertools.product([x-1, x, x+1], [y-1, y, y+1])
+    return itertools.product([x - 1, x, x + 1], [y - 1, y, y + 1])
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 3, 2017)
