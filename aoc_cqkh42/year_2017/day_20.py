@@ -46,7 +46,7 @@ class Solution(BaseSolution):
     def part_b(self):
         # print(self.processed)
         steps = []
-        # try increasing this if it doesnt work
+        # try increasing this if it doesn't work
         for step in range(40):
             a = [particle.position_at(step) for particle in self.processed]
             vals, indices, counts = np.unique(a, return_counts=True, return_index=True, axis=0)
