@@ -1,8 +1,8 @@
 import collections
 import itertools
 import re
-from functools import cached_property
 import string
+from functools import cached_property
 
 import more_itertools
 from multidict import MultiDict

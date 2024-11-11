@@ -5,11 +5,10 @@ Read the full puzzle at https://adventofcode.com/2015/day/2
 """
 __all__ = ["Solution"]
 
-import collections
 import itertools
 import math
 from dataclasses import dataclass
-from typing import Self, List
+from typing import Self
 
 import parse
 
