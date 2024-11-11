@@ -14,6 +14,7 @@ def spin(programs: list, num: int):
     second = programs[-num:]
     return second + first
 
+
 def swap_indices(programs, indices):
     x, y = indices
     a = programs[x]
@@ -21,6 +22,7 @@ def swap_indices(programs, indices):
     programs[x] = b
     programs[y] = a
     return programs
+
 
 def swap_characters(programs, characters):
     x, y = characters
@@ -37,15 +39,15 @@ class Solution(BaseSolution):
     num_iterations = 0
 
     def _process_data(self: Self) -> dict[int, list[int]]:
-        p = parse.compile(r'{:d}')
+        p = parse.compile(r"{:d}")
         instructions = []
-        for instruction in self.input_.split(','):
+        for instruction in self.input_.split(","):
             nums = [i[0] for i in p.findall(instruction)]
             x, y = more_itertools.padded(nums, n=2)
-            if instruction.startswith('s'):
+            if instruction.startswith("s"):
                 func = functools.partial(spin, num=x)
                 instructions.append(func)
-            elif instruction.startswith('x'):
+            elif instruction.startswith("x"):
                 func = functools.partial(swap_indices, indices=nums)
                 instructions.append(func)
             else:
@@ -57,18 +59,18 @@ class Solution(BaseSolution):
     def _do_iterations(self):
         for instruction in self.processed:
             self.programs = instruction(self.programs)
-        self.program_history.append(''.join(self.programs))
+        self.program_history.append("".join(self.programs))
         self.num_iterations += 1
 
     def part_a(self, num_programs=16):
         self._do_iterations()
-        return ''.join(self.programs)
+        return "".join(self.programs)
 
     def part_b(self, num_programs=16, num_iters=1_000_000_000):
         while self.programs != list(ascii_lowercase[:16]):
             self._do_iterations()
         l_o = num_iters % self.num_iterations
-        return ''.join(self.program_history[l_o])
+        return "".join(self.program_history[l_o])
 
 
 if __name__ == "__main__":

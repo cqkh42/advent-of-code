@@ -6,13 +6,13 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 func_map = {
-    'set': lambda x, y: y,
-    'add': lambda x, y: x+y,
-    'mul': lambda x, y: x*y,
-    'mod': lambda x, y: x%y,
-
+    "set": lambda x, y: y,
+    "add": lambda x, y: x + y,
+    "mul": lambda x, y: x * y,
+    "mod": lambda x, y: x % y,
     # ''
 }
+
 
 class BaseProgram:
     def __init__(self, instructions):
@@ -39,15 +39,15 @@ class BaseProgram:
     def run_line(self):
         command, *variables = self.instructions[self.index]
         step = 1
-        if command == 'snd':
+        if command == "snd":
             self.snd(variables[0])
-        elif command == 'rcv':
+        elif command == "rcv":
             step = self.rcv(variables[0])
 
-        elif command in {'set', 'add', 'mul', 'mod'}:
+        elif command in {"set", "add", "mul", "mod"}:
             x, y = variables
             self[x] = func_map[command](self[x], self[y])
-        elif command == 'jgz':
+        elif command == "jgz":
             x, y = variables
             if self[x] > 0:
                 step = self[y]
@@ -62,6 +62,7 @@ class ProgramA(BaseProgram):
         self.awaiting_input = bool(self[v])
         return 1
 
+
 @dataclass
 class ProgramB(BaseProgram):
     def __init__(self, instructions):
@@ -74,6 +75,7 @@ class ProgramB(BaseProgram):
             next_value = self.inputs_.pop(0)
             self[v] = next_value
         return step
+
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:
@@ -88,10 +90,10 @@ class Solution(BaseSolution):
 
     def part_b(self: Self):
         program_0 = ProgramB(self.processed)
-        program_0['p'] = 0
+        program_0["p"] = 0
 
         program_1 = ProgramB(self.processed)
-        program_1['p'] = 1
+        program_1["p"] = 1
 
         while (not program_0.awaiting_input) or (not program_1.awaiting_input):
             program_0.run_line()

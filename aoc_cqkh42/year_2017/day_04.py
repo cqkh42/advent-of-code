@@ -9,6 +9,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 def sort_words(phrase):
     return [sorted(word) for word in phrase]
 
+
 class Solution(BaseSolution):
     def _process_data(self: Self) -> list[list[str]]:
         return [line.split() for line in self.lines]

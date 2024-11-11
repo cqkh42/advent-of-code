@@ -15,6 +15,7 @@ def _distribute(banks):
         banks[index] += 1
     return tuple(banks)
 
+
 class Solution(BaseSolution):
     def part_a(self):
         return do(self.numbers)[0]
@@ -22,6 +23,7 @@ class Solution(BaseSolution):
     def part_b(self):
         a = do(self.numbers)
         return a[0] - a[1]
+
 
 @functools.cache
 def do(banks):
@@ -31,6 +33,7 @@ def do(banks):
         if banks in seen:
             return dist, seen[banks]
         seen[banks] = dist
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 6, 2017)

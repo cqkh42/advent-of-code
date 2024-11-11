@@ -10,23 +10,34 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     highest_seen = 0
+
     def _process_data(self: Self):
         mappings = {
-            'inc': operator.add,
-            'dec': operator.sub,
-            '>': operator.gt,
-            '<': operator.lt,
-            '>=': operator.ge,
-            '==': operator.eq,
-            '<=': operator.le,
-            '!=': operator.ne
+            "inc": operator.add,
+            "dec": operator.sub,
+            ">": operator.gt,
+            "<": operator.lt,
+            ">=": operator.ge,
+            "==": operator.eq,
+            "<=": operator.le,
+            "!=": operator.ne,
         }
-        parser = parse.compile('{:l} {:l} {:d} if {:l} {} {:d}')
+        parser = parse.compile("{:l} {:l} {:d} if {:l} {} {:d}")
         results = []
-        for modify, instruction, amount, predicate, condition, value in parser.findall(self.input_):
-            results.append((modify, mappings[instruction], amount, predicate, mappings[condition], value))
+        for modify, instruction, amount, predicate, condition, value in parser.findall(
+            self.input_
+        ):
+            results.append(
+                (
+                    modify,
+                    mappings[instruction],
+                    amount,
+                    predicate,
+                    mappings[condition],
+                    value,
+                )
+            )
         return results
-
 
     def part_a(self):
         registers = defaultdict(int)
@@ -39,6 +50,7 @@ class Solution(BaseSolution):
 
     def part_b(self):
         return self.highest_seen
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 8, 2017)

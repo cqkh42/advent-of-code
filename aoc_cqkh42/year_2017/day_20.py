@@ -20,7 +20,7 @@ class Particle:
         return total + self.v
 
     def position_at(self, step):
-        z = (self.a * (step+1))/2
+        z = (self.a * (step + 1)) / 2
         return step * (z + self.v) + self.p
 
     def distance_at(self, step):
@@ -29,7 +29,7 @@ class Particle:
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:
-        parser = parse.compile('{:d}')
+        parser = parse.compile("{:d}")
         particles = []
         for line in self.lines:
             p = parser.findall(line)
@@ -49,11 +49,14 @@ class Solution(BaseSolution):
         # try increasing this if it doesn't work
         for step in range(40):
             a = [particle.position_at(step) for particle in self.processed]
-            vals, indices, counts = np.unique(a, return_counts=True, return_index=True, axis=0)
+            vals, indices, counts = np.unique(
+                a, return_counts=True, return_index=True, axis=0
+            )
             single_counts = np.where(counts == 1)
             single_indices = set(indices[single_counts])
             steps.append(single_indices)
         return len(set.intersection(*steps))
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 20, 2017)

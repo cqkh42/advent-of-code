@@ -12,17 +12,14 @@ class Solution(BaseSolution):
         g = nx.Graph()
 
         for line in self.lines:
-            left, right = line.split(' <-> ')
-            right = right.split(', ')
+            left, right = line.split(" <-> ")
+            right = right.split(", ")
             for r in right:
                 g.add_edge(left, r)
         return g
 
     def part_a(self):
-        return sum(
-            nx.has_path(self.processed, node, '0')
-            for node in self.processed
-        )
+        return sum(nx.has_path(self.processed, node, "0") for node in self.processed)
 
     def part_b(self):
         return more_itertools.ilen(nx.connected_components(self.processed))

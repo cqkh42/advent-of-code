@@ -9,8 +9,9 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     a_outputs = []
     b_outputs = []
+
     def _process_data(self: Self) -> Any:
-        a, b = parse.findall('{:d}', self.input_)
+        a, b = parse.findall("{:d}", self.input_)
         return a[0], b[0]
 
     def part_a(self):
@@ -20,9 +21,9 @@ class Solution(BaseSolution):
         b_factor_post_mod = 48271 % mod
         total = 0
         for i in range(40_000_000):
-            a = (a *a_factor_post_mod) % mod
-            b = (b *b_factor_post_mod) % mod
-            if bin(a^b).endswith('0'*16):
+            a = (a * a_factor_post_mod) % mod
+            b = (b * b_factor_post_mod) % mod
+            if bin(a ^ b).endswith("0" * 16):
                 total += 1
             if not a % 4:
                 self.a_outputs.append(a)
@@ -33,7 +34,7 @@ class Solution(BaseSolution):
     def part_b(self):
         total = 0
         for a, b in zip(self.a_outputs[:5_000_000], self.b_outputs[:5_000_000]):
-            if bin(a^b).endswith('0'*16):
+            if bin(a ^ b).endswith("0" * 16):
                 total += 1
         return total
 
