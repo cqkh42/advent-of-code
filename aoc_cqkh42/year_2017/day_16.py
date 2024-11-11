@@ -1,16 +1,12 @@
 import functools
-import math
-from collections import defaultdict
-from typing import Self
 from string import ascii_lowercase
+from typing import Self
 
 import more_itertools
 import parse
-import bidict
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
-
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def spin(programs: list, num: int):

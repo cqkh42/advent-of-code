@@ -1,9 +1,9 @@
 import functools
-
 import itertools
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+
 
 @functools.cache
 def part_b_rule(num):

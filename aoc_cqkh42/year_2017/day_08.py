@@ -1,19 +1,11 @@
-import itertools
-
-import functools
-import itertools
-from dataclasses import dataclass, field
-from typing import Self, Any
-from collections import defaultdict
-
-from frozendict import frozendict
-
-import more_itertools
-import parse
 import operator
-from functools import cached_property
-from aoc_cqkh42.helpers.base_solution import BaseSolution
+from collections import defaultdict
+from typing import Self
+
+import parse
+
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):

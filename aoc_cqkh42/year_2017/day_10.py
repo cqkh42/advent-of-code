@@ -1,14 +1,12 @@
-import itertools
+from functools import reduce
+from operator import xor
 from typing import Self, Any
 
 import more_itertools
 import numpy as np
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
-
-from functools import reduce
-from operator import xor
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class KnotHash:

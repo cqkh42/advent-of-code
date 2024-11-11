@@ -1,11 +1,14 @@
 import functools
 from typing import Self, Any
 
+import more_itertools
+import networkx as nx
+
+from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.year_2017.day_10 import KnotHash
-from aoc_cqkh42 import submit_answers
-import networkx as nx
-import more_itertools
+
+
 @functools.cache
 def process_line(input_):
     hasher = KnotHash(input_)

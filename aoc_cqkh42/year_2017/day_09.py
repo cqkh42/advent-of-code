@@ -1,9 +1,9 @@
+import re
 from typing import Self, Any
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-import re
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> Any:

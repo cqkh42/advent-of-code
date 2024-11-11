@@ -1,12 +1,13 @@
-from typing import Self, Any
 from dataclasses import dataclass
+from typing import Self, Any
 
 import more_itertools
 import numpy as np
 import parse
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+
 
 @dataclass
 class Particle:

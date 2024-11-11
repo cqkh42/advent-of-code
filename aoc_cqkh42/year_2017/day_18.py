@@ -1,14 +1,9 @@
-import functools
-from dataclasses import dataclass, field
+from collections import defaultdict
+from dataclasses import dataclass
 from typing import Self, Any
 
-from collections import defaultdict
-
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
-
-import more_itertools
-import operator
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 func_map = {
     'set': lambda x, y: y,

@@ -1,10 +1,9 @@
+import itertools
 from typing import Self
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-import more_itertools
-import itertools
 
 def is_caught(time, size):
     return not time % (2*size - 2)

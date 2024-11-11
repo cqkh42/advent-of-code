@@ -1,11 +1,11 @@
 import functools
-from collections import defaultdict
-
 import itertools
+from collections import defaultdict
 from typing import Self
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+
 
 class Solution(BaseSolution):
     def _process_data(self: Self) -> int:
