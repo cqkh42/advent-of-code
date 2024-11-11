@@ -2,11 +2,11 @@ import itertools
 import re
 from collections import defaultdict
 from hashlib import md5
+
 from more_itertools import ilen, first
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
-
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):

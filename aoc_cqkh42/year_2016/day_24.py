@@ -1,13 +1,14 @@
-from collections import defaultdict
 import itertools
-import more_itertools
+from collections import defaultdict
 from typing import Self, Any
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42 import submit_answers
-
-import numpy as np
+import more_itertools
 import networkx as nx
+import numpy as np
+
+from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+
 
 def calc_distance(path, distances):
     distance =  sum(distances[x][y] for x, y in more_itertools.pairwise(path))

@@ -1,14 +1,14 @@
+import itertools
 from dataclasses import dataclass, asdict
 from functools import cached_property
-import itertools
 
 import more_itertools
 import networkx
 import networkx as nx
 import parse
 
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 PARSER = parse.compile(
     r'/dev/grid/node-x{data[x]:d}-y{data[y]:d}{:s}{data[size]:d}T{:s}{data[used]:d}'

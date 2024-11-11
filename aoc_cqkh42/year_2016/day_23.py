@@ -1,7 +1,5 @@
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42 import submit_answers
-
-
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.year_2016.day_12 import Computer
 
 
