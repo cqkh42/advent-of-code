@@ -33,5 +33,6 @@ class Solution(BaseSolution):
     def part_b(self):
         return max(weight - lowest for weight, lowest in self.processed)
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 13, 2015)

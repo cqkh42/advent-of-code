@@ -57,9 +57,7 @@ class Solution(BaseSolution):
             numpy Array of steps in (x, y) format
         """
         mapping_dict = {">": (1, 0), "<": (-1, 0), "^": (0, 1), "v": (0, -1)}
-        return np.array(
-            [[0, 0], *(mapping_dict[step] for step in self.input_)]
-        )
+        return np.array([[0, 0], *(mapping_dict[step] for step in self.input_)])
 
 
 if __name__ == "__main__":

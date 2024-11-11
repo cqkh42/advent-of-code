@@ -41,5 +41,6 @@ class Solution(BaseSolution):
         recipe = self.processed[self.processed[:, -1] == 500, :-1]
         return str(recipe.clip(min=0).prod(1).max())
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 15, 2015)

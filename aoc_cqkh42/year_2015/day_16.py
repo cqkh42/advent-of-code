@@ -48,5 +48,6 @@ class Solution(BaseSolution):
         is_good_sue = [_good_sue(sue) for sue in self.processed]
         return is_good_sue.index(True) + 1
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 16, 2015)

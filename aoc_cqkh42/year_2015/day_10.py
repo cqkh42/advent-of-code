@@ -9,6 +9,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 def _resolve(a, b):
     return f"{len(list(b))}{a}"
 
+
 def iterate(string):
     g = itertools.groupby(string)
     d = (f"{len(list(b))}{a}" for a, b in g)

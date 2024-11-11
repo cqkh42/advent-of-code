@@ -26,5 +26,6 @@ class Solution(BaseSolution):
     def _process_data(self: Self) -> str:
         return self.input_
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 17, 2015)

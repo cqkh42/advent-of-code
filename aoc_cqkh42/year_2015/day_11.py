@@ -12,7 +12,7 @@ class Solution(BaseSolution):
         for index, char in enumerate(ords):
             if char in [8, 14, 11]:
                 ords[index] += 1
-                ords[index + 1:] = [0] * (len(ords) - index - 1)
+                ords[index + 1 :] = [0] * (len(ords) - index - 1)
                 break
         return ords
 
@@ -47,6 +47,7 @@ def _is_valid(password):
     counts = [i >= 2 for i in counts]
     match_counts = sum(counts) >= 2
     return match_counts and match_triples and 8 not in password
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 11, 2015)

@@ -143,5 +143,6 @@ class StateB(State):
             return []
         yield from a._n()
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 22, 2015)

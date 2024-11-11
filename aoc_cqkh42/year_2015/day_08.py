@@ -44,11 +44,7 @@ class Solution(BaseSolution):
         Returns:
             2 * number of lines + number of " + number of \
         """
-        return (
-            2 * len(self.lines)
-            + self.input_.count('"')
-            + self.input_.count("\\")
-        )
+        return 2 * len(self.lines) + self.input_.count('"') + self.input_.count("\\")
 
 
 if __name__ == "__main__":

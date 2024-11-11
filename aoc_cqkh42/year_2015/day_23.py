@@ -38,8 +38,7 @@ class Register:
 class Solution(BaseSolution):
     def _process_data(self):
         instructions = [
-            instr.replace(",", "").replace("+", "").split() for instr in
-            self.lines
+            instr.replace(",", "").replace("+", "").split() for instr in self.lines
         ]
         instructions = [
             [part if part.isalpha() else int(part) for part in instr]
@@ -58,6 +57,7 @@ class Solution(BaseSolution):
         r = Register(registers, self.processed)
         r.run()
         return r.reg[target]
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 23, 2015)

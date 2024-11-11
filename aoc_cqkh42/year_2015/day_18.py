@@ -29,8 +29,9 @@ def _iteration(lights):
 
 class Solution(BaseSolution):
     """Solutions for day 18 of 2015's Advent of Code."""
+
     def _process_data(self: Self) -> np.ndarray[bool]:
-        flag = '#'
+        flag = "#"
         rows = np.array([list(row) for row in self.lines])
         rows = rows == flag
         return rows
@@ -49,6 +50,7 @@ class Solution(BaseSolution):
             light_arr = _iteration(light_arr)
             light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
         return str(light_arr.sum())
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 18, 2015)

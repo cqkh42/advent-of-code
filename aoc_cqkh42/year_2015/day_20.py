@@ -24,5 +24,6 @@ class Solution(BaseSolution):
             houses[elf : (elf * 50) + 1 : elf] += elf * 11
         return str(np.argmax(houses > self.processed))
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 20, 2015)

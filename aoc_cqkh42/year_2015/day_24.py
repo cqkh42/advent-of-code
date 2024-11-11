@@ -40,5 +40,6 @@ class Solution(BaseSolution):
     def part_b(self):
         return self.solve(4)
 
+
 if __name__ == "__main__":
     submit_answers(Solution, 24, 2015)

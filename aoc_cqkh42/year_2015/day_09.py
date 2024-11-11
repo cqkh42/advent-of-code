@@ -21,8 +21,7 @@ class Solution(BaseSolution):
 
     def _process_data(self):
         graph = Graph(
-            (a, b, {"weight": c})
-            for a, b, c in self.parser.findall(self.input_)
+            (a, b, {"weight": c}) for a, b, c in self.parser.findall(self.input_)
         )
         distances = {
             sum(
