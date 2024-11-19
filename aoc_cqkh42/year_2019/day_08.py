@@ -2,7 +2,7 @@ from collections import Counter
 
 from aoc_cqkh42.helpers import aocr
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42.helpers.helpers import make_chunks
+import more_itertools
 
 
 def pixel_color(pixel):
@@ -14,7 +14,7 @@ def pixel_color(pixel):
 
 
 def flatten_message(message, width, height):
-    chunks = make_chunks(message, width * height)
+    chunks = more_itertools.chunked(message, width * height)
     pixels = zip(*chunks)
     final_message = (pixel_color(pixel) for pixel in pixels)
     return final_message
@@ -22,7 +22,7 @@ def flatten_message(message, width, height):
 
 class Solution(BaseSolution):
     def part_a(self):
-        chunks = make_chunks(self.input_, 25 * 6)
+        chunks = more_itertools.chunked(self.input_, 25 * 6)
         counters = [Counter(chunk) for chunk in chunks]
         scores = [(counter["0"], counter["1"] * counter["2"]) for counter in
                   counters]

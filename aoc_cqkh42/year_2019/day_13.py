@@ -1,7 +1,8 @@
 from collections import Counter
 
+import more_itertools
+
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42.helpers.helpers import make_chunks
 from aoc_cqkh42.year_2019.computer import Computer
 
 
@@ -11,8 +12,8 @@ class Solution(BaseSolution):
         computer = Computer(list(self.numbers), [])
         computer.run()
         results = computer.outputs
+        chunks = more_itertools.chunked(results, 3)
 
-        chunks = make_chunks(results, 3)
         tiles = [chunk[2] for chunk in chunks]
         result = Counter(tiles)[2]
         return result
@@ -28,7 +29,7 @@ class Solution(BaseSolution):
                 computer.run()
             except IndexError:
                 pass
-            chunks = make_chunks(computer.outputs, 3)
+            chunks = more_itertools.chunked(computer.outputs, 3)
             computer.outputs = []
             new_results = {tuple(i[:2]): i[2] for i in chunks}
             results.update(new_results)

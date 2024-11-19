@@ -1,76 +1,74 @@
-# TODO abstract dijkstra
-# TODO abstract search
 from dataclasses import dataclass, replace
-from typing import Self
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42.helpers.graph.dijkstra import dijkstra
+from aoc_cqkh42.helpers.graph.a_star import AStar, BaseNode
 
 
 class Solution(BaseSolution):
     def part_a(self):
         starting_state = State(PLAYER_HEALTH, *self.numbers, PLAYER_MANA)
-        return dijkstra(starting_state)
+        return AStar(starting_state).run()
 
     def part_b(self):
-        starting_state = StateB(PLAYER_HEALTH, *self.numbers, PLAYER_MANA)
-        return dijkstra(starting_state)
-
-    def _process_data(self: Self) -> str:
-        return self.input_
+        starting_state = State(PLAYER_HEALTH, *self.numbers, PLAYER_MANA, hard_mode=True)
+        return AStar(starting_state).run()
 
 
 PLAYER_HEALTH = 50
 PLAYER_MANA = 500
-EFFECT_STATS = {
+EFFECT_STATS = [
     # (duration, mana)
-    "shield": (6, 113),
-    "poison": (6, 173),
-    "recharge": (5, 229),
-}
+    ("shield", 6, 113),
+    ("poison", 6, 173),
+    ("recharge", 5, 229),
+]
 
+def effect_moves(node):
+    attacks = [
+        node.cast_effect(name, duration, mana) for name, duration, mana in
+        EFFECT_STATS
+        if not getattr(node, name) and node.mana >= mana
+    ]
+    return attacks
+
+def attack_moves(node):
+    new_states = (
+        node.cast_attack(*stats)
+        for stats in [(53, 4, 0), (73, 2, 2)]
+        if node.mana >= stats[0]
+    )
+    return new_states
 
 @dataclass(frozen=True)
-class State:
+class State(BaseNode):
     player_health: int
     boss_health: int
     boss_damage: int
     mana: int
-    used_mana: int = 0
+    hard_mode: bool = False
+    distance: int = 0
     poison: int = 0
     recharge: int = 0
     shield: int = 0
-    travelled: int = 0
-
-    def __eq__(self, other):
-        # TODO there is a way to get rid of these using eq and compare
-        return self.used_mana == other.used_mana
-
-    def __lt__(self, other):
-        return self.used_mana < other.used_mana
-
-    def __le__(self, other):
-        return self.used_mana <= other.used_mana
-
-    def __gt__(self, other):
-        return self.used_mana > other.used_mana
-
-    def __ge__(self, other):
-        return self.used_mana >= other.used_mana
-
-    @property
-    def player_armor(self):
-        return 7 * (self.shield > 0)
 
     def cast_effect(self, name, duration, mana):
         state = replace(
             self,
             mana=self.mana - mana,
-            used_mana=self.used_mana + mana,
+            distance=self.distance + mana,
             **{name: duration},
         )
         return state
+
+    def cast_attack(self, mana, boss_change=0, player_change=0):
+        return replace(
+            self,
+            player_health=self.player_health + player_change,
+            boss_health=self.boss_health - boss_change,
+            mana=self.mana - mana,
+            distance=self.distance + mana,
+        )
 
     def buff(self):
         return replace(
@@ -82,66 +80,36 @@ class State:
             shield=max(self.shield - 1, 0),
         )
 
-    def cast_attack(self, mana, boss_change=0, player_change=0):
-        return replace(
-            self,
-            player_health=self.player_health + player_change,
-            boss_health=self.boss_health - boss_change,
-            mana=self.mana - mana,
-            used_mana=self.used_mana + mana,
-        )
-
-    def attack_neighbours(self):
-        return (
-            self.cast_attack(*stats)
-            for stats in [(53, 4, 0), (73, 2, 2)]
-            if self.mana >= stats[0]
-        )
-
     def boss_attack(self):
+        armour = 7 * (self.shield > 0)
         return replace(
-            self,
-            player_health=self.player_health - self.boss_damage + self.player_armor,
+            self.buff(),
+            player_health=self.player_health - self.boss_damage + armour,
         )
 
     def is_target(self):
         return self.boss_health <= 0
 
-    def effect_moves(self):
-        for name, (duration, mana) in EFFECT_STATS.items():
-            a = self.buff()
-            if not getattr(a, name) and a.mana >= mana:
-                a = a.cast_effect(name, duration, mana).buff().boss_attack()
-                if a.player_health > 0 or a.is_target():
-                    yield a
-
-    def attack_moves(self):
-        b = self.buff()
-        new_states = b.attack_neighbours()
-        new_states = (state.buff() for state in new_states)
-        new_states = (state.boss_attack() for state in new_states)
+    def _n(self):
+        buffed = self.buff()
+        effect_states = effect_moves(buffed)
+        attack_states = attack_moves(buffed)
+        a =  *attack_states, *effect_states
+        new_states = (state.boss_attack() for state in a)
         new_states = (
-            state
-            for state in new_states
+            state for state in new_states
             if state.player_health > 0 or state.is_target()
         )
         return new_states
 
-    def _n(self):
-        effect_states = self.effect_moves()
-        attack_states = self.attack_moves()
-        return *attack_states, *effect_states
-
     def neighbours(self):
-        yield from self._n()
-
-
-class StateB(State):
-    def neighbours(self):
-        a = replace(self, player_health=self.player_health - 1)
-        if a.player_health <= 0:
-            return []
-        yield from a._n()
+        if not self.hard_mode:
+            yield from self._n()
+        else:
+            a = replace(self, player_health=self.player_health - 1)
+            if a.player_health <= 0:
+                return []
+            yield from a._n()
 
 
 if __name__ == "__main__":

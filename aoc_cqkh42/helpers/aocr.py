@@ -3,16 +3,12 @@ Parsing functions to identify characters from visual outputs.
 """
 from typing import Any, Generator, Iterable, List
 
+import more_itertools
+
 from aoc_cqkh42.helpers.aocr_mappings import mappings
 
 __all__ = ['letter', 'word']
 #todo stop all auto suggests
-
-def _chunks(lst, n) -> Generator[List, None, None]:
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield list(lst[i:i + n])
-
 
 def _format_row(row: Iterable[int], true=1) -> str:
     row = ''.join('#' if char == true else ' ' for char in row)
@@ -49,7 +45,7 @@ def word(characters: Iterable[Any], true=1) -> str:
     str
     """
     characters = [item for item in characters if item != '\n']
-    rows = _chunks(characters, len(characters)//6)
-    blocks = (_chunks(row, 5) for row in rows)
+    rows = more_itertools.chunked(characters, len(characters)//6)
+    blocks = (more_itertools.chunked(row, 5) for row in rows)
     answer = (letter(char, true) for char in zip(*blocks))
     return ''.join(answer)

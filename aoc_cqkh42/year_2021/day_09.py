@@ -5,14 +5,15 @@ import numpy as np
 from scipy.ndimage import generic_filter
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-from aoc_cqkh42.helpers.graph.bfs import BFS, BFSBaseState
+from aoc_cqkh42.helpers.graph.a_star import BaseNode, AStar
 
 
 @dataclass(frozen=True)
-class State(BFSBaseState):
+class State(BaseNode):
     x: int
     y: int
     arr: np.array = field(compare=False)
+    distance: int = field(compare=False, hash=False, default=1)
 
     def is_target(self):
         return False
@@ -51,7 +52,7 @@ class Solution(BaseSolution):
         peaks = np.argwhere(arr < neighbours)
 
         a = [State(*i, arr) for i in peaks]
-        a = [BFS(start) for start in a]
+        a = [AStar(start) for start in a]
         for i in a:
             i.run()
         a = [len(a.visited) for a in a]

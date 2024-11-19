@@ -50,6 +50,7 @@ class BaseSolution(ABC):
     @abstractmethod
     def part_a(self: Self) -> str | int:
         """Part a for the Solution."""
+        return None
 
     @abstractmethod
     def part_b(self: Self) -> str | int:
