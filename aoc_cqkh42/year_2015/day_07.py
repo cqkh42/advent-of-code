@@ -6,6 +6,7 @@ Read the full puzzle at https://adventofcode.com/2015/day/7
 __all__ = ["Solution"]
 import operator
 import re
+from collections import UserDict
 from dataclasses import dataclass
 
 from aoc_cqkh42 import submit_answers
@@ -59,10 +60,6 @@ class Solution(BaseSolution):
     """Solutions for day 7 of 2015's Advent of Code."""
 
     answer_a = None
-    regex = re.compile(r"([a-z0-9]*) ?(\w*) ?([a-z0-9]*) -> (\w+)")
-
-    def _process_data(self):
-        return self.regex.findall(self.input_)
 
     def part_a(self):
         register = Register(self.lines)

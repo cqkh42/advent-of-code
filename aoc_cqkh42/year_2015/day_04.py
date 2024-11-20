@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+#todo hash
 """Solutions for day 4 of 2015's Advent of Code.
 
 Read the full puzzle at https://adventofcode.com/2015/day/4

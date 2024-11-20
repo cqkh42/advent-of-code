@@ -10,7 +10,6 @@ import parse
 NUM_PARSER = parse.compile("{num:d}")
 
 
-@dataclass
 class BaseSolution(ABC):
     """Base solution to build solutions for each day.
 
@@ -20,12 +19,11 @@ class BaseSolution(ABC):
         processed: processed input data
         numbers: tuple of numbers in the input data
     """
-
-    input_: str
-
-    def __post_init__(self: Self) -> None:
+    def __init__(self: Self, input_) -> None:
         """Initialise the solution behind the scenes."""
+        self.input_ = input_
         self.processed: Any = self._process_data()
+
 
     @cached_property
     def lines(self: Self) -> list[str]:
@@ -47,14 +45,13 @@ class BaseSolution(ABC):
             result["num"] for result in NUM_PARSER.findall(self.input_)
         )
 
-    @abstractmethod
     def part_a(self: Self) -> str | int:
         """Part a for the Solution."""
         return None
 
-    @abstractmethod
     def part_b(self: Self) -> str | int:
         """Part b for the Solution."""
+        return None
 
     def _process_data(self: Self) -> Any:
         """Process raw input data.

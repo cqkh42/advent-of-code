@@ -40,7 +40,7 @@ class Solution(BaseSolution):
         light_arr = self.processed.copy()
         for _ in range(steps):
             light_arr = _iteration(light_arr)
-        return str(light_arr.sum())
+        return light_arr.sum()
 
     def part_b(self: Self, steps: int = 100) -> int:
         light_arr = self.processed
@@ -49,7 +49,7 @@ class Solution(BaseSolution):
         for _ in range(steps):
             light_arr = _iteration(light_arr)
             light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
-        return str(light_arr.sum())
+        return light_arr.sum()
 
 
 if __name__ == "__main__":
