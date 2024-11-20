@@ -4,7 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         asteroids = set()
         for y_index, row in enumerate(self.lines):
             for x_index, item in enumerate(row):
@@ -14,7 +14,7 @@ class Solution(BaseSolution):
 
     def _asteroids_in_sight(self, origin):
         in_sight = {}
-        for asteroid in self.processed:
+        for asteroid in self.parsed:
             angle = _angle(origin, asteroid)
             if angle not in in_sight:
                 in_sight[angle] = asteroid
@@ -29,14 +29,14 @@ class Solution(BaseSolution):
 
     def part_a(self):
         in_sight = (self._asteroids_in_sight(origin) for origin in
-                    self.processed)
+                    self.parsed)
         counts = (len(asteroids) for asteroids in in_sight)
         return max(counts)
 
     def part_b(self):
         in_sight = {
             origin: self._asteroids_in_sight(origin) for origin in
-            self.processed
+            self.parsed
         }
         centre = max(in_sight, key=lambda key: len(in_sight[key]))
         in_sight = in_sight[centre]

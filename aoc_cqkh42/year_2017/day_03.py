@@ -8,11 +8,11 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> int:
+    def _parse(self: Self) -> int:
         return int(self.input_)
 
     def part_a(self):
-        x, y = _coords(self.processed)
+        x, y = _coords(self.parsed)
         return abs(x) + abs(y)
 
     def part_b(self):
@@ -23,7 +23,7 @@ class Solution(BaseSolution):
             around = _around_point(x, y)
             total = sum(tracked[(x_, y_)] for x_, y_ in around)
             tracked[(x, y)] = total
-            if total > self.processed:
+            if total > self.parsed:
                 return total
 
 

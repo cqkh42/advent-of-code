@@ -8,7 +8,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         g = nx.Graph()
 
         for line in self.lines:
@@ -19,10 +19,10 @@ class Solution(BaseSolution):
         return g
 
     def part_a(self):
-        return sum(nx.has_path(self.processed, node, "0") for node in self.processed)
+        return sum(nx.has_path(self.parsed, node, "0") for node in self.parsed)
 
     def part_b(self):
-        return more_itertools.ilen(nx.connected_components(self.processed))
+        return more_itertools.ilen(nx.connected_components(self.parsed))
 
 
 if __name__ == "__main__":

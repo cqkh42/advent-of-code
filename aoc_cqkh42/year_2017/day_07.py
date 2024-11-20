@@ -47,27 +47,27 @@ def parse_line(line):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> frozendict[str, Program]:
+    def _parse(self: Self) -> frozendict[str, Program]:
         lines = [line.split(" -> ") for line in self.lines]
         return frozendict(parse_line(line) for line in lines)
 
     def part_a(self):
-        all_dependencies = (program.dependencies for program in self.processed.values())
+        all_dependencies = (program.dependencies for program in self.parsed.values())
         all_dependencies = itertools.chain.from_iterable(all_dependencies)
-        difference = set(self.processed).difference(all_dependencies)
+        difference = set(self.parsed).difference(all_dependencies)
         return more_itertools.one(difference)
 
     def part_b(self):
         stack_weights = {
-            program: stack_weight(program, self.processed) for program in self.processed
+            program: stack_weight(program, self.parsed) for program in self.parsed
         }
         for program in sorted(
-            self.processed,
-            key=lambda program: len(self.processed[program].dependencies),
+            self.parsed,
+            key=lambda program: len(self.parsed[program].dependencies),
             reverse=True,
         ):
             d = defaultdict(list)
-            dependencies = self.processed[program].dependencies
+            dependencies = self.parsed[program].dependencies
 
             for dependency in dependencies:
                 d[stack_weights[dependency]].append(dependency)
@@ -75,7 +75,7 @@ class Solution(BaseSolution):
                 bad_one = [i for i in d.values() if len(i) == 1][0][0]
                 good_one = [i for i in d.values() if len(i) != 1][0][0]
                 change_needed = stack_weights[good_one] - stack_weights[bad_one]
-                return self.processed[bad_one].weight + change_needed
+                return self.parsed[bad_one].weight + change_needed
 
 
 if __name__ == "__main__":

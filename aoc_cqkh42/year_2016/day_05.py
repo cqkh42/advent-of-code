@@ -5,7 +5,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         hashes = ""
         # placed_hashes = [''] * 8
         placed_hashes = defaultdict(list)
@@ -22,9 +22,9 @@ class Solution(BaseSolution):
                 return hashes, placed_hashes
 
     def part_a(self):
-        hashes = self.processed[0]
+        hashes = self.parsed[0]
         return hashes[:8]
 
     def part_b(self):
-        hashes = self.processed[1]
+        hashes = self.parsed[1]
         return "".join(hashes[index][0] for index in range(8))

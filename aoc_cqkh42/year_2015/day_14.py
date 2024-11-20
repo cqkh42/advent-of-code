@@ -31,19 +31,19 @@ class Reindeer:
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
-        reindeer = [Reindeer(**data.named) for data in PARSER.findall(self.input_)]
-        return reindeer
+    def _parse_line(self, line: str):
+        data = PARSER.search(line)
+        return Reindeer(**data.named)
 
     def part_a(self, time=TIME):
-        return max(deer.distance(time) for deer in self.processed)
+        return max(deer.distance(time) for deer in self.parsed_lines)
 
     def part_b(self, time=TIME):
         for second in range(1, time + 1):
-            highest_score = max(deer.distance(second) for deer in self.processed)
-            for deer in self.processed:
+            highest_score = max(deer.distance(second) for deer in self.parsed_lines)
+            for deer in self.parsed_lines:
                 deer.score += deer.distance(second) == highest_score
-        return max(self.processed, key=lambda deer: deer.score).score
+        return max(self.parsed_lines, key=lambda deer: deer.score).score
 
 
 if __name__ == "__main__":

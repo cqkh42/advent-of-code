@@ -33,19 +33,19 @@ def parse_line(line):
 class Solution(BaseSolution):
     """Solutions for day 2 of 2023's Advent of Code."""
 
-    def _process_data(self):
+    def _parse(self):
         return [parse_line(line) for line in self.lines]
 
     def part_a(self: Self) -> int:
         bag = np.array([12, 13, 14])
         return sum(
-            index for index, game in enumerate(self.processed, 1)
+            index for index, game in enumerate(self.parsed, 1)
             if (game <= bag).all(axis=1).all()
         )
 
     def part_b(self: Self) -> int:
         return sum(
-            np.product(game.max(axis=0)) for game in self.processed
+            np.product(game.max(axis=0)) for game in self.parsed
         )
 
 

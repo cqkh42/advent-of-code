@@ -9,7 +9,7 @@ class Solution(BaseSolution):
     coord_parser = parse.compile(r'{:d},{:d}')
     fold_parser = parse.compile(r'fold along {}={:d}')
 
-    def _process_data(self):
+    def _parse(self):
         coords = self.coord_parser.findall(self.input_)
         self.folds = [i for i in self.fold_parser.findall(self.input_)]
         x = max(b for a, b in self.folds if a == 'x')
@@ -23,9 +23,9 @@ class Solution(BaseSolution):
         axis, index = self.folds.pop(0)
         fold_axis = axis == 'x'
         if axis == 'y':
-            a, b = self.processed[:index, :], self.processed[index + 1:, :]
+            a, b = self.parsed[:index, :], self.parsed[index + 1:, :]
         else:
-            a, b = self.processed[:, :index], self.processed[:, index + 1:]
+            a, b = self.parsed[:, :index], self.parsed[:, index + 1:]
         b = np.flip(b, axis=fold_axis)
         self.parsed_data = a | b
 

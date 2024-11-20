@@ -11,7 +11,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     highest_seen = 0
 
-    def _process_data(self: Self):
+    def _parse(self: Self):
         mappings = {
             "inc": operator.add,
             "dec": operator.sub,
@@ -41,7 +41,7 @@ class Solution(BaseSolution):
 
     def part_a(self):
         registers = defaultdict(int)
-        for modify, instruction, amount, predicate, condition, value in self.processed:
+        for modify, instruction, amount, predicate, condition, value in self.parsed:
             if condition(registers[predicate], value):
                 new_value = instruction(registers[modify], amount)
                 self.highest_seen = max(self.highest_seen, new_value)

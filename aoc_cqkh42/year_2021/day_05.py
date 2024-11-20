@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         horizontal = []
         vertical = []
         diagonal = []
@@ -37,9 +37,9 @@ class Solution(BaseSolution):
         return horizontal + vertical, diagonal
 
     def part_a(self):
-        c = Counter(self.processed[0])
+        c = Counter(self.parsed[0])
         return sum(count > 1 for count in c.values())
 
     def part_b(self):
-        c = Counter(self.processed[0] + self.processed[1])
+        c = Counter(self.parsed[0] + self.parsed[1])
         return sum(count > 1 for count in c.values())

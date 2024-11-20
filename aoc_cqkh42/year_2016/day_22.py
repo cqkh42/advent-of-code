@@ -31,7 +31,7 @@ class Node:
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         rows = PARSER.findall(self.input_)
         cells = [Node(**cell) for cell in [(row.named["data"]) for row in rows]]
 
@@ -55,14 +55,14 @@ class Solution(BaseSolution):
         return graph
 
     def part_a(self):
-        return len(self.processed) - 1  # we exclude the empty node here
+        return len(self.parsed) - 1  # we exclude the empty node here
 
     def part_b(self):
-        max_x = max(self.processed, key=lambda x: x[0])[0]
+        max_x = max(self.parsed, key=lambda x: x[0])[0]
         empty = more_itertools.only(
-            k for k, v in self.processed.nodes.items() if v["used"] == 0
+            k for k, v in self.parsed.nodes.items() if v["used"] == 0
         )
-        a = networkx.shortest_path_length(self.processed, empty, (max_x, 0))
+        a = networkx.shortest_path_length(self.parsed, empty, (max_x, 0))
         return a + ((max_x - 1) * 5)
 
 

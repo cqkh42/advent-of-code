@@ -24,18 +24,7 @@ FUNC_MAP = {
 @dataclass
 class Register:
     def __init__(self, lines):
-        self.register = {}
-        for line in lines:
-            self.add_line(line)
-
-    def add_line(self, line):
-        match line.split():
-            case [wire_1, op, wire_2, "->", destination]:
-                self.register[destination] = (op, (wire_1, wire_2))
-            case [op, wire, "->", destination]:
-                self.register[destination] = (op, (wire,))
-            case [wire, "->", destination]:
-                self.register[destination] = wire
+        self.register = dict(lines)
 
     def resolve(self, key):
         match self[key]:
@@ -58,18 +47,23 @@ class Register:
 
 class Solution(BaseSolution):
     """Solutions for day 7 of 2015's Advent of Code."""
-
-    answer_a = None
-
     def part_a(self):
-        register = Register(self.lines)
-        self.answer_a = register.resolve("a")
-        return self.answer_a
+        register = Register(self.parsed_lines)
+        return register.resolve("a")
 
     def part_b(self):
-        register = Register(self.lines)
-        register["b"] = self.answer_a
+        register = Register(self.parsed_lines)
+        register["b"] = self.part_a()
         return register.resolve("a")
+
+    def _parse_line(self, line: str):
+        match line.split():
+            case [wire_1, op, wire_2, "->", destination]:
+                return destination, (op, (wire_1, wire_2))
+            case [op, wire, "->", destination]:
+                return destination, (op, (wire,))
+            case [wire, "->", destination]:
+                return destination, wire
 
 
 if __name__ == "__main__":

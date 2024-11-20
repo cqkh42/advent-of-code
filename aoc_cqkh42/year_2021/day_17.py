@@ -24,20 +24,20 @@ def x_location(x, n):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         return parse.search(r'x={x_min:d}..{x_max:d}, y={y_min:d}..{y_max:d}',
                             self.input_)
 
     def part_a(self):
-        v = abs(self.processed['y_min']) - 1
+        v = abs(self.parsed['y_min']) - 1
         return y_location(v, v)
 
     def part_b(self):
-        y_min = self.processed['y_min']
-        y_max = self.processed['y_max']
+        y_min = self.parsed['y_min']
+        y_max = self.parsed['y_max']
 
-        x_min = self.processed['x_min']
-        x_max = self.processed['x_max']
+        x_min = self.parsed['x_min']
+        x_max = self.parsed['x_max']
         # 3 columns for y
         # velocity, step, is_valid
 

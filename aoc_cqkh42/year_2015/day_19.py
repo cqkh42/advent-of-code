@@ -105,7 +105,7 @@ class Solution(BaseSolution):
     molecule = None
     rules = None
 
-    def _process_data(self):
+    def _parse(self):
         self.molecule = self.lines[-1]
         a = input_parser(re.findall(r"(.+) => (.+)", self.input_))
         self.rules = MultiDict(((v, k) for k, v in a))

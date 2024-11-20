@@ -30,5 +30,5 @@ class Solution(BaseSolution):
         )
         return count_total(intersections)
 
-    def _process_data(self: Self) -> str:
+    def _parse(self: Self) -> str:
         return self.input_

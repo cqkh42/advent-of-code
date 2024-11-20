@@ -23,20 +23,20 @@ def hex_to_bytes(char):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         a = [self.input_ + f"-{num}" for num in range(128)]
         b = [process_line(line) for line in a]
         return b
 
     def part_a(self, size=256):
-        return sum(line.count("1") for line in self.processed)
+        return sum(line.count("1") for line in self.parsed)
 
     def part_b(self):
         g = nx.grid_graph((128, 128))
         pairs = []
         for x in range(128):
             for y in range(128):
-                if self.processed[x][y] != "1":
+                if self.parsed[x][y] != "1":
                     pairs.append((x, y))
         g.remove_nodes_from(pairs)
         return more_itertools.ilen(nx.connected_components(g))

@@ -10,16 +10,16 @@ def is_caught(time, size):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> list[tuple[int, int]]:
+    def _parse(self: Self) -> list[tuple[int, int]]:
         lines = [line.split(": ") for line in self.lines]
         return [(int(l), int(r)) for l, r in lines]
 
     def part_a(self):
-        return sum(l * r for l, r in self.processed if is_caught(l, r))
+        return sum(l * r for l, r in self.parsed if is_caught(l, r))
 
     def part_b(self):
         for delay in itertools.count():
-            locations = ((l + delay, r) for l, r in self.processed)
+            locations = ((l + delay, r) for l, r in self.parsed)
             if any(is_caught(l, r) for l, r in locations):
                 continue
             else:

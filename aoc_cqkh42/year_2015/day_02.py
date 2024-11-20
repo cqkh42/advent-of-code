@@ -16,21 +16,13 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
-@dataclass
-class Present:
+class Present(list):
     """A present represented by 3 dimensions.
 
     Attributes:
-        dim_0: The first dimension
-        dim_1: The second dimension
-        dim_2: The third dimension
         paper: How much paper is needed for the present.
         ribbon: How much ribbon is needed for the present.
     """
-
-    dim_0: int
-    dim_1: int
-    dim_2: int
 
     def _pairs(self: Self) -> itertools.combinations:
         """Pairs of dimensions.
@@ -38,7 +30,7 @@ class Present:
         Returns:
             generator: iterable of pairs of dimensions
         """
-        return itertools.combinations([self.dim_0, self.dim_1, self.dim_2], 2)
+        return itertools.combinations(self, 2)
 
     @property
     def paper(self: Self) -> int:
@@ -58,7 +50,7 @@ class Present:
             int: the amount of ribbon needed for the present
         """
         perms = (sum(corner) for corner in self._pairs())
-        return min(perms) * 2 + math.prod([self.dim_0, self.dim_1, self.dim_2])
+        return min(perms) * 2 + math.prod(self)
 
 
 class Solution(BaseSolution):
@@ -70,7 +62,7 @@ class Solution(BaseSolution):
         Returns:
             Total paper needed for all presents
         """
-        return sum(present.paper for present in self.processed)
+        return sum(present.paper for present in self.parsed_lines)
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -78,20 +70,10 @@ class Solution(BaseSolution):
         Returns:
             Total ribbon needed for all presents
         """
-        return sum(present.ribbon for present in self.processed)
+        return sum(present.ribbon for present in self.parsed_lines)
 
-    def _process_data(self: Self) -> list[Present]:
-        """Build a list of Presents from raw input data.
-
-        Returns:
-            List of Presents
-        """
-        parser = parse.compile("{dim_0:d}x{dim_1:d}x{dim_2:d}")
-
-        return [
-            Present(dims["dim_0"], dims["dim_1"], dims["dim_2"])
-            for dims in parser.findall(self.input_)
-        ]
+    def _parse_line(self, line):
+        return Present(int(dim) for dim in line.split('x'))
 
 
 if __name__ == "__main__":

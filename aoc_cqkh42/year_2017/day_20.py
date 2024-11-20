@@ -28,7 +28,7 @@ class Particle:
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         parser = parse.compile("{:d}")
         particles = []
         for line in self.lines:
@@ -40,7 +40,7 @@ class Solution(BaseSolution):
         return particles
 
     def part_a(self):
-        a = [particle.distance_at(1_000_000) for particle in self.processed]
+        a = [particle.distance_at(1_000_000) for particle in self.parsed]
         return np.argmin(a)
 
     def part_b(self):
@@ -48,7 +48,7 @@ class Solution(BaseSolution):
         steps = []
         # try increasing this if it doesn't work
         for step in range(40):
-            a = [particle.position_at(step) for particle in self.processed]
+            a = [particle.position_at(step) for particle in self.parsed]
             vals, indices, counts = np.unique(
                 a, return_counts=True, return_index=True, axis=0
             )

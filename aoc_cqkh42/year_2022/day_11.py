@@ -29,7 +29,7 @@ class Solution(BaseSolution):
     If true: throw to monkey {true_monkey:d}
     If false: throw to monkey {false_monkey:d}""")
 
-    def _process_data(self):
+    def _parse(self):
         monkeys = []
         for monkey in self.parser.findall(self.input_):
             items = [int(num) for num in monkey['items'].split(', ')]
@@ -65,7 +65,7 @@ class Solution(BaseSolution):
         return container
 
     def generic_part(self, iters, func):
-        monkeys = deepcopy(self.processed)
+        monkeys = deepcopy(self.parsed)
         for _ in range(iters):
             monkeys = self.generic_turn(monkeys, func)
         counts = sorted((monkey.inspected for monkey in monkeys),
@@ -76,5 +76,5 @@ class Solution(BaseSolution):
         return self.generic_part(20, lambda x: x // 3)
 
     def part_b(self):
-        lcm = np.lcm.reduce([monkey.test for monkey in self.processed])
+        lcm = np.lcm.reduce([monkey.test for monkey in self.parsed])
         return self.generic_part(10_000, lambda x: x % lcm)

@@ -17,16 +17,16 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     """Solutions for day 1 of 2018's Advent of Code."""
 
-    def _process_data(self: Self) -> list[int, ...]:
+    def _parse(self: Self) -> list[int, ...]:
         return [int(num.strip('+')) for num in self.lines]
 
     def part_a(self: Self) -> int:
-        return sum(self.processed)
+        return sum(self.parsed)
 
     def part_b(self: Self) -> int:
         seen = {0}
         current = 0
-        for value in itertools.cycle(self.processed):
+        for value in itertools.cycle(self.parsed):
             current += value
             if current in seen:
                 return current

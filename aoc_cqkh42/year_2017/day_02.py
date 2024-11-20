@@ -6,14 +6,14 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> list[list[int]]:
+    def _parse(self: Self) -> list[list[int]]:
         return [[int(num) for num in row.split("\t")] for row in self.lines]
 
     def part_a(self):
-        return sum(_row_checksum(row) for row in self.processed)
+        return sum(_row_checksum(row) for row in self.parsed)
 
     def part_b(self):
-        return sum(_row_even_checksum(row) for row in self.processed)
+        return sum(_row_even_checksum(row) for row in self.parsed)
 
 
 def _row_checksum(row):

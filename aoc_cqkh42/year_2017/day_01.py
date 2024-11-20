@@ -3,12 +3,12 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         return [int(num) for num in self.input_]
 
     def solve_captcha(self, jump=1):
-        jumped = self.processed[jump:] + self.processed[:jump]
-        return sum(left for left, right in zip(self.processed, jumped) if left == right)
+        jumped = self.parsed[jump:] + self.parsed[:jump]
+        return sum(left for left, right in zip(self.parsed, jumped) if left == right)
 
     def part_a(self):
         return self.solve_captcha()

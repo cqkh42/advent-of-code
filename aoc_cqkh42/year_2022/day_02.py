@@ -8,7 +8,7 @@ class Solution(BaseSolution):
     score = {'rock': 1, 'paper': 2, 'scissors': 3}
     you_mapping = {'X': 'rock', 'Y': 'paper', 'Z': 'scissors'}
 
-    def _process_data(self):
+    def _parse(self):
         elf_mapping = {'A': 'rock', 'B': 'paper', 'C': 'scissors'}
         plays = (line.split() for line in self.lines)
         return [(elf_mapping[elf], you) for elf, you in plays]
@@ -24,7 +24,7 @@ class Solution(BaseSolution):
     def part_a(self):
         return sum(
             self.round_score(elf, self.you_mapping[you])
-            for elf, you in self.processed
+            for elf, you in self.parsed
         )
 
     def _find_your_b_play(self, elf, you):
@@ -39,5 +39,5 @@ class Solution(BaseSolution):
     def part_b(self):
         return sum(
             self.round_score(elf, self._find_your_b_play(elf, you))
-            for elf, you in self.processed
+            for elf, you in self.parsed
         )

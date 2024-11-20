@@ -38,7 +38,7 @@ class Number:
 class Solution(BaseSolution):
     """Solutions for day 3 of 2018's Advent of Code."""
 
-    def _process_data(self: Self) -> list[Number, ...]:
+    def _parse(self: Self) -> list[Number, ...]:
         num_regex = re.compile(r'(\d+)')
         numbers = []
         for y, line in enumerate(self.lines):
@@ -66,12 +66,12 @@ class Solution(BaseSolution):
 
     def part_a(self: Self) -> int:
         return sum(
-            num for num in self.processed if any(self._validate_2(num))
+            num for num in self.parsed if any(self._validate_2(num))
         )
 
     def part_b(self: Self) -> int:
         gears = defaultdict(list)
-        for num in self.processed:
+        for num in self.parsed:
             for coords in self._validate_2(num):
                 gears[coords].append(num)
         return sum(np.prod(nums) for nums in gears.values() if len(nums) == 2)

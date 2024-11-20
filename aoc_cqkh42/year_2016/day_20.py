@@ -4,7 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         parser = parse.compile("{:d}-{:d}")
         rs = parser.findall(self.input_)
         rs = sorted([(a, b) for a, b in rs], key=lambda x: x[0])
@@ -23,9 +23,9 @@ class Solution(BaseSolution):
         return ranges
 
     def part_a(self):
-        first_range = self.processed[0]
+        first_range = self.parsed[0]
         return max(first_range) + 1
 
     def part_b(self):
-        bad_count = sum(len(i) for i in self.processed)
+        bad_count = sum(len(i) for i in self.parsed)
         return 4294967295 + 1 - bad_count

@@ -51,16 +51,16 @@ class Puzzle:
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         return [Puzzle.from_line(line) for line in self.lines]
 
     def part_a(self):
         good_sizes = {2, 3, 4, 7}
         a = [
             sum(len(part) in good_sizes for part in puzzle.right)
-            for puzzle in self.processed
+            for puzzle in self.parsed
         ]
         return sum(a)
 
     def part_b(self):
-        return sum(puzzle._solve() for puzzle in self.processed)
+        return sum(puzzle._solve() for puzzle in self.parsed)

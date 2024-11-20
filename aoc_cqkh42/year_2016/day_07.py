@@ -26,15 +26,15 @@ class IP:
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         ips = [IP(ip) for ip in self.lines]
         return ips
 
     def part_a(self):
-        return sum(ip.tls() for ip in self.processed)
+        return sum(ip.tls() for ip in self.parsed)
 
     def part_b(self):
-        return sum(ip.ssl() for ip in self.processed)
+        return sum(ip.ssl() for ip in self.parsed)
 
 
 abba = regex.compile(r"(\w)(?!\1)(\w)\2\1")

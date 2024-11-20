@@ -30,20 +30,20 @@ def _iteration(lights):
 class Solution(BaseSolution):
     """Solutions for day 18 of 2015's Advent of Code."""
 
-    def _process_data(self: Self) -> np.ndarray[bool]:
-        flag = "#"
-        rows = np.array([list(row) for row in self.lines])
-        rows = rows == flag
-        return rows
+    def _parse(self: Self) -> np.ndarray[bool]:
+        return np.array(self.parsed_lines)
+
+    def _parse_line(self, line: str):
+        return [element == '#' for element in line]
 
     def part_a(self: Self, steps: int = 100) -> int:
-        light_arr = self.processed.copy()
+        light_arr = self.parsed.copy()
         for _ in range(steps):
             light_arr = _iteration(light_arr)
         return light_arr.sum()
 
     def part_b(self: Self, steps: int = 100) -> int:
-        light_arr = self.processed
+        light_arr = self.parsed
         light_arr[[0, 0, -1, -1], [0, -1, 0, -1]] = 1
 
         for _ in range(steps):

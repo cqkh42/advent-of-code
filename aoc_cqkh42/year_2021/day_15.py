@@ -28,7 +28,7 @@ def make_big_square(start):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         array = []
         for line in self.lines:
             line = [int(i) for i in line]
@@ -48,16 +48,16 @@ class Solution(BaseSolution):
 
     def part_a(self):
         target = (len(self.lines) - 1, len(self.lines) - 1)
-        a_star = nx.shortest_paths.astar_path(self.processed, (0, 0), target,
+        a_star = nx.shortest_paths.astar_path(self.parsed, (0, 0), target,
                                               heuristic=heuristic,
                                               weight='weight')
         return sum(
-            self.processed.edges[i]['weight'] for i in zip(a_star, a_star[1:]))
+            self.parsed.edges[i]['weight'] for i in zip(a_star, a_star[1:]))
 
     def part_b(self):
         target = ((len(self.lines) * 5) - 1, (len(self.lines) * 5) - 1)
-        a_star = nx.shortest_paths.astar_path(self.processed, (0, 0), target,
+        a_star = nx.shortest_paths.astar_path(self.parsed, (0, 0), target,
                                               heuristic=heuristic,
                                               weight='weight')
         return sum(
-            self.processed.edges[i]['weight'] for i in zip(a_star, a_star[1:]))
+            self.parsed.edges[i]['weight'] for i in zip(a_star, a_star[1:]))

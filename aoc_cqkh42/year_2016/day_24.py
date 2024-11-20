@@ -16,7 +16,7 @@ def calc_distance(path, distances):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         a = np.array([list(line) for line in self.input_.split()])
 
         x = a.shape

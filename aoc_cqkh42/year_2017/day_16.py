@@ -38,7 +38,7 @@ class Solution(BaseSolution):
     program_history = [ascii_lowercase[:16]]
     num_iterations = 0
 
-    def _process_data(self: Self) -> dict[int, list[int]]:
+    def _parse(self: Self) -> dict[int, list[int]]:
         p = parse.compile(r"{:d}")
         instructions = []
         for instruction in self.input_.split(","):
@@ -57,7 +57,7 @@ class Solution(BaseSolution):
         return instructions
 
     def _do_iterations(self):
-        for instruction in self.processed:
+        for instruction in self.parsed:
             self.programs = instruction(self.programs)
         self.program_history.append("".join(self.programs))
         self.num_iterations += 1

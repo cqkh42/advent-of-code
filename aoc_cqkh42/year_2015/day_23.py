@@ -36,7 +36,7 @@ class Register:
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         instructions = [
             instr.replace(",", "").replace("+", "").split() for instr in self.lines
         ]
@@ -48,13 +48,13 @@ class Solution(BaseSolution):
 
     def part_a(self, target="b"):
         registers = {"a": 0, "b": 0}
-        r = Register(registers, self.processed)
+        r = Register(registers, self.parsed)
         r.run()
         return r.reg[target]
 
     def part_b(self, target="b"):
         registers = {"a": 1, "b": 0}
-        r = Register(registers, self.processed)
+        r = Register(registers, self.parsed)
         r.run()
         return r.reg[target]
 

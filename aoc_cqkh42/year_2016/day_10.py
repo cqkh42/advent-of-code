@@ -29,7 +29,7 @@ class Solution(BaseSolution):
     instructions = {}
     outputs = {}
 
-    def _process_data(self):
+    def _parse(self):
         v = parse.findall("value {:d} goes to bot {:d}", self.input_)
         for v_, b in v:
             self.bots[b].add(v_)

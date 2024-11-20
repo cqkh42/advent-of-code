@@ -76,11 +76,11 @@ def fuel_with_ore(reactions, ore):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         return extract_conversions(self.input_)
 
     def part_a(self):
-        return ore_needed(self.processed, 1)
+        return ore_needed(self.parsed, 1)
 
     def part_b(self):
-        return fuel_with_ore(self.processed, 1e12)
+        return fuel_with_ore(self.parsed, 1e12)

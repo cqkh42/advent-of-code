@@ -14,7 +14,7 @@ class Solution(BaseSolution):
         for count, from_, to in self.parser.findall(self.input_):
             yield count, from_ - 1, to - 1
 
-    def _process_data(self):
+    def _parse(self):
         lines, _ = more_itertools.split_at(self.lines, lambda line: line == '')
         stacks = (stack for stack in zip(*lines) if stack[-1] != ' ')
         queues = [
@@ -24,7 +24,7 @@ class Solution(BaseSolution):
         return queues
 
     def move_boxes(self, lifo=True):
-        queues = deepcopy(self.processed)
+        queues = deepcopy(self.parsed)
         for count, from_, to in self.instructions:
             if lifo:
                 queues[to].extend(reversed(queues[from_][-count:]))

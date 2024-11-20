@@ -37,13 +37,13 @@ class Claim:
 class Solution(BaseSolution):
     """Solutions for day 3 of 2018's Advent of Code."""
 
-    def _process_data(self: Self) -> list[Claim]:
+    def _parse(self: Self) -> list[Claim]:
         return [Claim(*row) for row in parser.findall(self.input_)]
 
     @cached_property
     def counter(self):
         k = list(more_itertools.flatten(
-            claim.squares for claim in self.processed))
+            claim.squares for claim in self.parsed))
         return collections.Counter(k)
 
     def part_a(self: Self) -> int:
@@ -51,7 +51,7 @@ class Solution(BaseSolution):
 
     def part_b(self: Self) -> str:
         c = {a for a, b in self.counter.items() if b == 1}
-        for claim in self.processed:
+        for claim in self.parsed:
             if claim.squares.issubset(c):
                 return claim.claim
 

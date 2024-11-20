@@ -11,19 +11,6 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
-def _decode_str(string: str) -> str:
-    replacements = [
-        (r'^"', ""),
-        (r'"$', ""),
-        (r"\\\\", r"\\"),
-        (r'\\"', '"'),
-        (r"\\x[a-f0-9]{2}", "x"),
-    ]
-    for regex, repl in replacements:
-        string = re.sub(regex, repl, string)
-    return string
-
-
 class Solution(BaseSolution):
     """Solutions for day 8 of 2015's Advent of Code."""
 
@@ -34,9 +21,7 @@ class Solution(BaseSolution):
             Number of characters of code for string literals minus
             number of characters for the values of the strings
         """
-        code_len = len(self.input_) - len(self.lines) + 1
-        decoded = (len(_decode_str(line)) for line in self.lines)
-        return code_len - sum(decoded)
+        return len(self.input_) - len(self.lines) + 1 - sum(self.parsed_lines)
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -45,6 +30,18 @@ class Solution(BaseSolution):
             2 * number of lines + number of " + number of \
         """
         return 2 * len(self.lines) + self.input_.count('"') + self.input_.count("\\")
+
+    def _parse_line(self, line: str):
+        replacements = [
+            (r'^"', ""),
+            (r'"$', ""),
+            (r"\\\\", r"\\"),
+            (r'\\"', '"'),
+            (r"\\x[a-f0-9]{2}", "x"),
+        ]
+        for regex, repl in replacements:
+            line = re.sub(regex, repl, line)
+        return len(line)
 
 
 if __name__ == "__main__":

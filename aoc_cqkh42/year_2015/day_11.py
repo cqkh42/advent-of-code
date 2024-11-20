@@ -7,7 +7,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         ords = [ord(char) - 97 for char in self.input_]
         for index, char in enumerate(ords):
             if char in [8, 14, 11]:
@@ -23,17 +23,17 @@ class Solution(BaseSolution):
         return self.next_valid_password()
 
     def cycle_password(self):
-        for index in range(len(self.processed) - 1, -1, -1):
-            if num := self.processed[index] != 25:
-                self.processed[index] += 1 + (num in [7, 13, 10])
+        for index in range(len(self.parsed) - 1, -1, -1):
+            if num := self.parsed[index] != 25:
+                self.parsed[index] += 1 + (num in [7, 13, 10])
                 break
-            self.processed[index] = 0
+            self.parsed[index] = 0
 
     def next_valid_password(self):
         self.cycle_password()
-        while not _is_valid(self.processed):
+        while not _is_valid(self.parsed):
             self.cycle_password()
-        return "".join(chr(index + 97) for index in self.processed)
+        return "".join(chr(index + 97) for index in self.parsed)
 
 
 def _is_valid(password):

@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         first = re.sub(r"!.", "", self.input_)
         second = re.sub(r"<(.*?)>", "", first)
         return second
@@ -14,7 +14,7 @@ class Solution(BaseSolution):
     def part_a(self):
         total = 0
         current_value = 1
-        for char in self.processed:
+        for char in self.parsed:
             if char == "{":
                 total += current_value
                 current_value += 1

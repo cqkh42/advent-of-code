@@ -10,7 +10,7 @@ from aoc_cqkh42.helpers.graph import a_star
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         indices = re.findall(r" (\w+) generator", self.input_)
 
         generators = [0 for _ in range(len(indices))]
@@ -29,12 +29,12 @@ class Solution(BaseSolution):
         return g
 
     def part_a(self):
-        z = a_star.AStar(self.processed)
+        z = a_star.AStar(self.parsed)
         return z.run()
 
     def part_b(self):
-        gen = [*self.processed.generators, 0, 0]
-        chips = [*self.processed.chips, 0,0]
+        gen = [*self.parsed.generators, 0, 0]
+        chips = [*self.parsed.chips, 0, 0]
         start = Node(gen, chips, 0, 0)
         z = a_star.AStar(start)
         return z.run()

@@ -11,14 +11,14 @@ def sort_words(phrase):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> list[list[str]]:
+    def _parse(self: Self) -> list[list[str]]:
         return [line.split() for line in self.lines]
 
     def part_a(self):
-        return sum(more_itertools.all_unique(line) for line in self.processed)
+        return sum(more_itertools.all_unique(line) for line in self.parsed)
 
     def part_b(self):
-        sorted_ = (sort_words(phrase) for phrase in self.processed)
+        sorted_ = (sort_words(phrase) for phrase in self.parsed)
         return sum(more_itertools.all_unique(line) for line in sorted_)
 
 

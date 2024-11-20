@@ -36,7 +36,7 @@ class Room:
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         rooms = list(parse.findall(r"{:D}-{:d}[{:w}]", self.input_))
         rooms = [Room(*room) for room in rooms]
         checksummed = (room for room in rooms if room.valid_checksum())
@@ -46,7 +46,7 @@ class Solution(BaseSolution):
         return r
 
     def part_a(self):
-        return sum(self.processed.values())
+        return sum(self.parsed.values())
 
     def part_b(self):
-        return self.processed["northpole object storage"]
+        return self.parsed["northpole object storage"]

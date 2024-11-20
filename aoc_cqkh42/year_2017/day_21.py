@@ -25,7 +25,7 @@ def do_three_iteration(start, mappings):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
        ...
 
     def part_a(self, iterations):

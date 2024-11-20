@@ -26,9 +26,6 @@ class Solution(BaseSolution):
         data = [json.loads(self.input_)]
         return recursive_sum(data)
 
-    def _process_data(self: Self) -> str:
-        return self.input_
-
 
 if __name__ == "__main__":
     submit_answers(Solution, 12, 2015)

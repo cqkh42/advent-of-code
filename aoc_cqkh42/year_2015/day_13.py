@@ -1,37 +1,48 @@
 import itertools
+from collections import defaultdict
 
 import networkx as nx
 import parse
+import more_itertools
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-PARSER = parse.compile(r"{:w} would {:d} happiness units by sitting next to {:w}.")
+
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    PARSER = parse.compile(
+        r"{:w} would {:d} happiness units by sitting next to {:w}.")
+    def _parse(self):
+        a = defaultdict(int)
+        for persons, value in self.parsed_lines:
+            a[persons] += value
         graph = nx.Graph()
-        data = self.input_.replace("lose ", "-").replace("gain ", "")
-        matches = PARSER.findall(data)
-        for a, change, b in matches:
-            if graph.has_edge(a, b):
-                graph.edges[a, b]["weight"] += change
-            else:
-                graph.add_edge(a, b, weight=change)
+        for (person_a, person_b), val in a.items():
+            graph.add_edge(person_a, person_b, weight=val)
 
-        perms = ([*i, i[0]] for i in itertools.permutations(graph))
-        weights = (
-            [graph.edges[u, v]["weight"] for u, v in zip(path, path[1:])]
-            for path in perms
-        )
-        return [(sum(weight), min(weight)) for weight in weights]
+        circle_routes = ([*i, i[0]] for i in itertools.permutations(graph))
+        paths = [
+            [
+                graph.edges[start, end]["weight"]
+                for start, end in more_itertools.pairwise(route)
+            ]
+            for route in circle_routes
+        ]
+        return [(sum(path), min(path)) for path in paths]
+
+    def _parse_line(self, line: str):
+        a = line.replace("lose ", "-").replace("gain ", "")
+        p_1, val, p_2 = self.PARSER.search(a)
+        return frozenset({p_1, p_2}), val
+
 
     def part_a(self):
-        return max(self.processed)[0]
+        return max(self.parsed)[0]
 
     def part_b(self):
-        return max(weight - lowest for weight, lowest in self.processed)
+        return max(weight - lowest for weight, lowest in self.parsed)
 
 
 if __name__ == "__main__":

@@ -28,13 +28,13 @@ class Solution(BaseSolution):
             int that creates a hash ending in `sequence`
         """
         for answer in self._salt:
-            hash_ = self.processed.copy()
+            hash_ = self.parsed.copy()
             hash_.update(f"{answer}".encode())
             if hash_.hexdigest().startswith(sequence):
                 return answer
         return self._salt
 
-    def _process_data(self: Self) -> md5:
+    def _parse(self: Self) -> md5:
         """Create a md5 of the input data.
 
         Returns:

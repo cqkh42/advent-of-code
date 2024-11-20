@@ -42,20 +42,20 @@ def parse_line(line):
 class Solution(BaseSolution):
     """Solutions for day 4 of 2023's Advent of Code."""
 
-    def _process_data(self: Self) -> tuple[int, ...]:
+    def _parse(self: Self) -> tuple[int, ...]:
         return tuple(parse_line(line) for line in self.lines)
 
     def part_a(self: Self) -> int:
         return sum(
             2 ** (intersection - 1)
-            for intersection in self.processed if intersection
+            for intersection in self.parsed if intersection
         )
 
     def part_b(self: Self) -> int:
         return sum(
-            _play_intersection(num, intersection, self.processed)
+            _play_intersection(num, intersection, self.parsed)
             for num, intersection in
-            more_itertools.always_reversible(enumerate(self.processed))
+            more_itertools.always_reversible(enumerate(self.parsed))
         )
 
 

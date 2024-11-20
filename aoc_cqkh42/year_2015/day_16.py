@@ -1,51 +1,59 @@
+from collections import UserDict
+from dataclasses import dataclass
+from operator import eq, gt, lt
+from typing import Callable
+
 import parse
+from functools import cached_property
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-PARSER = parse.compile("{:w}: {:d}, {:w}: {:d}, {:w}: {:d}")
+PARSER = parse.compile("{:w}: {:d}")
 
 
-# noinspection SpellCheckingInspection
-AUNTIE = {
-    "children": 3,
-    "cats": 7,
-    "samoyeds": 2,
-    "pomeranians": 3,
-    "akitas": 0,
-    "vizslas": 0,
-    "goldfish": 5,
-    "trees": 3,
-    "cars": 2,
-    "perfumes": 1,
-}
+class Sue(UserDict):
+    auntie = {
+        "children": 3,
+        "cats": 7,
+        "samoyeds": 2,
+        "pomeranians": 3,
+        "akitas": 0,
+        "vizslas": 0,
+        "goldfish": 5,
+        "trees": 3,
+        "cars": 2,
+        "perfumes": 1,
+    }
 
+    @cached_property
+    def intersection(self):
+        return set(self).intersection(self.auntie)
 
-# noinspection SpellCheckingInspection
-def _good_sue(sue):
-    equals = ["children", "samoyeds", "akitas", "vizslas", "cars", "perfumes"]
-    equals = all(sue.get(key, AUNTIE[key]) == AUNTIE[key] for key in equals)
+    def is_good(self):
+        return all(self[item] == self.auntie[item] for item in self.intersection)
 
-    gt = ["cats", "trees"]
-    gt = all(sue.get(key, float("inf")) > AUNTIE[key] for key in gt)
-
-    lt = ["pomeranians", "goldfish"]
-    lt = all(sue.get(key, -1) < AUNTIE[key] for key in lt)
-    return equals and gt and lt
+    def is_real_sue(self):
+        ops = {
+            'cats': gt,
+            'trees': gt,
+            'pomeranians': lt,
+            'goldfish': lt
+        }
+        return all(ops.get(key, eq)(self[key], self.auntie[key]) for key in self.intersection)
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
-        sue_list = PARSER.findall(self.input_)
-        sues = [zip(sue[::2], sue[1::2]) for sue in sue_list]
-        return [dict(sue) for sue in sues]
+    def _parse_line(self, line: str):
+        sue = PARSER.findall(line)
+        return Sue(dict(sue))
 
     def part_a(self):
-        sue_is_good = [sue.items() <= AUNTIE.items() for sue in self.processed]
+        sue_is_good = [sue.is_good() for sue in self.parsed_lines]
         return sue_is_good.index(True) + 1
 
     def part_b(self):
-        is_good_sue = [_good_sue(sue) for sue in self.processed]
+        is_good_sue = [sue.is_real_sue() for sue in self.parsed_lines]
         return is_good_sue.index(True) + 1
 
 

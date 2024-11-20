@@ -12,7 +12,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     parser = parse.compile(r'{:l} -> {:l}')
 
-    def _process_data(self):
+    def _parse(self):
         self.original_polymer = self.lines[0]
         p = frozendict(self.parser.findall(self.input_))
         self.polymer = Counter(
@@ -22,8 +22,8 @@ class Solution(BaseSolution):
     def run(self):
         new = defaultdict(int)
         for (a, b), v in self.polymer.items():
-            l = a + self.processed[a + b]
-            r = self.processed[a + b] + b
+            l = a + self.parsed[a + b]
+            r = self.parsed[a + b] + b
             new[l] += v
             new[r] += v
         self.polymer = new

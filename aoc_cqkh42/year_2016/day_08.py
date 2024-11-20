@@ -29,7 +29,7 @@ class Solution(BaseSolution):
         Returns:
             Count of 'lit' pixels
         """
-        return self.processed.sum()
+        return self.parsed.sum()
 
     def part_b(self: Self) -> str:
         """Answer part a.
@@ -37,9 +37,9 @@ class Solution(BaseSolution):
         Returns:
             Word spelled by the pixels
         """
-        return word(itertools.chain.from_iterable(self.processed))
+        return word(itertools.chain.from_iterable(self.parsed))
 
-    def _process_data(self: Self) -> np.array:
+    def _parse(self: Self) -> np.array:
         """Create the post-processed screen.
 
         Returns:

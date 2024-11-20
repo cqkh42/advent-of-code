@@ -16,13 +16,13 @@ class BaseSolution(ABC):
     Attributes:
         input_: raw input data
         lines: list of lines in the input data
-        processed: processed input data
+        parsed: processed input data
         numbers: tuple of numbers in the input data
     """
     def __init__(self: Self, input_) -> None:
         """Initialise the solution behind the scenes."""
         self.input_ = input_
-        self.processed: Any = self._process_data()
+        self.parsed: Any = self._parse()
 
 
     @cached_property
@@ -53,10 +53,18 @@ class BaseSolution(ABC):
         """Part b for the Solution."""
         return None
 
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         """Process raw input data.
 
         Returns:
             Processed data
         """
         return self.input_
+
+    @cached_property
+    def parsed_lines(self) -> tuple[Any, ...]:
+        return tuple(self._parse_line(line) for line in self.lines)
+
+    @staticmethod
+    def _parse_line(self, line: str):
+        return line

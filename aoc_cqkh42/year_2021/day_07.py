@@ -16,18 +16,18 @@ def tri_cost_of_point(numbers, point):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         return tuple(int(num) for num in self.input_.split(','))
 
     def part_a(self):
-        median = np.median(self.processed).astype(int)
-        fuel_cost = [abs(num - median) for num in self.processed]
+        median = np.median(self.parsed).astype(int)
+        fuel_cost = [abs(num - median) for num in self.parsed]
         return sum(fuel_cost)
 
     def part_b(self):
-        start = min(self.processed)
-        end = max(self.processed) + 1
+        start = min(self.parsed)
+        end = max(self.parsed) + 1
         for point in range(start, end):
-            this_cost = tri_cost_of_point(self.processed, point)
-            if tri_cost_of_point(self.processed, point + 1) > this_cost:
+            this_cost = tri_cost_of_point(self.parsed, point)
+            if tri_cost_of_point(self.parsed, point + 1) > this_cost:
                 return this_cost

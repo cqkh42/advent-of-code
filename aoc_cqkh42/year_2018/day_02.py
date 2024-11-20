@@ -18,12 +18,12 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     """Solutions for day 2 of 2018's Advent of Code."""
 
-    def _process_data(self: Self) -> dict[str, collections.Counter]:
+    def _parse(self: Self) -> dict[str, collections.Counter]:
         return {line:collections.Counter(line) for line in self.lines}
 
     def part_a(self: Self) -> int:
-        a = len([a for a in self.processed.values() if 2 in a.values()])
-        b = len([i for i in self.processed.values() if 3 in i.values()])
+        a = len([a for a in self.parsed.values() if 2 in a.values()])
+        b = len([i for i in self.parsed.values() if 3 in i.values()])
         return a*b
 
     def part_b(self: Self) -> str:

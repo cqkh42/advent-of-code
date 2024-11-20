@@ -32,7 +32,7 @@ def data():
 '<{o"i!a,<{i<a>',
 ])
 def test_garbage_removal(input_):
-    assert day_09.Solution(input_).processed == ''
+    assert day_09.Solution(input_).parsed == ''
 
 
 @pytest.mark.parametrize('input_, output', [
@@ -46,7 +46,7 @@ def test_garbage_removal(input_):
     ('{{<!>},{<!>},{<!>},{<a>}}', 2)
 ])
 def test_count_groups(input_, output):
-    assert day_09.Solution(input_).processed.count('{') == output
+    assert day_09.Solution(input_).parsed.count('{') == output
 
 
 @pytest.mark.parametrize('input_, output', [

@@ -25,21 +25,22 @@ def get_ratios(num_ingredients):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
-        ingredients = PARSER.findall(self.input_)
-        ingredients = [np.array(list(i)) for i in ingredients]
-        ingredients = np.stack(ingredients)
-
+    def _parse(self):
+        ingredients = np.stack(self.parsed_lines)
         recipes = get_ratios(len(ingredients)) * ingredients
         return recipes.sum(-2)
 
+    def _parse_line(self, line: str):
+        return list(PARSER.search(line))
+
+    def output_answer(self, recipe):
+        return recipe.clip(min=0).prod(1).max()
+
     def part_a(self):
-        recipe = self.processed[:, :-1]
-        return str(recipe.clip(min=0).prod(1).max())
+        return self.output_answer(self.parsed[:, :-1])
 
     def part_b(self):
-        recipe = self.processed[self.processed[:, -1] == 500, :-1]
-        return str(recipe.clip(min=0).prod(1).max())
+        return self.output_answer(self.parsed[self.parsed[:, -1] == 500, :-1])
 
 
 if __name__ == "__main__":

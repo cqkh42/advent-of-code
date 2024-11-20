@@ -10,12 +10,12 @@ class Solution(BaseSolution):
     a_outputs = []
     b_outputs = []
 
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         a, b = parse.findall("{:d}", self.input_)
         return a[0], b[0]
 
     def part_a(self):
-        a, b = self.processed
+        a, b = self.parsed
         mod = 2147483647
         a_factor_post_mod = 16807 % mod
         b_factor_post_mod = 48271 % mod

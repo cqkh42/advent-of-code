@@ -19,10 +19,8 @@ class Solution(BaseSolution):
 
     parser = parse.compile(r"{:w} to {:w} = {:d}")
 
-    def _process_data(self):
-        graph = Graph(
-            (a, b, {"weight": c}) for a, b, c in self.parser.findall(self.input_)
-        )
+    def _parse(self):
+        graph = Graph(self.parsed_lines)
         distances = {
             sum(
                 graph.edges[start, end]["weight"]
@@ -32,11 +30,15 @@ class Solution(BaseSolution):
         }
         return distances
 
+    def _parse_line(self, line: str):
+        a, b, c = self.parser.search(line)
+        return a, b, {"weight": c}
+
     def part_a(self):
-        return min(self.processed)
+        return min(self.parsed)
 
     def part_b(self):
-        return max(self.processed)
+        return max(self.parsed)
 
 
 if __name__ == "__main__":

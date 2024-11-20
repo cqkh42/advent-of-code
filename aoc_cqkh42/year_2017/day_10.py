@@ -62,7 +62,7 @@ def reduce_xor(sequence):
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         ...
 
     def part_a(self, size=256):

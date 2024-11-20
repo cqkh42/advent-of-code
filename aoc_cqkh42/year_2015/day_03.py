@@ -35,7 +35,7 @@ class Solution(BaseSolution):
         Returns:
             Number of unique coordinates in the path
         """
-        return len(_unique_coords(self.processed))
+        return len(_unique_coords(self.parsed))
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -44,13 +44,13 @@ class Solution(BaseSolution):
             Number of unique coordinates, assuming there are two
             paths zipped together.
         """
-        santa = _unique_coords(self.processed[::2])
-        robot = _unique_coords(self.processed[1::2])
+        santa = _unique_coords(self.parsed[::2])
+        robot = _unique_coords(self.parsed[1::2])
         all_coords = np.concatenate((santa, robot))
         unique = np.unique(all_coords, axis=0)
         return len(unique)
 
-    def _process_data(self: Self) -> np.array:
+    def _parse(self: Self) -> np.array:
         """Turn glyphs into (x, y) steps.
 
         Returns:

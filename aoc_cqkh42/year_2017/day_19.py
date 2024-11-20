@@ -10,7 +10,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         g = nx.Graph()
 
         chars = defaultdict(str)
@@ -49,7 +49,7 @@ class Solution(BaseSolution):
         return longest
 
     def part_a(self):
-        return "".join(self.chars[i] for i in self.processed if self.chars[i].isalpha())
+        return "".join(self.chars[i] for i in self.parsed if self.chars[i].isalpha())
 
     def part_b(self):
         edge_dict = {}
@@ -57,7 +57,7 @@ class Solution(BaseSolution):
             edge_dict[(a, b)] = c["weight"]
             edge_dict[(b, a)] = c["weight"]
         distance = 0
-        for a, b in itertools.pairwise(self.processed):
+        for a, b in itertools.pairwise(self.parsed):
             distance += edge_dict[(a, b)]
         return distance
 

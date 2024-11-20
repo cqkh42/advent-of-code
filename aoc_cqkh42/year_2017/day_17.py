@@ -7,11 +7,11 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     index = 0
 
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         return int(self.input_) + 1
 
     def _do_step(self, step):
-        self.index += self.processed
+        self.index += self.parsed
         self.index %= step
 
     def part_a(self):

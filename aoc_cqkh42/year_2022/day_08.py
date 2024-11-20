@@ -28,7 +28,7 @@ def visible_row(row):
 
 
 class Solution(BaseSolution):
-    def _process_data(self):
+    def _parse(self):
         forest = []
         for row in self.lines:
             r = [int(i) for i in row]
@@ -36,14 +36,14 @@ class Solution(BaseSolution):
         return forest
 
     def part_a(self):
-        seen = np.zeros_like(self.processed)
-        for index, row in enumerate(self.processed):
+        seen = np.zeros_like(self.parsed)
+        for index, row in enumerate(self.parsed):
             from_left = visible(row)
             seen[index, from_left] = 1
             from_right = visible(row[::-1])[::-1]
             seen[index, from_right] = 1
 
-        for index, col in enumerate(zip(*self.processed)):
+        for index, col in enumerate(zip(*self.parsed)):
             from_top = visible(col)
             seen[from_top, index] = 1
             from_bottom = list(reversed(visible(col[::-1])))
@@ -51,11 +51,11 @@ class Solution(BaseSolution):
         return seen.sum()
 
     def part_b(self):
-        right = np.array([visible_row(row) for row in self.processed])
+        right = np.array([visible_row(row) for row in self.parsed])
         left = np.array(
-            [visible_row(row[::-1])[::-1] for row in self.processed])
+            [visible_row(row[::-1])[::-1] for row in self.parsed])
 
-        cols = [list(i) for i in zip(*self.processed)]
+        cols = [list(i) for i in zip(*self.parsed)]
         down = np.array([visible_row(row) for row in cols]).T
         up = np.array([visible_row(row[::-1])[::-1] for row in cols]).T
         i = (right * left * down * up)

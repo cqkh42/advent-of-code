@@ -7,7 +7,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _process_data(self: Self) -> Any:
+    def _parse(self: Self) -> Any:
         # https://www.redblobgames.com/grids/hexagons/#neighbors is
         # the gold standard
         q_map = {"ne": 1, "sw": -1, "se": 1, "nw": -1}
@@ -23,10 +23,10 @@ class Solution(BaseSolution):
         return distances
 
     def part_a(self):
-        return int(self.processed[-1])
+        return int(self.parsed[-1])
 
     def part_b(self):
-        return int(self.processed.max())
+        return int(self.parsed.max())
 
 
 if __name__ == "__main__":
