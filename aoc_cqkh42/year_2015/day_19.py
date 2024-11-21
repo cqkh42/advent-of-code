@@ -46,9 +46,10 @@ class CYKRunner:
                 )
             ]
             for needed_element in needed_elements:
+                a = "".join(needed_element)
                 missing_rules = (
                     rule
-                    for rule in self.rules.getall("".join(needed_element), [])
+                    for rule in self.rules.getall(a, [])
                     if rule not in self.cyk[(start_point + 1)][remainder]
                 )
                 for rule in missing_rules:
@@ -79,36 +80,62 @@ def get_new_letter():
         for second in string.ascii_lowercase:
             yield "Z" + first + second
 
+class Rules:
+    letters = get_new_letter()
+    def __init__(self, lines):
+        a = self.input_parser(lines)
+        b = [(y, x) for x, y in a]
+        self.rules = MultiDict(b)
 
-def input_parser(lines):
-    a = [right for left, right in lines]
-    a = [sum(char.isupper() for char in right) for right in a]
-    if max(a) == 2:
-        return lines
-    else:
-        letters = get_new_letter()
-        new = []
-        for left, right in lines:
-            parts = re.findall("[A-Z][a-z]?", right)
+    def getall(self, key, default):
+        return self.rules.getall(key, default)
 
-            if len(parts) > 2:
-                letter = next(letters)
-                new_right = parts[0] + letter
-                new.append((left, new_right))
-                new.append((letter, "".join(parts[1:])))
-            else:
-                new.append((left, right))
-        return input_parser(new)
+    def _parse_line(self, line):
+        left, right = line
+        parts = right.elements
+        if len(parts) > 2:
+            letter = next(self.letters)
+            new_right = parts[0] + letter
+            yield Molecule(left), Molecule(new_right)
+            yield Molecule(letter), Molecule("".join(parts[1:]))
+            yield from self.parse_line((Molecule(letter), Molecule("".join(parts[1:]))))
+        else:
+            yield (left), (right)
 
+    def parse_line(self, line):
+        a = set(self._parse_line(line))
+        b = {i for i in a if len(i[1]) <= 2}
+        return b
+
+    def input_parser(self, lines):
+        lines = (self.parse_line(line) for line in lines)
+        a = list(set.union(*lines))
+        return a
+
+class Molecule(str):
+    def __init__(self, string):
+        self.string = string
+        reg = r'[A-Z][a-z]?'
+        self.elements = list(re.findall(reg, string))
+
+    def __len__(self):
+        return len(self.elements)
 
 class Solution(BaseSolution):
     molecule = None
     rules = None
 
+    LINE_REGEX = re.compile(r"(.+) => (.+)")
+
     def _parse(self):
         self.molecule = self.lines[-1]
-        a = input_parser(re.findall(r"(.+) => (.+)", self.input_))
-        self.rules = MultiDict(((v, k) for k, v in a))
+        self.rules = Rules(self.parsed_lines)
+
+    def _parse_line(self, line: str):
+        matches = self.LINE_REGEX.search(line)
+        if matches:
+            return tuple(Molecule(group) for group in matches.groups())
+
 
     def part_a(self):
         new_strings = set()

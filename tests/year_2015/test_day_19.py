@@ -1,6 +1,7 @@
 import pytest
 
 from aoc_cqkh42.year_2015 import day_19
+from aoc_cqkh42.year_2015.day_19 import Molecule
 
 
 @pytest.fixture
@@ -16,15 +17,29 @@ def test_part_a(data, answer, transformations):
     assert solution.part_a() == answer
 
 
-def test_input_parser():
-    input_ = {
-        "Al": "ThF",
-        "Al": "ThRnFAr",
-    }
-    assert day_19._input_parser(input_) == {
-        "Al": "ThF",
-        "Al": "ThRnFAr",
-        "Zaa": "RnFAr",
-        "Zab": "FAr"
-    }
+# def test_input_parser():
+#     input_ = {
+#         "Al": "ThF",
+#         "Al": "ThRnFAr",
+#     }
+#     assert day_19._input_parser(input_) == {
+#         "Al": "ThF",
+#         "Al": "ThRnFAr",
+#         "Zaa": "RnFAr",
+#         "Zab": "FAr"
+#     }
 
+def test_line_parser_simple():
+    b = day_19.Rules([(Molecule('a'), Molecule('b'))])
+    out = b.parse_line((Molecule('Al'), Molecule('ThF')))
+    assert set(out) == {(Molecule('Al'), Molecule('ThF'))}
+
+def test_line_parser_complex():
+    b = day_19.Rules([(Molecule('a'), Molecule('b'))])
+    out = b.parse_line((Molecule('Al'), Molecule('ThRnFAr')))
+    expected = {
+        (Molecule('Al'), Molecule('ThZaa')),
+        (Molecule('Zaa'), Molecule('RnZab')),
+        (Molecule('Zab'), Molecule('FAr')),
+    }
+    assert set(out) == expected

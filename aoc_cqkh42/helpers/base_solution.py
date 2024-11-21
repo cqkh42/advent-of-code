@@ -63,7 +63,8 @@ class BaseSolution(ABC):
 
     @cached_property
     def parsed_lines(self) -> tuple[Any, ...]:
-        return tuple(self._parse_line(line) for line in self.lines)
+        parsed = (self._parse_line(line) for line in self.lines)
+        return tuple(line for line in parsed if line)
 
     @staticmethod
     def _parse_line(self, line: str):
