@@ -137,6 +137,15 @@ class Molecule(str):
     def __len__(self):
         return self._len
 
+    def __eq__(self, other):
+        if isinstance(other, Molecule):
+            return self.elements == other.elements
+        else:
+            raise NotImplementedError(f'Cannot compare Molecule and {type(other)}')
+
+    def __hash__(self):
+        return hash(tuple(self.elements))
+
     @cached_property
     def _len(self):
         return len(self.elements)
