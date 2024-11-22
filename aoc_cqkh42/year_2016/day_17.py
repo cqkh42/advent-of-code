@@ -1,10 +1,12 @@
 import hashlib
 
+import more_itertools
+
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def paths(self):
+    def _parse(self):
         to_visit = [(0, 0, "")]
         while True:
             try:
@@ -27,9 +29,7 @@ class Solution(BaseSolution):
                 to_visit.append((x + 1, y, steps + "R"))
 
     def part_a(self):
-        paths = self.paths()
-        return next(paths)
+        return next(self.parsed)
 
     def part_b(self):
-        paths = list(self.paths())
-        return len(paths[-1])
+        return len(more_itertools.last(self.parsed))

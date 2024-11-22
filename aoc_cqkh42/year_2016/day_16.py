@@ -1,37 +1,38 @@
-from aoc_cqkh42.helpers.base_solution import BaseSolution
+from typing import Self, Any
+from aoc_cqkh42 import submit_answers
 
-DISC_LENGTH = 272
-TRANS = str.maketrans("01", "10")
+
+from aoc_cqkh42.helpers.base_solution import BaseSolution
+import numpy as np
 
 
 def dragon_curve(a, length):
-    b = a[::-1].translate(TRANS)
-    # a = a+'0'+b
+    b = ~a[::-1]
+    z =np.concatenate([a, [False], b])
     if len(a) * 2 + 1 < length:
-        return dragon_curve(a + "0" + b, length)
-    return (a + "0" + b)[:length]
+        return dragon_curve(z, length)
+    return z[:length]
 
 
 def checksum(num):
-    pairs = zip(num[::2], num[1::2])
-    p = "".join("1" if a == b else "0" for a, b in pairs)
+    pairs = num.reshape(-1, 2)
+    p = pairs[:, 0] == pairs[:, 1]
     if not len(p) % 2:
         return checksum(p)
-    return p
+    return ''.join(p.astype(int).astype(str))
 
 
 class Solution(BaseSolution):
-    def _dragon_curve(self, length):
-        b = self.input_[::-1].translate(TRANS)
-        self.input_ += "0" + b
-        if len(self.input_) < length:
-            return self._dragon_curve(length)
-        return self.input_[:length]
-
     def part_a(self):
-        b = self._dragon_curve(272)
+        b = dragon_curve(self.parsed, 272)
         return checksum(b)
+
+    def _parse(self: Self) -> Any:
+        return np.array([int(num) for num in self.input_]).astype(bool)
 
     def part_b(self):
-        b = dragon_curve(self.input_, 35651584)
+        b = dragon_curve(self.parsed, 35651584)
         return checksum(b)
+
+if __name__ == "__main__":
+    submit_answers(Solution, 16, 2016)

@@ -6,13 +6,14 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
+    PARSER = parse.compile("{:n} positions; at time=0, it is at position {:n}.")
     def _parse(self):
-        p = parse.findall(
-            "{:n} positions; at time=0, it is at position {:n}.", self.input_
-        )
-        firsts, seconds = zip(*p)
+        firsts, seconds = zip(*self.parsed_lines)
         seconds = [idx + i for idx, i in enumerate(seconds, start=1)]
         return list(firsts), list(seconds)
+
+    def _parse_line(self, line: str):
+        return self.PARSER.search(line)
 
     def part_a(self):
         p = sympy.ntheory.modular.crt(*self.parsed)
