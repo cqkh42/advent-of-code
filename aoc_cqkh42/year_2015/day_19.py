@@ -6,6 +6,7 @@ from collections import defaultdict
 from functools import cached_property
 
 import more_itertools
+from more_itertools.recipes import iter_index
 from multidict import MultiDict
 
 from aoc_cqkh42 import submit_answers
@@ -35,28 +36,18 @@ class CYKRunner:
             [Molecule(element)] for element in self.molecule.elements
         ]
 
-        for start_point, remainder, i in self.get_trio():
-            # print(start_point, remainder, i)
+        for start, remainder, i in self.get_trio():
             needed_elements = [
                 Molecule(''.join(more_itertools.flatten(t)))
                 for t in itertools.product(
-                    self.cyk[i][remainder], self.cyk[start_point - i][remainder + i + 1]
+                    self.cyk[i][remainder], self.cyk[start - i][remainder + i + 1]
                 )
             ]
-            # print(needed_elements)
-            # if needed_elements:
-            #     print(needed_elements)
             for needed_element in needed_elements:
-                missing_rules = self.rules[needed_element].difference( self.cyk[(start_point + 1)][remainder])
-                for rule in missing_rules:
-                    self.cyk[start_point + 1][remainder].append(rule)
-                    self.backref[start_point + 1][remainder].append(
-                        (
-                            (remainder, i),
-                            (remainder + i + 1, start_point - i),
-                            needed_element,
-                        )
-                    )
+                missing_rules = self.rules[needed_element].difference( self.cyk[(start + 1)][remainder])
+                self.cyk[start + 1][remainder].extend(missing_rules)
+                a = ((remainder, i), (remainder + i + 1, start - i), needed_element)
+                self.backref[start + 1][remainder].extend([a]* len(missing_rules))
 
     def solve(self):
         self._solve(0, len(self.molecule)-1)
@@ -74,7 +65,7 @@ class CYKRunner:
 def get_new_letter():
     for first in string.ascii_lowercase:
         for second in string.ascii_lowercase:
-            yield "Z" + first + second
+            yield Molecule("Z" + first + second)
 
 class RuleBuilder:
     letters = get_new_letter()
@@ -87,7 +78,6 @@ class RuleBuilder:
             rules[y].add(x)
         return rules
 
-
     def _parse_line(self, line):
         left, right = line
         parts = right.elements
@@ -95,9 +85,7 @@ class RuleBuilder:
             letter = next(self.letters)
             new_right = parts[0] + letter
             p = Molecule(parts[1:])
-            a = Molecule("".join(parts[1:]))
             yield Molecule(left), Molecule(new_right)
-            yield Molecule(letter), a
             yield from self._parse_line((Molecule(letter), p))
         else:
             yield Molecule(left), Molecule(right)
@@ -128,10 +116,8 @@ class Molecule(str):
             self.string = input_
             self.elements = list(self.reg.findall(input_))
         else:
-            # print(input_)
             self.elements = input_
             self.string = ''.join(input_)
-            # print(self.string)
 
     def __len__(self):
         return self._len
@@ -152,12 +138,14 @@ class Molecule(str):
         return len(self.elements)
 
     def replace(self, index, value):
-        new_elements = list(self.elements)
-        new_elements[index] = value
-        return Molecule(''.join(new_elements))
+        a = self.elements[:index]
+        b = self.elements[index+1:]
+        new = [*a, *value.elements, *b]
+        return Molecule(new)
 
     def __repr__(self):
         return f'Molecule("{self.string}")'
+
 
 class Solution(BaseSolution):
     molecule = None
@@ -167,7 +155,6 @@ class Solution(BaseSolution):
 
     def _parse(self):
         self.molecule = Molecule(self.lines[-1])
-        # self.rules = Rules(self.parsed_lines)
         self.rules = RuleBuilder().build(self.parsed_lines)
 
     def _parse_line(self, line: str):
@@ -176,16 +163,10 @@ class Solution(BaseSolution):
             return tuple(Molecule(group) for group in matches.groups())
 
     def _find_simple_replacements(self, old, new):
-        a = set()
-        for index, element in enumerate(self.molecule.elements):
-            if element == old:
-                replaced = self.molecule.replace(index, new)
-                a.add(replaced)
-        return a
-
         return {
-                self.molecule.replace(index, new) for index in more_itertools.iter_index(self.molecule.elements, old)
-            }
+            self.molecule.replace(index, new)
+            for index in iter_index(self.molecule.elements, old)
+        }
 
     def part_a(self):
         options = set.union(*(self._find_simple_replacements(old, new) for old, new in self.parsed_lines))

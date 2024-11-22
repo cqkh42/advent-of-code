@@ -1,7 +1,7 @@
 import pytest
 
 from aoc_cqkh42.year_2015 import day_19
-from aoc_cqkh42.year_2015.day_19 import Molecule
+from aoc_cqkh42.year_2015.day_19 import Compound
 
 
 @pytest.fixture
@@ -19,18 +19,18 @@ def test_part_a(data, answer, transformations):
 
 def test_line_parser_simple():
     b = day_19.RuleBuilder()
-    out = b.parse_line((Molecule('Al'), Molecule('ThF')))
-    assert set(out) == {(Molecule('Al'), Molecule('ThF'))}
+    out = b.parse_line((Compound('Al'), Compound('ThF')))
+    assert set(out) == {(Compound('Al'), Compound('ThF'))}
 
 def test_line_parser_complex():
     b = day_19.RuleBuilder()
-    out = b.parse_line((Molecule('Al'), Molecule('ThRnFAr')))
+    out = b.parse_line((Compound('Al'), Compound('ThRnFAr')))
     expected = {
-        (Molecule('Al'), Molecule('ThZaa')),
-        (Molecule('Zaa'), Molecule('RnZab')),
-        (Molecule('Zab'), Molecule('FAr')),
+        (Compound('Al'), Compound('ThZaa')),
+        (Compound('Zaa'), Compound('RnZab')),
+        (Compound('Zab'), Compound('FAr')),
     }
     assert set(out) == expected
 
 def test_molecule_equality():
-    assert Molecule('AbC') == Molecule(['Ab', 'C'])
+    assert Compound('AbC') == Compound(['Ab', 'C'])
