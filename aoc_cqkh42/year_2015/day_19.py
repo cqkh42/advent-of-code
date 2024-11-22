@@ -2,6 +2,7 @@ import collections
 import itertools
 import re
 import string
+from collections import defaultdict
 from functools import cached_property
 
 import more_itertools
@@ -23,13 +24,9 @@ class CYKRunner:
         self.counter = 0
         self.build_cyk()
 
-    @cached_property
-    def num_elements(self):
-        return len(self.molecule) - 1
-
     def get_trio(self):
         for start in range(len(self.molecule) - 1):
-            for remainder in range(self.num_elements - start):
+            for remainder in range(len(self.molecule) - start - 1):
                 for i in range(start + 1):
                     yield start, remainder, i
 
@@ -46,6 +43,7 @@ class CYKRunner:
                     self.cyk[i][remainder], self.cyk[start_point - i][remainder + i + 1]
                 )
             ]
+            # print(needed_elements)
             # if needed_elements:
             #     print(needed_elements)
             for needed_element in needed_elements:
@@ -83,10 +81,12 @@ class Rules:
     def __init__(self, lines):
         a = self.input_parser(lines)
         b = [(y, x) for x, y in a]
-        self.rules = MultiDict(b)
+        self.rules = defaultdict(set)
+        for y, x in b:
+            self.rules[y].add(x)
 
-    def getall(self, key, default):
-        return set(self.rules.getall(key, default))
+    def getall(self, key, _):
+        return self.rules[key]
 
     def _parse_line(self, line):
         left, right = line
@@ -95,10 +95,9 @@ class Rules:
             letter = next(self.letters)
             new_right = parts[0] + letter
             p = Molecule(parts[1:])
-            a = "".join(parts[1:])
-            # assert p == Molecule(a), (p, Molecule(a))
+            a = Molecule("".join(parts[1:]))
             yield Molecule(left), Molecule(new_right)
-            yield Molecule(letter), Molecule(a)
+            yield Molecule(letter), a
             yield from self._parse_line((Molecule(letter), p))
         else:
             yield Molecule(left), Molecule(right)
@@ -112,17 +111,20 @@ class Rules:
     def parse_line(self, line):
         a = set(self._parse_line(line))
         b = {i for i in a if len(i[1]) <= 2}
+        print(b)
         return b
 
     def input_parser(self, lines):
         lines = (self.parse_line(line) for line in lines)
         a = list(set.union(*lines))
-        # print(a)
         return a
 
 class Molecule(str):
     reg = re.compile(r'[A-Z][a-z]?')
     def __init__(self, input_):
+        if isinstance(input_, Molecule):
+            self.string = input_.string
+            self.elements = input_.elements
         if isinstance(input_, str):
             self.string = input_
             self.elements = list(self.reg.findall(input_))
