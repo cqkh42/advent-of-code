@@ -38,7 +38,7 @@ class CYKRunner:
         for start_point, remainder, i in self.get_trio():
             # print(start_point, remainder, i)
             needed_elements = [
-                ''.join(more_itertools.flatten(t))
+                Molecule(''.join(more_itertools.flatten(t)))
                 for t in itertools.product(
                     self.cyk[i][remainder], self.cyk[start_point - i][remainder + i + 1]
                 )
@@ -111,7 +111,6 @@ class RuleBuilder:
     def parse_line(self, line):
         a = set(self._parse_line(line))
         b = {i for i in a if len(i[1]) <= 2}
-        print(b)
         return b
 
     def input_parser(self, lines):
@@ -140,6 +139,8 @@ class Molecule(str):
     def __eq__(self, other):
         if isinstance(other, Molecule):
             return self.elements == other.elements
+        elif isinstance(other, str):
+            return self == Molecule(other)
         else:
             raise NotImplementedError(f'Cannot compare Molecule and {type(other)}')
 
@@ -175,6 +176,12 @@ class Solution(BaseSolution):
             return tuple(Molecule(group) for group in matches.groups())
 
     def _find_simple_replacements(self, old, new):
+        a = set()
+        for index, element in enumerate(self.molecule.elements):
+            if element == old:
+                replaced = self.molecule.replace(index, new)
+                a.add(replaced)
+        return a
 
         return {
                 self.molecule.replace(index, new) for index in more_itertools.iter_index(self.molecule.elements, old)
