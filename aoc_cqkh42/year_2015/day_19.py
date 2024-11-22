@@ -21,37 +21,35 @@ class CYKRunner:
         )
         self.backref = collections.defaultdict(lambda: [[] for _ in range(1000)])
         self.counter = 0
-        self.run()
+        self.build_cyk()
 
     @cached_property
     def num_elements(self):
-        return sum(char.isupper() for char in self.molecule) - 1
+        return len(self.molecule) - 1
 
     def get_trio(self):
-        for start in range(self.num_elements):
+        for start in range(len(self.molecule) - 1):
             for remainder in range(self.num_elements - start):
                 for i in range(start + 1):
                     yield start, remainder, i
 
-    def run(self):
+    def build_cyk(self):
         self.cyk[0] = [
-            [element] for element in re.findall(r"[A-Z][a-z]?", self.molecule)
+            [Molecule(element)] for element in self.molecule.elements
         ]
 
         for start_point, remainder, i in self.get_trio():
+            # print(start_point, remainder, i)
             needed_elements = [
-                more_itertools.flatten(t)
+                ''.join(more_itertools.flatten(t))
                 for t in itertools.product(
                     self.cyk[i][remainder], self.cyk[start_point - i][remainder + i + 1]
                 )
             ]
+            # if needed_elements:
+            #     print(needed_elements)
             for needed_element in needed_elements:
-                a = "".join(needed_element)
-                missing_rules = (
-                    rule
-                    for rule in self.rules.getall(a, [])
-                    if rule not in self.cyk[(start_point + 1)][remainder]
-                )
+                missing_rules = self.rules.getall(needed_element, []).difference( self.cyk[(start_point + 1)][remainder])
                 for rule in missing_rules:
                     self.cyk[start_point + 1][remainder].append(rule)
                     self.backref[start_point + 1][remainder].append(
@@ -63,7 +61,7 @@ class CYKRunner:
                     )
 
     def solve(self):
-        self._solve(0, self.num_elements)
+        self._solve(0, len(self.molecule)-1)
         return self.counter
 
     def _solve(self, x, y):
@@ -88,7 +86,7 @@ class Rules:
         self.rules = MultiDict(b)
 
     def getall(self, key, default):
-        return self.rules.getall(key, default)
+        return set(self.rules.getall(key, default))
 
     def _parse_line(self, line):
         left, right = line
@@ -96,11 +94,20 @@ class Rules:
         if len(parts) > 2:
             letter = next(self.letters)
             new_right = parts[0] + letter
+            p = Molecule(parts[1:])
+            a = "".join(parts[1:])
+            # assert p == Molecule(a), (p, Molecule(a))
             yield Molecule(left), Molecule(new_right)
-            yield Molecule(letter), Molecule("".join(parts[1:]))
-            yield from self.parse_line((Molecule(letter), Molecule("".join(parts[1:]))))
+            yield Molecule(letter), Molecule(a)
+            yield from self._parse_line((Molecule(letter), p))
         else:
-            yield (left), (right)
+            yield Molecule(left), Molecule(right)
+
+    def __repr__(self):
+        return self.rules
+
+    def __str__(self):
+        return self.rules.__str__()
 
     def parse_line(self, line):
         a = set(self._parse_line(line))
@@ -110,16 +117,37 @@ class Rules:
     def input_parser(self, lines):
         lines = (self.parse_line(line) for line in lines)
         a = list(set.union(*lines))
+        # print(a)
         return a
 
 class Molecule(str):
-    def __init__(self, string):
-        self.string = string
-        reg = r'[A-Z][a-z]?'
-        self.elements = list(re.findall(reg, string))
+    reg = re.compile(r'[A-Z][a-z]?')
+    def __init__(self, input_):
+        if isinstance(input_, str):
+            self.string = input_
+            self.elements = list(self.reg.findall(input_))
+        else:
+            # print(input_)
+            self.elements = input_
+            self.string = ''.join(input_)
+            # print(self.string)
 
     def __len__(self):
+        return self._len
+
+    @cached_property
+    def _len(self):
         return len(self.elements)
+
+    def replace(self, index, value):
+        new_elements = list(self.elements)
+        new_elements[index] = value
+        return Molecule(''.join(new_elements))
+
+    def __repr__(self):
+        return f'Molecule("{self.string}")'
+    # def __iter__(self):
+    #     yield from self.elements
 
 class Solution(BaseSolution):
     molecule = None
@@ -128,7 +156,7 @@ class Solution(BaseSolution):
     LINE_REGEX = re.compile(r"(.+) => (.+)")
 
     def _parse(self):
-        self.molecule = self.lines[-1]
+        self.molecule = Molecule(self.lines[-1])
         self.rules = Rules(self.parsed_lines)
 
     def _parse_line(self, line: str):
@@ -136,16 +164,14 @@ class Solution(BaseSolution):
         if matches:
             return tuple(Molecule(group) for group in matches.groups())
 
+    def _find_simple_replacements(self, old, new):
+        return {
+                self.molecule.replace(index, new) for index in more_itertools.iter_index(self.molecule.elements, old)
+            }
 
     def part_a(self):
-        new_strings = set()
-        for old, new in re.findall(r"(.+) => (.+)", self.input_):
-            replacements = {
-                self.molecule[: i.start()] + new + self.molecule[i.end() :]
-                for i in re.finditer(old, self.molecule)
-            }
-            new_strings.update(replacements)
-        return len(new_strings)
+        options = set.union(*(self._find_simple_replacements(old, new) for old, new in self.parsed_lines))
+        return len(options)
 
     def part_b(self):
         solution = CYKRunner(self.rules, self.molecule)

@@ -43,3 +43,10 @@ def test_line_parser_complex():
         (Molecule('Zab'), Molecule('FAr')),
     }
     assert set(out) == expected
+
+def test_line_parser_complex_two():
+    b = day_19.Rules([(Molecule("P"), Molecule("SiRnFAr"))])
+    out = b.parse_line((Molecule("P"), Molecule("SiRnFAr")))
+    expected = {
+    }
+    assert set(out) == expected
