@@ -1,18 +1,23 @@
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo computer
 class Solution(BaseSolution):
+    def run(self, registers=None):
+        registers = registers or {}
+        computer = Computer(self.parsed_lines)
+        computer.registers.update(registers)
+        computer.run()
+        return computer.registers['a']
+
+    def _parse_line(self, line: str):
+        return line.split()
+
     def part_a(self):
-        c = Computer(self.input_)
-        c.run()
-        return c.registers["a"]
+        return self.run()
 
     def part_b(self):
-        c = Computer(self.input_)
-        c.registers["c"] = 1
-        c.run()
-        return c.registers["a"]
+        return self.run({'c': 1})
 
 
 def compile_instruction(instructions):
@@ -45,9 +50,7 @@ def compile_instruction(instructions):
 
 class Computer:
     def __init__(self, instructions):
-        self.instructions = [
-            instruction.split() for instruction in instructions.split("\n")
-        ]
+        self.instructions = list(instructions)
         self.instructions = self.compile_instructions()
         self.registers = {"a": 0, "b": 0, "c": 0, "d": 0}
         self.index = 0

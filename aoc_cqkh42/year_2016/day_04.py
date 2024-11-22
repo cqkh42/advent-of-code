@@ -10,7 +10,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 def decrypt_letter(char, sector):
     if char == "-":
         return " "
-    index = (string.ascii_lowercase.index(char) + (sector % 26)) % 26
+    index = (string.ascii_lowercase.index(char) + sector) % 26
     return string.ascii_lowercase[index]
 
 
@@ -21,8 +21,8 @@ class Room:
     checksum: str
 
     def calc_checksum(self):
-        counted = Counter(self.encrypted.replace("-", "").strip())
-        in_order = sorted(counted.items(), key=lambda x: (-x[1], x[0]))[:5]
+        counted = Counter(sorted(self.encrypted.replace("-", "")))
+        in_order = counted.most_common(5)
         in_order = [letter for letter, count in in_order]
         return "".join(in_order)
 
@@ -36,14 +36,18 @@ class Room:
 
 
 class Solution(BaseSolution):
+    PARSER = parse.compile(r"{:D}-{:d}[{:w}]")
     def _parse(self):
-        rooms = list(parse.findall(r"{:D}-{:d}[{:w}]", self.input_))
-        rooms = [Room(*room) for room in rooms]
-        checksummed = (room for room in rooms if room.valid_checksum())
-        real = [(room.decrypt(), room.sector) for room in checksummed]
+        return dict(room for room in self.parsed_lines if room)
 
-        r = dict(real)
-        return r
+    def _parse_line(self, line: str):
+        line = self.PARSER.search(line)
+        room = Room(*line)
+        if not room.valid_checksum():
+            return
+        else:
+            return room.decrypt(), room.sector
+
 
     def part_a(self):
         return sum(self.parsed.values())

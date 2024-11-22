@@ -1,41 +1,26 @@
 import itertools
-from dataclasses import dataclass
 
+import more_itertools
 import parse
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
-@dataclass
-class Triangle:
-    x: int
-    y: int
-    z: int
-
-    def is_valid(self):
-        a = self.x + self.y > self.z
-        b = self.x + self.z > self.y
-        c = self.y + self.z > self.x
-        return a and b and c
-
-
-def grouper(iterable, n):
-    """Collect data into fixed-length chunks or blocks"""
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
-    args = [iter(iterable)] * n
-    return itertools.zip_longest(*args)
+def is_valid(x, y, z):
+    a = x + y > z
+    b = x + z > y
+    c = y + z > x
+    return a and b and c
 
 
 class Solution(BaseSolution):
-    def _parse(self):
-        rows = list(parse.findall("{:>d} {:>d} {:>d}", self.input_))
-        return rows
+    PARSER = parse.compile("{:>d} {:>d} {:>d}")
+    def _parse_line(self, line: str):
+        return self.PARSER.search(line)
 
     def part_a(self):
-        triangles = [Triangle(*row) for row in self.parsed]
-        return sum(triangle.is_valid() for triangle in triangles)
+        return sum(is_valid(*line) for line in self.parsed_lines)
 
     def part_b(self):
-        vertically = itertools.chain.from_iterable(zip(*self.parsed))
-        triangles = (Triangle(*row) for row in grouper(vertically, 3))
-        return sum(triangle.is_valid() for triangle in triangles)
+        vertically = itertools.chain.from_iterable(zip(*self.parsed_lines))
+        return sum(is_valid(*line) for line in more_itertools.chunked(vertically, 3))

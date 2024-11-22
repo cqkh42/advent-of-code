@@ -58,12 +58,10 @@ class Solution(BaseSolution):
         return player_turns_needed <= boss_turns_needed
 
     def part_a(self):
-        return str(min(cost for cost, *stats in self.parsed if self.winner(*stats)))
+        return min(cost for cost, *stats in self.parsed if self.winner(*stats))
 
     def part_b(self):
-        return str(
-            max(cost for cost, *stats in self.parsed if not self.winner(*stats))
-        )
+        return max(cost for cost, *stats in self.parsed if not self.winner(*stats))
 
 
 if __name__ == "__main__":

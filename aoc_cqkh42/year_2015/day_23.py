@@ -36,25 +36,19 @@ class Register:
 
 
 class Solution(BaseSolution):
-    def _parse(self):
-        instructions = [
-            instr.replace(",", "").replace("+", "").split() for instr in self.lines
-        ]
-        instructions = [
-            [part if part.isalpha() else int(part) for part in instr]
-            for instr in instructions
-        ]
-        return instructions
+    def _parse_line(self, line: str):
+        replaced = line.replace(",", "").replace("+", "").split()
+        return tuple(part if part.isalpha() else int(part) for part in replaced)
 
     def part_a(self, target="b"):
         registers = {"a": 0, "b": 0}
-        r = Register(registers, self.parsed)
+        r = Register(registers, self.parsed_lines)
         r.run()
         return r.reg[target]
 
     def part_b(self, target="b"):
         registers = {"a": 1, "b": 0}
-        r = Register(registers, self.parsed)
+        r = Register(registers, self.parsed_lines)
         r.run()
         return r.reg[target]
 
