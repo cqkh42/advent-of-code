@@ -175,6 +175,7 @@ class Solution(BaseSolution):
             return tuple(Molecule(group) for group in matches.groups())
 
     def _find_simple_replacements(self, old, new):
+
         return {
                 self.molecule.replace(index, new) for index in more_itertools.iter_index(self.molecule.elements, old)
             }

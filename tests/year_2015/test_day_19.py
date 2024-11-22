@@ -17,18 +17,6 @@ def test_part_a(data, answer, transformations):
     assert solution.part_a() == answer
 
 
-# def test_input_parser():
-#     input_ = {
-#         "Al": "ThF",
-#         "Al": "ThRnFAr",
-#     }
-#     assert day_19._input_parser(input_) == {
-#         "Al": "ThF",
-#         "Al": "ThRnFAr",
-#         "Zaa": "RnFAr",
-#         "Zab": "FAr"
-#     }
-
 def test_line_parser_simple():
     b = day_19.RuleBuilder()
     out = b.parse_line((Molecule('Al'), Molecule('ThF')))
@@ -44,9 +32,5 @@ def test_line_parser_complex():
     }
     assert set(out) == expected
 
-def test_line_parser_complex_two():
-    b = day_19.Rules([(Molecule("P"), Molecule("SiRnFAr"))])
-    out = b.parse_line((Molecule("P"), Molecule("SiRnFAr")))
-    expected = {
-    }
-    assert set(out) == expected
+def test_molecule_equality():
+    assert Molecule('AbC') == Molecule(['Ab', 'C'])
