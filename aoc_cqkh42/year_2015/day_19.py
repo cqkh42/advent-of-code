@@ -47,7 +47,7 @@ class CYKRunner:
             # if needed_elements:
             #     print(needed_elements)
             for needed_element in needed_elements:
-                missing_rules = self.rules.getall(needed_element, []).difference( self.cyk[(start_point + 1)][remainder])
+                missing_rules = self.rules[needed_element].difference( self.cyk[(start_point + 1)][remainder])
                 for rule in missing_rules:
                     self.cyk[start_point + 1][remainder].append(rule)
                     self.backref[start_point + 1][remainder].append(
@@ -76,17 +76,17 @@ def get_new_letter():
         for second in string.ascii_lowercase:
             yield "Z" + first + second
 
-class Rules:
+class RuleBuilder:
     letters = get_new_letter()
-    def __init__(self, lines):
+
+    def build(self, lines):
         a = self.input_parser(lines)
         b = [(y, x) for x, y in a]
-        self.rules = defaultdict(set)
+        rules = defaultdict(set)
         for y, x in b:
-            self.rules[y].add(x)
+            rules[y].add(x)
+        return rules
 
-    def getall(self, key, _):
-        return self.rules[key]
 
     def _parse_line(self, line):
         left, right = line
@@ -148,8 +148,6 @@ class Molecule(str):
 
     def __repr__(self):
         return f'Molecule("{self.string}")'
-    # def __iter__(self):
-    #     yield from self.elements
 
 class Solution(BaseSolution):
     molecule = None
@@ -159,7 +157,8 @@ class Solution(BaseSolution):
 
     def _parse(self):
         self.molecule = Molecule(self.lines[-1])
-        self.rules = Rules(self.parsed_lines)
+        # self.rules = Rules(self.parsed_lines)
+        self.rules = RuleBuilder().build(self.parsed_lines)
 
     def _parse_line(self, line: str):
         matches = self.LINE_REGEX.search(line)

@@ -30,12 +30,12 @@ def test_part_a(data, answer, transformations):
 #     }
 
 def test_line_parser_simple():
-    b = day_19.Rules([(Molecule('a'), Molecule('b'))])
+    b = day_19.RuleBuilder()
     out = b.parse_line((Molecule('Al'), Molecule('ThF')))
     assert set(out) == {(Molecule('Al'), Molecule('ThF'))}
 
 def test_line_parser_complex():
-    b = day_19.Rules([(Molecule('a'), Molecule('b'))])
+    b = day_19.RuleBuilder()
     out = b.parse_line((Molecule('Al'), Molecule('ThRnFAr')))
     expected = {
         (Molecule('Al'), Molecule('ThZaa')),
