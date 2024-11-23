@@ -17,7 +17,6 @@ TRAPS = {
 def calc_row(row):
     t = [True] + row + [True]
     triples = itertools.zip_longest(t, t[1:], t[2:], fillvalue=".")
-    # triples = more_itertools.triplewise(t)
     new = [not tuple(a) in TRAPS for a in triples]
     new = new[:-2]
     return new
