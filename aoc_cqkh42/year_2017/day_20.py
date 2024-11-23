@@ -28,6 +28,7 @@ class Particle:
 
 
 class Solution(BaseSolution):
+    PARSER = parse.compile("{:d}")
     def _parse(self: Self) -> Any:
         parser = parse.compile("{:d}")
         particles = []
@@ -39,16 +40,21 @@ class Solution(BaseSolution):
             particles.append(particle)
         return particles
 
+    def _parse_line(self, line: str):
+        a = [i[0] for i in self.PARSER.findall(line)]
+        bits = [np.array(i) for i in more_itertools.chunked(a, 3)]
+        particle = Particle(*bits)
+        return particle
+
     def part_a(self):
-        a = [particle.distance_at(1_000_000) for particle in self.parsed]
+        a = [particle.distance_at(1_000_000) for particle in self.parsed_lines]
         return np.argmin(a)
 
     def part_b(self):
-        # print(self.processed)
         steps = []
         # try increasing this if it doesn't work
         for step in range(40):
-            a = [particle.position_at(step) for particle in self.parsed]
+            a = [particle.position_at(step) for particle in self.parsed_lines]
             vals, indices, counts = np.unique(
                 a, return_counts=True, return_index=True, axis=0
             )

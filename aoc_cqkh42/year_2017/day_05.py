@@ -1,13 +1,7 @@
-import functools
 import itertools
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-
-
-@functools.cache
-def part_b_rule(num):
-    return (-1) ** (num >= 3)
 
 
 class Solution(BaseSolution):
@@ -26,7 +20,8 @@ class Solution(BaseSolution):
         return self.do_run(func)
 
     def part_b(self):
-        return self.do_run(part_b_rule)
+        func = lambda num: (-1) ** (num >= 3)
+        return self.do_run(func)
 
 
 if __name__ == "__main__":

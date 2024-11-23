@@ -11,12 +11,15 @@ class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
         g = nx.Graph()
 
-        for line in self.lines:
-            left, right = line.split(" <-> ")
-            right = right.split(", ")
+        for left, right in self.parsed_lines:
             for r in right:
                 g.add_edge(left, r)
         return g
+
+    def _parse_line(self, line: str):
+        left, right = line.split(" <-> ")
+        right = right.split(', ')
+        return left, right
 
     def part_a(self):
         return sum(nx.has_path(self.parsed, node, "0") for node in self.parsed)

@@ -78,21 +78,21 @@ class ProgramB(BaseProgram):
 
 
 class Solution(BaseSolution):
-    def _parse(self: Self) -> Any:
-        return [line.split() for line in self.lines]
+    def _parse_line(self, line: str):
+        return line.split()
 
     def part_a(self: Self) -> int:
-        computer = ProgramA(self.parsed)
+        computer = ProgramA(self.parsed_lines)
         while True:
             computer.run_line()
             if computer.awaiting_input:
                 return computer.outputs[-1]
 
     def part_b(self: Self):
-        program_0 = ProgramB(self.parsed)
+        program_0 = ProgramB(self.parsed_lines)
         program_0["p"] = 0
 
-        program_1 = ProgramB(self.parsed)
+        program_1 = ProgramB(self.parsed_lines)
         program_1["p"] = 1
 
         while (not program_0.awaiting_input) or (not program_1.awaiting_input):
