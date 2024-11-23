@@ -1,7 +1,7 @@
 """
 Parsing functions to identify characters from visual outputs.
 """
-from typing import Any, Generator, Iterable, List
+from typing import Any, Iterable
 
 import more_itertools
 

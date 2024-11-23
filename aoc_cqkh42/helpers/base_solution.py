@@ -1,7 +1,6 @@
 """Base solution to build solutions for each day."""
 __all__ = ["BaseSolution"]
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from abc import ABC
 from functools import cached_property
 from typing import Any, Self
 
@@ -45,11 +44,11 @@ class BaseSolution(ABC):
             result["num"] for result in NUM_PARSER.findall(self.input_)
         )
 
-    def part_a(self: Self) -> str | int:
+    def part_a(self: Self) -> str | int | None:
         """Part a for the Solution."""
         return None
 
-    def part_b(self: Self) -> str | int:
+    def part_b(self: Self) -> str | int | None:
         """Part b for the Solution."""
         return None
 
@@ -66,6 +65,5 @@ class BaseSolution(ABC):
         parsed = (self._parse_line(line) for line in self.lines)
         return tuple(line for line in parsed if line)
 
-    @staticmethod
     def _parse_line(self, line: str):
         return line
