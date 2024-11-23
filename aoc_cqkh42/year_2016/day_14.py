@@ -8,6 +8,7 @@ from more_itertools import ilen, first
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+
 #todo hash
 class Solution(BaseSolution):
     triple_re = re.compile(r"(.)\1\1")

@@ -3,6 +3,7 @@ import itertools
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+
 def iterate(string):
     g = itertools.groupby(string)
     d = (f"{len(list(b))}{a}" for a, b in g)

@@ -1,8 +1,9 @@
 from typing import Self, Any
 
+import networkx as nx
+
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-import networkx as nx
 
 class Solution(BaseSolution):
     def is_wall(self, x, y):

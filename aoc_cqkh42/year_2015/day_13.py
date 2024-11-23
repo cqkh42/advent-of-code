@@ -1,14 +1,12 @@
 import itertools
 from collections import defaultdict
 
+import more_itertools
 import networkx as nx
 import parse
-import more_itertools
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
-
-
 
 
 class Solution(BaseSolution):

@@ -1,10 +1,8 @@
 from collections import UserDict
-from dataclasses import dataclass
+from functools import cached_property
 from operator import eq, gt, lt
-from typing import Callable
 
 import parse
-from functools import cached_property
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution

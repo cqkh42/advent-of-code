@@ -3,6 +3,7 @@ from collections import defaultdict
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+
 #todo hashes
 
 

@@ -7,7 +7,6 @@ from functools import cached_property
 
 import more_itertools
 from more_itertools.recipes import iter_index
-from multidict import MultiDict
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution

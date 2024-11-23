@@ -5,8 +5,6 @@ Read the full puzzle at https://adventofcode.com/2015/day/7
 """
 __all__ = ["Solution"]
 import operator
-import re
-from collections import UserDict
 from dataclasses import dataclass
 
 from aoc_cqkh42 import submit_answers

@@ -1,9 +1,9 @@
 from typing import Self, Any
-from aoc_cqkh42 import submit_answers
 
-
-from aoc_cqkh42.helpers.base_solution import BaseSolution
 import numpy as np
+
+from aoc_cqkh42 import submit_answers
+from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 def dragon_curve(a, length):

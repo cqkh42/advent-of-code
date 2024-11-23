@@ -10,6 +10,7 @@ import parse
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+
 class Solution(BaseSolution):
     """Solutions for day 6 of 2015's Advent of Code."""
     PARSER = parse.compile("{:w} {:d},{:d} through {:d},{:d}")
