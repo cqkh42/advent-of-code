@@ -1,4 +1,5 @@
 import itertools
+from typing import Self, Any
 
 import more_itertools
 
@@ -23,21 +24,24 @@ def calc_row(row):
 
 
 class Solution(BaseSolution):
+    total = 0
+    def _parse(self: Self) -> Any:
+        self.total += self.input_.count('.')
+        return list(self.input_)
+
+    def _run(self, iters):
+        for step in range(iters):
+            self.parsed = calc_row(self.parsed)
+            self.total += self.parsed.count(".")
+
     def part_a(self):
-        row = list(self.input_)
-        total = row.count(".")
-        for step in range(39):
-            row = calc_row(row)
-            total += row.count(".")
-        return total
+        self._run(39)
+        return self.total
 
     def part_b(self):
-        row = list(self.input_)
-        total = row.count(".")
-        for step in range(399_999):
-            row = calc_row(row)
-            total += row.count(".")
-        return total
+        self._run(399_999 - 39)
+        return self.total
+
 
 if __name__ == "__main__":
     submit_answers(Solution, 18, 2016)
