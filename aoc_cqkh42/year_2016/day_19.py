@@ -1,3 +1,5 @@
+from typing import Self, Any
+
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -9,8 +11,11 @@ def iteration(nums):
 
 
 class Solution(BaseSolution):
+    def _parse(self: Self) -> Any:
+        return int(self.input_)
+
     def part_a(self):
-        a = list(range(1, int(self.input_) + 1))
+        a = list(range(1, self.parsed + 1))
         while len(a) > 1:
             a = iteration(a)
         return a[0]
@@ -23,13 +28,8 @@ class Solution(BaseSolution):
             last, current = one_wins_at[-2:]
             next_ = 4 * current - 3 * last
             one_wins_at.append(next_)
-            if next_ > int(self.input_):
+            if next_ > self.parsed:
                 break
         start, end = one_wins_at[-2:]
 
-        inflection = ((start + end) / 2) - 1
-        if int(self.input_) <= inflection:
-            return int(self.input_) - start + 1
-        else:
-            raise NotImplementedError
-            # this actually now incrememnts by two
+        return self.parsed - start + 1
