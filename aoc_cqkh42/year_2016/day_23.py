@@ -4,18 +4,21 @@ from aoc_cqkh42.year_2016.day_12 import Computer
 
 
 class Solution(BaseSolution):
+    def run(self, registers=None):
+        registers = registers or {}
+        computer = Computer(self.parsed_lines)
+        computer.registers.update(registers)
+        computer.run()
+        return computer.registers['a']
+
+    def _parse_line(self, line: str):
+        return line.split()
+
     def part_a(self):
-        c = Computer(self.input_)
-        c.registers["a"] = 7
-        c.run()
-        return c.registers["a"]
+        return self.run({'a': 7})
 
     def part_b(self):
-        # return
-        c = Computer(self.input_)
-        c.registers["a"] = 12
-        c.run()
-        return c.registers["a"]
+        return self.run({'a': 12})
 
 
 if __name__ == "__main__":
