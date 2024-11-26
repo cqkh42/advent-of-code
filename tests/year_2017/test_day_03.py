@@ -65,4 +65,4 @@ def test__coords(data, answer):
     ],
 )
 def test_part_a(data, answer):
-    assert day_03.part_a(data) == answer
+    assert day_03.Solution(data).part_a() == answer

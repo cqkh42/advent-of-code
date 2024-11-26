@@ -1,6 +1,6 @@
 import pytest
 
-from aoc_cqkh42.year_2017.day_21 import Solution, do_three_iteration
+from aoc_cqkh42.year_2017.day_21 import Solution, create_thruple, break_into_chunks
 
 import numpy as np
 
@@ -10,24 +10,23 @@ def data():
 .#./..#/### => #..#/..../..../#..#"""
 
 
-def test_three_iteration():
-    maps = {
-        '../.#':  '##./#../...',
-        '.#./..#/###': '#..#/..../..../#..#'
+def test_create_thruple():
+    a = ('.#.', '#.#', '...')
+    assert create_thruple(a) == {
+        ('.#.', '#.#', '...'),
+        ('...', '#.#', '.#.'),
+        ('.#.', '..#', '.#.'),
+        ('.#.', '#..', '.#.')
     }
-    start = np.array([
-        [False, True, False],
-        [False, False, True],
-        [True, True, True]
-    ])
-    end = np.array([
-        [True, False, False, True],
-        [False, False, False, False],
-        [False, False, False, False],
-        [True, False, False, True]
-    ])
 
-    np.testing.assert_array_equal(do_three_iteration(start, maps), end)
+def test_break_into_chunks():
+    a = ('#..#', '....', '....', '#..#')
+    assert tuple(break_into_chunks(a, 2)) == (
+        ('#.', '..'),
+        ('.#', '..'),
+        ('..', '#.'),
+        ('..', '.#')
+    )
 
 
 def test_part_a(data):
