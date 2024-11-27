@@ -1,5 +1,5 @@
 from typing import Self, Any
-from collections import ChainMap
+from collections import ChainMap, UserDict
 
 import more_itertools
 import numpy as np
@@ -7,25 +7,34 @@ import numpy as np
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-def _create_thruple(lines):
-    arr = np.array([list(line) for line in lines])
-    for i in range(4):
-        rot = np.rot90(arr, i)
-        yield rot
-        yield np.flipud(rot)
-        yield np.fliplr(rot)
+
+class Mapper:
+    def __init__(self, maps=None):
+        self._map = {}
+        if maps:
+            for k, v in maps.items():
+                self[k] = v
 
 
-def create_thruple(lines):
-    return {
-        tuple(''.join(i) for i in l) for l in _create_thruple(lines)
-    }
-    return set(list(_create_thruple(lines)))
-    arr =np.array([list(line) for line in lines])
-    rotate_one = tuple(''.join(i) for i in np.rot90(arr, 1).tolist())
-    rotate_two = tuple(''.join(i) for i in np.rot90(arr, 2).tolist())
-    rotate_three = tuple(''.join(i) for i in np.rot90(arr, 3).tolist())
-    return {tuple(lines), flipped_v, flipped_h , rotate_one, rotate_two, rotate_three}
+    def __getitem__(self, item):
+        if isinstance(item, tuple):
+            a = np.array([list(i) for i in item])
+            return self._map[a.tobytes()]
+        elif isinstance(item, np.array):
+            return self._map[item.tobytes()]
+        else:
+            raise TypeError
+
+    def __setitem__(self, key, value):
+        self._map[key] = value
+
+        arr = np.array([list(line) for line in key])
+        for i in range(4):
+            rot = np.rot90(arr, i)
+            self._map[rot.tobytes()] = value
+            self._map[np.flipud(rot).tobytes()] = value
+            self._map[np.fliplr(rot).tobytes()] = value
+
 
 def break_into_chunks(lines):
     if not (len(lines) % 2):
@@ -74,15 +83,13 @@ class Solution(BaseSolution):
     arr = ('.#.', '..#', '###')
 
     def _parse(self: Self) -> Any:
-        d =  dict(ChainMap(*self.parsed_lines))
-        # print(('.##', '#.#', '..#') in d)
-        return d
+        return Mapper(dict(self.parsed_lines))
 
-    def _parse_line(self, line: str):
+    def _parse_line(self, line: str) -> tuple:
         left, right = line.split(' => ')
         right = right.split('/')
         left = left.split('/')
-        return {arr: tuple(right) for arr in create_thruple(left)}
+        return tuple(left), tuple(right)
 
     def do_iteration(self):
         chunks = break_into_chunks(self.arr)
