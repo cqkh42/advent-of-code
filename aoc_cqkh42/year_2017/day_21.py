@@ -51,15 +51,8 @@ def break_into_chunks(lines):
     return tuple(out)
 
 def rebuild_into_lines(chunks):
-    # if len(chunks) % 3:
     chunksize = int(len(chunks) **0.5)
-        # break it into 4s
-    # else:
-    #     chunksize = len(chunks) // 3
-        # break it into 3s
-    # print(chunksize)
     a = list(more_itertools.chunked(chunks, chunksize))
-    # print(a[1])
     out = []
     for piece in a:
         x = list(zip(*piece))
@@ -67,11 +60,6 @@ def rebuild_into_lines(chunks):
             z = ''.join(i)
             out.append(z)
     return tuple(out)
-    # print(list(a))
-
-# .#.
-# ..#
-# ###
 
 def counted(lines):
     total = 0
@@ -92,6 +80,7 @@ class Solution(BaseSolution):
         return tuple(left), tuple(right)
 
     def do_iteration(self):
+        print(self.parsed._map)
         chunks = break_into_chunks(self.arr)
         mapped = tuple([self.parsed[chunk] for chunk in chunks])
         self.arr = rebuild_into_lines(mapped)
