@@ -79,6 +79,9 @@ class Solution(BaseSolution):
         self.arr = rebuild_into_lines(mapped)
 
     def part_a(self, iterations=5):
+        for k, v in self.parsed._map.items():
+            if not isinstance(v, np.ndarray):
+                print(type(v))
         for i in range(iterations):
             self.do_iteration()
         total = 0
