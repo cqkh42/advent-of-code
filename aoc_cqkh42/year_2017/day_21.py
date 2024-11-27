@@ -7,6 +7,8 @@ import numpy as np
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+def _tuple_to_arr(t):
+    return np.array([list(i) for i in t])
 
 class Mapper:
     def __init__(self, maps=None):
@@ -15,20 +17,11 @@ class Mapper:
             for k, v in maps.items():
                 self[k] = v
 
-
     def __getitem__(self, item):
-        if isinstance(item, tuple):
-            a = np.array([list(i) for i in item])
-            return self._map[a.tobytes()]
-        elif isinstance(item, np.array):
-            return self._map[item.tobytes()]
-        else:
-            raise TypeError
+        return self._map[item.tobytes()]
 
     def __setitem__(self, key, value):
-        self._map[key] = value
-
-        arr = np.array([list(line) for line in key])
+        arr = _tuple_to_arr(key)
         for i in range(4):
             rot = np.rot90(arr, i)
             self._map[rot.tobytes()] = value
@@ -47,8 +40,9 @@ def break_into_chunks(lines):
         a = list(zip(*split))
         for x in more_itertools.chunked(a, chunksize):
             y = list(zip(*x))
-            out.append(tuple(''.join(i) for i in y))
-    return tuple(out)
+            a = tuple(''.join(i) for i in y)
+            out.append(_tuple_to_arr(a))
+    return out
 
 def rebuild_into_lines(chunks):
     chunksize = int(len(chunks) **0.5)
@@ -80,14 +74,12 @@ class Solution(BaseSolution):
         return tuple(left), tuple(right)
 
     def do_iteration(self):
-        print(self.parsed._map)
         chunks = break_into_chunks(self.arr)
         mapped = tuple([self.parsed[chunk] for chunk in chunks])
         self.arr = rebuild_into_lines(mapped)
 
     def part_a(self, iterations=5):
         for i in range(iterations):
-            # print(i)
             self.do_iteration()
         total = 0
         for line in self.arr:
