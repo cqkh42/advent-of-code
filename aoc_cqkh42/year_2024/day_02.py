@@ -1,8 +1,10 @@
-import more_itertools
+import itertools
+
 import parse
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
+
 
 def remove_list_items(line):
     for index in range(len(line)):
@@ -16,7 +18,7 @@ class Solution(BaseSolution):
         return [result[0] for result in self.PARSER.findall(line)]
 
     def is_safe_line(self, line):
-        line = list(more_itertools.pairwise(line))
+        line = list(itertools.pairwise(line))
         decreasing = all(x > y for x, y in line)
         increasing = all(y > x for x, y in line)
         in_range = all(abs(x - y) <= 3 for x, y in line)
