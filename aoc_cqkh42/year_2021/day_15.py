@@ -47,7 +47,7 @@ class Solution(BaseSolution):
         return graph
 
     def part_a(self):
-        target = (len(self.lines) - 1, len(self.lines) - 1)
+        target = (self.num_lines - 1, self.num_lines - 1)
         a_star = nx.shortest_paths.astar_path(self.parsed, (0, 0), target,
                                               heuristic=heuristic,
                                               weight='weight')
@@ -55,7 +55,7 @@ class Solution(BaseSolution):
             self.parsed.edges[i]['weight'] for i in zip(a_star, a_star[1:]))
 
     def part_b(self):
-        target = ((len(self.lines) * 5) - 1, (len(self.lines) * 5) - 1)
+        target = (self.num_lines * 5 - 1, (self.num_lines * 5) - 1)
         a_star = nx.shortest_paths.astar_path(self.parsed, (0, 0), target,
                                               heuristic=heuristic,
                                               weight='weight')
