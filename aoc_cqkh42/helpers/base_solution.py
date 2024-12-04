@@ -61,6 +61,10 @@ class BaseSolution(ABC):
         return self.input_
 
     @cached_property
+    def num_lines(self) -> int:
+        return len(self.lines)
+
+    @cached_property
     def parsed_lines(self) -> tuple[Any, ...]:
         parsed = (self._parse_line(line) for line in self.lines)
         return tuple(line for line in parsed if line)
