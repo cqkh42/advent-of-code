@@ -1,21 +1,20 @@
+import more_itertools
+
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
-    def _parse(self):
-        return [int(num) for num in self.lines]
-
     def part_a(self):
         return sum(
             second > line
-            for (line, second) in zip(self.parsed, self.parsed[1:])
+            for (line, second) in more_itertools.pairwise(self.numbers)
         )
 
     def part_b(self):
-        windows = [
-            sum(self.parsed[start:start + 3])
-            for start in range(len(self.lines))
-        ]
+        windows = (
+            sum(nums) for nums in more_itertools.triplewise(self.numbers)
+        )
         return sum(
-            second > line for (line, second) in zip(windows, windows[1:])
+            second > line
+            for (line, second) in more_itertools.pairwise(windows)
         )
