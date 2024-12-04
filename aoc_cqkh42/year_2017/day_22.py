@@ -42,7 +42,7 @@ class Solution(BaseSolution):
                 d[(x_index, y_index)] = Node(value)
                 # if value == '#':
                 #     d[(x_index, y_index)] = True
-        x = (len(self.lines) - 1) // 2
+        x = (self.num_lines - 1) // 2
         self.current = (x,x)
         return d
 
@@ -99,7 +99,7 @@ class Solution(BaseSolution):
         return self.total_a
 
     def part_b(self, iters=10_000_000):
-        x = (len(self.lines) - 1) // 2
+        x = (self.num_lines - 1) // 2
         self.current = (x, x)
         for _ in range(iters):
             self.take_step_b()

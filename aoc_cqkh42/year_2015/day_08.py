@@ -21,7 +21,7 @@ class Solution(BaseSolution):
             Number of characters of code for string literals minus
             number of characters for the values of the strings
         """
-        return len(self.input_) - len(self.lines) + 1 - sum(self.parsed_lines)
+        return len(self.input_) - self.num_lines + 1 - sum(self.parsed_lines)
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -29,7 +29,7 @@ class Solution(BaseSolution):
         Returns:
             2 * number of lines + number of " + number of \
         """
-        return 2 * len(self.lines) + self.input_.count('"') + self.input_.count("\\")
+        return 2 * self.num_lines + self.input_.count('"') + self.input_.count("\\")
 
     def _parse_line(self, line: str):
         replacements = [

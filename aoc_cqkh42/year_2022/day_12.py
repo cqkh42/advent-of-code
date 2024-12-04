@@ -39,7 +39,7 @@ class Solution(BaseSolution):
 
     def _parse(self):
         graph = nx.grid_2d_graph(
-            len(self.lines), len(self.lines[0]), create_using=nx.DiGraph
+            self.num_lines, len(self.lines[0]), create_using=nx.DiGraph
         )
         to_remove = [
             edge for edge in graph.edges if not self.is_valid_edge(*edge)
