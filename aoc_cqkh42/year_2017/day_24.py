@@ -1,9 +1,8 @@
 import itertools
-from typing import Self, Any
+from typing import Self
 
 import more_itertools
 import networkx as nx
-from networkx.algorithms.simple_paths import all_simple_paths
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
@@ -17,37 +16,62 @@ def is_valid(path):
     )
 
 class Solution(BaseSolution):
+    values = None
     def _parse(self: Self) -> nx.Graph:
         nodes = [tuple(nums) for nums in more_itertools.chunked(self.numbers, 2)]
         g = nx.Graph()
-        g.add_nodes_from(nodes)
+        for node in nodes:
+            g.add_node(node)
         for a, b in itertools.combinations(nodes, 2):
             if set(a).intersection(b):
                 g.add_edge(a, b)
+
+        self.values = {
+            node: sum(node) for node in nodes
+        }
         return g
 
-    def add_node(self, paths):
-        for *path, end in paths:
-            options = self.parsed.neighbors(end)
-            for option in options:
-                new_path = tuple([*path, end, option])
-                if is_valid(new_path):
-                    yield new_path
-
-
-
     def part_a(self):
-        for node in self.parsed:
-            print(node, len(list(self.parsed.neighbors(node))))
+        connected_nodes = [sum(node) for node in self.parsed if len(list(self.parsed.neighbors(node)))]
+        highest_value_connected_node = max(connected_nodes)
+
+        for node in [node for node in self.parsed if not len(list(self.parsed.neighbors(node)))]:
+            if sum(node) <= highest_value_connected_node:
+                self.parsed.remove_node(node)
+
+        for node in list(self.parsed):
+            neighbours = list(self.parsed.neighbors(node))
+            if len(neighbours) == 1:
+                neighbour = more_itertools.first(neighbours)
+                self.values[neighbour] += self.values[node]
+                # nx.set_node_attributes(self.processed, {node: {'value': }})
+                # self.parsed[neighbour]['value'] += values[node]
+                self.parsed.remove_node(node)
+
+        sinks = []
+        for node in list(self.parsed):
+            neighbours = list(self.parsed.neighbors(node))
+            neighbour_values = {a for i in neighbours for a in i}
+            for value in node:
+                if value not in neighbour_values:
+                    sinks.append(node)
+                    continue
+        print(sinks)
+        for sink in sinks:
+            neighbours = list(self.parsed.neighbors(sink))
+            for neighbour in neighbours:
+                self.values[neighbour] += self.values[sink]
+            self.parsed.remove_node(sink)
+
+
+
+        import matplotlib.pyplot as plt
+        pos = nx.spring_layout(self.parsed)
+        nx.draw_networkx_labels(self.parsed, pos)
+        nx.draw_networkx_nodes(self.parsed, pos=pos)
+        nx.draw_networkx_edges(self.parsed, pos)
+        plt.show()
         return
-        potential_paths = []
-        paths = [tuple([node]) for node in self.parsed.nodes]
-        potential_paths.extend(paths)
-        while paths:
-            paths = list(self.add_node(paths))
-            potential_paths.extend(paths)
-            print(len(paths), paths[0])
-        print(potential_paths)
 
     def part_b(self):
         ...
