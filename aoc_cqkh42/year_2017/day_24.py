@@ -31,47 +31,45 @@ class Solution(BaseSolution):
         }
         return g
 
+    def greedy(self, visited):
+        current_node = visited[-1]
+        if len(visited) == 1:
+            # this is first
+            potential_options = [node for node in self.parsed if set(node).intersection(current_node) and node not in visited]
+        elif visited[-1][0] in visited[-2]:
+            free_edge = visited[-1][1]
+            potential_options = [node for node in self.parsed if node not in visited and free_edge in node]
+        else:
+            free_edge = visited[-1][0]
+            potential_options = [node for node in self.parsed if
+                                 node not in visited and free_edge in node]
+        if not potential_options:
+            print('here', visited)
+            return visited
+        else:
+            m = max(potential_options, key=sum)
+            return self.greedy(visited +[m])
+
+
     def part_a(self):
-        connected_nodes = [sum(node) for node in self.parsed if len(list(self.parsed.neighbors(node)))]
-        highest_value_connected_node = max(connected_nodes)
-
-        for node in [node for node in self.parsed if not len(list(self.parsed.neighbors(node)))]:
-            if sum(node) <= highest_value_connected_node:
-                self.parsed.remove_node(node)
-
-        for node in list(self.parsed):
-            neighbours = list(self.parsed.neighbors(node))
-            if len(neighbours) == 1:
-                neighbour = more_itertools.first(neighbours)
-                self.values[neighbour] += self.values[node]
-                # nx.set_node_attributes(self.processed, {node: {'value': }})
-                # self.parsed[neighbour]['value'] += values[node]
-                self.parsed.remove_node(node)
-
-        sinks = []
-        for node in list(self.parsed):
-            neighbours = list(self.parsed.neighbors(node))
-            neighbour_values = {a for i in neighbours for a in i}
-            for value in node:
-                if value not in neighbour_values:
-                    sinks.append(node)
-                    continue
-        print(sinks)
-        for sink in sinks:
-            neighbours = list(self.parsed.neighbors(sink))
-            for neighbour in neighbours:
-                self.values[neighbour] += self.values[sink]
-            self.parsed.remove_node(sink)
+        values = [self.greedy([node]) for node in self.parsed if 0 in node]
+        v = []
+        for val in values:
+            a = sum(sum(x) for x in val)
+            v.append(a)
+        return max(v)
+        # for node in nodes:
+        #     print('f', node, self.greedy([node]))
 
 
-
-        import matplotlib.pyplot as plt
-        pos = nx.spring_layout(self.parsed)
-        nx.draw_networkx_labels(self.parsed, pos)
-        nx.draw_networkx_nodes(self.parsed, pos=pos)
-        nx.draw_networkx_edges(self.parsed, pos)
-        plt.show()
-        return
+        #
+        # import matplotlib.pyplot as plt
+        # pos = nx.spring_layout(self.parsed)
+        # nx.draw_networkx_labels(self.parsed, pos)
+        # nx.draw_networkx_nodes(self.parsed, pos=pos)
+        # nx.draw_networkx_edges(self.parsed, pos)
+        # plt.show()
+        # return
 
     def part_b(self):
         ...
