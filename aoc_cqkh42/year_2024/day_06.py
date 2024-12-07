@@ -1,9 +1,3 @@
-import itertools
-from typing import Self, Any
-
-import more_itertools
-from isort.wrap_modes import vertical
-
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -66,10 +60,8 @@ class Solution(BaseSolution):
             maze = Maze([list(line) for line in self.lines])
             maze.maze[y][x] = '#'
             maze.run()
-
             if maze.is_loop:
                 nodes.add((x, y))
-        print(len(nodes))
         return len(nodes)
 
 
