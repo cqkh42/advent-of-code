@@ -44,7 +44,6 @@ class Solution(BaseSolution):
             potential_options = [node for node in self.parsed if
                                  node not in visited and free_edge in node]
         if not potential_options:
-            print('here', visited)
             return visited
         else:
             m = max(potential_options, key=sum)
@@ -52,24 +51,13 @@ class Solution(BaseSolution):
 
 
     def part_a(self):
-        values = [self.greedy([node]) for node in self.parsed if 0 in node]
-        v = []
-        for val in values:
-            a = sum(sum(x) for x in val)
-            v.append(a)
-        return max(v)
-        # for node in nodes:
-        #     print('f', node, self.greedy([node]))
+        starts = [node for node in self.parsed if 0 in node]
+        # print(starts, all_nodes)
+        for start in starts:
+            a = [(node, nx.has_path(self.parsed, start, node)) for node in self.parsed]
+            paths = [list(nx.all_simple_paths(self.parsed, start, node)) for node, path in a if path]
+            print(a, paths)
 
-
-        #
-        # import matplotlib.pyplot as plt
-        # pos = nx.spring_layout(self.parsed)
-        # nx.draw_networkx_labels(self.parsed, pos)
-        # nx.draw_networkx_nodes(self.parsed, pos=pos)
-        # nx.draw_networkx_edges(self.parsed, pos)
-        # plt.show()
-        # return
 
     def part_b(self):
         ...
