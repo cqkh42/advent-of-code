@@ -21,19 +21,14 @@ class Equation:
             self.factorise_last()
 
     def is_valid(self):
+        if not self.numbers and not self.total:
+            return True
+        elif not self.numbers and self.total:
+            return False
         if self.total < 0:
             return False
-        if self.total == 0:
-            return True
-
-        # if math.prod(self.numbers) == self.total:
-        #     return True
-        # if math.prod(self.numbers) < self.total:
-        #     return False
         if sum(self.numbers) == self.total:
             return True
-        if sum(self.numbers) > self.total:
-            return False
         if not self.numbers:
             return False
 
