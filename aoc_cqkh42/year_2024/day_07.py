@@ -1,4 +1,4 @@
-import math
+import itertools
 from typing import Self, Any
 
 import parse
@@ -13,7 +13,7 @@ class Equation:
         self.base_total = total
         self.numbers = numbers
         self.base_numbers = [i for i in numbers]
-        self.factorise_last()
+        # self.factorise_last()
 
     def factorise_last(self):
         if not self.numbers:
@@ -32,22 +32,22 @@ class Equation:
         return new_addition.is_valid() or new_mul.is_valid()
 
     def is_valid_b(self):
-        if len(self.numbers) > 1:
-            a, b = self.numbers[-2:]
-            new_num = int(str(a) + str(b))
-            new_equation = Equation(self.total, self.numbers[:-2]+[new_num])
-            n = new_equation.is_valid()
-        else:
-            n = False
-        return n
+        num_indices = len(self.numbers) - 1
+        options = ['add', 'concat', 'mul']
+        paths = itertools.product(options, repeat=num_indices)
 
-        self.factorise_last()
-        if not self.numbers:
-            return not self.total
-
-        new_addition = Equation(self.total - self.numbers[-1], self.numbers[:-1])
-        new_mul = Equation(self.total // self.numbers[-1], self.numbers[:-1])
-        return new_addition.is_valid() or new_mul.is_valid()
+        for path in paths:
+            start = self.numbers[0]
+            for num, operator in zip(self.numbers[1:], path):
+                if operator == 'add':
+                    start += num
+                elif operator == 'mul':
+                    start *= num
+                else:
+                    start = int(str(start) + str(num))
+            if start == self.base_total:
+                return True
+        return False
 
     def __repr__(self):
         return f'Equation({self.base_total}, {self.base_numbers})'
@@ -75,15 +75,9 @@ class Solution(BaseSolution):
         return sum(self.parsed[0])
 
     def part_b(self):
-        for line in self.parsed[1]:
-            print(line, line.is_valid_b())
-        return [self.parsed[1]]
-        failed = [Equation(line.base_total, line.base_numbers) for line in self.parsed_lines if not line.is_valid()]
-        print(failed)
-        unfailed = sum([e.base_total for e in failed if not e.is_valid_b()])
+        new = sum(equation.base_total for equation in self.parsed[1] if equation.is_valid_b())
+        return sum(self.parsed[0]) + new
 
-        a_sum = sum([line.base_total for line in self.parsed_lines if line.is_valid()])
-        return unfailed+a_sum
 
 
 if __name__ == "__main__":
