@@ -1,8 +1,11 @@
-from aoc_cqkh42.year_2024 import day_08
-from aoc_cqkh42.year_2024.day_08 import Solution
+import pytest
+
+from aoc_cqkh42.helpers.coords import Coords
+from aoc_cqkh42.year_2024.day_08 import Solution, find_antinodes
 
 
-def test_part_a():
+@pytest.fixture
+def solution():
     data = """............
 ........0...
 .....0......
@@ -15,4 +18,27 @@ def test_part_a():
 .........A..
 ............
 ............"""
-    assert Solution(data).part_a() == 14
+    return Solution(data)
+
+def test_part_a(solution):
+    assert solution.part_a() == 14
+
+def test_part_b_t():
+    data = """T.........
+...T......
+.T........
+..........
+..........
+..........
+..........
+..........
+..........
+.........."""
+    assert Solution(data).part_b()==9
+
+def test_b(solution):
+    assert solution.part_b() == 34
+
+def test_antinodes():
+    a = find_antinodes([Coords(0,0), Coords(2,2)], 2)
+    print(a)
