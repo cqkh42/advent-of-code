@@ -8,7 +8,7 @@ import parse
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo coords
 def spin(programs: list, num: int):
     first = programs[:-num]
     second = programs[-num:]

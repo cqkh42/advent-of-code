@@ -13,7 +13,7 @@ func_map = {
     # ''
 }
 
-
+#todo computer
 class BaseProgram:
     def __init__(self, instructions):
         self.instructions = instructions

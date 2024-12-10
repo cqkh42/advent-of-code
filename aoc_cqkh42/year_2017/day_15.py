@@ -29,14 +29,9 @@ class Solution(BaseSolution):
         return total
 
     def part_b(self):
-        total = 0
         binned = (bin(a^b) for a, b in zip(self.a_outputs[:5_000_000], self.b_outputs[:5_000_000]))
         with_ending = (num.endswith('0'*16) for num in binned)
         return sum(with_ending)
-        for a, b in zip(self.a_outputs[:5_000_000], self.b_outputs[:5_000_000]):
-            if bin(a ^ b).endswith("0" * 16):
-                total += 1
-        return total
 
 
 if __name__ == "__main__":

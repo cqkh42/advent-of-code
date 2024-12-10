@@ -1,6 +1,6 @@
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo compass coords
 class Solution(BaseSolution):
     def _find_code(self, pad):
         k = {(y, x): a for (y, b) in enumerate(pad) for x, a in enumerate(b) if a}

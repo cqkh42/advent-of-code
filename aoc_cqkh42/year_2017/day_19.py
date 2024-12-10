@@ -8,7 +8,7 @@ import networkx as nx
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo coords
 class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
         g = nx.Graph()

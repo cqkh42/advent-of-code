@@ -3,7 +3,7 @@ from collections import ChainMap, UserDict
 
 import more_itertools
 import numpy as np
-
+ #todo coords?
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 

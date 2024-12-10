@@ -4,7 +4,7 @@ import more_itertools
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo compass coords
 class Solution(BaseSolution):
     def _parse(self):
         to_visit = [(0, 0, "")]

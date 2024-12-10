@@ -10,7 +10,6 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     def _parse(self):
         hashes = ""
-        # placed_hashes = [''] * 8
         placed_hashes = defaultdict(list)
         strings = ((self.input_ + str(index)).encode() for index in range(100_000_000))
         h = (md5_builtin(s).hexdigest() for s in strings)

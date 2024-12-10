@@ -4,7 +4,7 @@ import parse
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo compass coords
 class Solution(BaseSolution):
     def _parse(self):
         return list(parse.findall(r"{:l}{:d}", self.input_))

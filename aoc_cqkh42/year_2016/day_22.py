@@ -14,7 +14,7 @@ PARSER = parse.compile(
     r"/dev/grid/node-x{data[x]:d}-y{data[y]:d}{:s}{data[size]:d}T{:s}{data[used]:d}"
 )
 
-
+#todo coords
 @dataclass(frozen=True)
 class Node:
     x: int

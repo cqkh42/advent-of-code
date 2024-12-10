@@ -5,15 +5,17 @@ Read the full puzzle at https://adventofcode.com/2015/day/3
 """
 __all__ = ["Solution"]
 from collections.abc import Iterable
+import itertools
 from typing import Self
-
-import numpy as np
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
+from aoc_cqkh42.helpers.coords import Coords
 
 
-def _unique_coords(steps: Iterable[Iterable[int, int]]) -> np.array:
+#todo compass coords
+
+def _unique_coords(steps: Iterable[Iterable[int, int]]) -> set[Coords]:
     """Find unique coordinates given a list of steps in a path.
 
     Args:
@@ -22,8 +24,7 @@ def _unique_coords(steps: Iterable[Iterable[int, int]]) -> np.array:
     Returns:
        numpy Array of unique coordinates visited.
     """
-    coords = np.cumsum(steps, axis=0)
-    return np.unique(coords, axis=0)
+    return set(itertools.accumulate(steps))
 
 
 class Solution(BaseSolution):
@@ -46,18 +47,17 @@ class Solution(BaseSolution):
         """
         santa = _unique_coords(self.parsed[::2])
         robot = _unique_coords(self.parsed[1::2])
-        all_coords = np.concatenate((santa, robot))
-        unique = np.unique(all_coords, axis=0)
-        return len(unique)
+        santa.update(robot)
+        return len(santa)
 
-    def _parse(self: Self) -> np.array:
+    def _parse(self: Self) -> list[Coords]:
         """Turn glyphs into (x, y) steps.
 
         Returns:
             numpy Array of steps in (x, y) format
         """
-        mapping_dict = {">": (1, 0), "<": (-1, 0), "^": (0, 1), "v": (0, -1)}
-        return np.array([[0, 0], *(mapping_dict[step] for step in self.input_)])
+        mapping_dict = {">": Coords(1, 0), "<": Coords(-1, 0), "^": Coords(0, -1), "v": Coords(0, 1)}
+        return [Coords(0, 0), *(mapping_dict[step] for step in self.input_)]
 
 
 if __name__ == "__main__":

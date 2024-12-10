@@ -19,7 +19,7 @@ class Solution(BaseSolution):
 
     parser = parse.compile(r"{:w} to {:w} = {:d}")
 
-    def _parse(self):
+    def _parse(self) -> tuple[int, int]:
         graph = Graph(self.parsed_lines)
         distances = {
             sum(
@@ -28,17 +28,17 @@ class Solution(BaseSolution):
             )
             for route in itertools.permutations(graph)
         }
-        return distances
+        return more_itertools.minmax(distances)
 
     def _parse_line(self, line: str):
         a, b, c = self.parser.search(line)
         return a, b, {"weight": c}
 
     def part_a(self):
-        return min(self.parsed)
+        return self.parsed[0]
 
     def part_b(self):
-        return max(self.parsed)
+        return self.parsed[1]
 
 
 if __name__ == "__main__":
