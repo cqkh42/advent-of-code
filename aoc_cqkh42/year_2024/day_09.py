@@ -44,17 +44,26 @@ class Solution(BaseSolution):
         self.parsed[fill] = new_filled_block
         self.parsed[free] = free_post_move
     def part_a(self):
-        # print()
-        # print(self.parsed)
-        # print()
-        while self.first_free_index() != self.last_filled_index():
-        # for i in range(2):
-            self.do_single_move()
-            print(self.first_free_index(), self.last_filled_index())
-            # print(self.parsed)
-            # print()
-        b = more_itertools.flatten(self.parsed)
-        return sum(index*num for index, num in enumerate(b) if num)
+        field = []
+        new_field = []
+        for index, num in enumerate(self.input_):
+            if index % 2:  # we're on a storage block
+                field.extend(None for _ in range(int(num)))
+            else:
+                field.extend(index // 2 for _ in range(int(num)))
+        nums_to_move = [num for num in field[::-1] if num is not None]
+        for index, num in enumerate(field[:len(nums_to_move)]):
+            if num is None:
+                new_field.append(nums_to_move.pop(0))
+            else:
+                new_field.append(num)
+        return sum(index*num for index, num in enumerate(new_field))
+
+    def part_b(self):
+        field = []
+
+
+
 
 
     def part_b(self):
