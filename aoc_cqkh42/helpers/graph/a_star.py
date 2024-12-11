@@ -28,7 +28,6 @@ class AStar:
         self.frontier = queue.PriorityQueue()
         self.visited = set()
         self.frontier.put(start)
-        self.terminii = set()
 
     def run(self):
         while not self.frontier.empty():
@@ -43,5 +42,3 @@ class AStar:
             new_states = {i for i in state.neighbours()}.difference(self.visited)
             for new_state in new_states:
                 self.frontier.put(new_state)
-            if not new_states:
-                self.terminii.add(state)
