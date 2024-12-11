@@ -9,7 +9,6 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
         numbers = [int(num) for num in self.input_]
-        files = []
         out = []
         for index, num in enumerate(numbers):
             if index % 2:  # we're on a storage block
