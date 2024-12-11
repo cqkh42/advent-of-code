@@ -4,47 +4,30 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 @cache
-def blink(stone: tuple):
-    new_stone = []
-    for num in stone:
+def blink_num(num: int, iterations:int):
+    if iterations == 1:
+        if len(str(num)) % 2 == 0:
+            return 2
+        else:
+            return 1
+    else:
         if num == 0:
-            new_stone.append(1)
+            return blink_num(1, iterations-1)
         elif len(str(num)) % 2 == 0:
             st = str(num)
-            new_stone.append(int(st[:len(st)//2]))
-            new_stone.append(int(st[len(st)//2:]))
+            a = int(st[:len(st)//2])
+            b = int(st[len(st)//2:])
+            return blink_num(a, iterations-1) + blink_num(b, iterations-1)
         else:
-            new_stone.append(num*2024)
-    return tuple(new_stone)
+            return blink_num(num*2024, iterations-1)
 
-@cache
-def blink_repeatedly(stone, num):
-    if num == 1:
-        return blink(stone)
-    else:
-        stones = blink(stone)
-        return blink_repeatedly(stones, num-1)
 
 class Solution(BaseSolution):
     def part_a(self):
-        total = 0
-        for num in self.numbers:
-            stone = tuple([num])
-            # stone = blink_repeatedly
-            for _ in range(25):
-                stone = blink(stone)
-            total += len(stone)
-        return total
+        return sum(blink_num(num, 25) for num in self.numbers)
 
     def part_b(self):
-        return
-        total = 0
-        for num in self.numbers:
-            stone = tuple([num])
-            for _ in range(75):
-                stone = blink(stone)
-            total += len(stone)
-        return total
+        return sum(blink_num(num, 75) for num in self.numbers)
 
 
 if __name__ == "__main__":
