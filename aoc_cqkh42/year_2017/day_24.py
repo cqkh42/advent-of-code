@@ -1,4 +1,5 @@
 from collections import defaultdict
+from functools import cached_property
 from typing import Self, Any
 
 from networkx.classes import neighbors
@@ -29,7 +30,8 @@ class Solution(BaseSolution):
             options = self.maps[visited[-1][0]].difference(visited)
         return [tuple([*visited, option]) for option in options]
 
-    def part_a(self):
+    @cached_property
+    def term(self):
         term = []
         queue = [[i] for i in self.maps[0]]
         while queue:
@@ -39,21 +41,15 @@ class Solution(BaseSolution):
                 term.append(node)
             else:
                 queue.extend(neighbors)
-        t = [sum(flatten(te)) for te in term]
+        return term
+
+    def part_a(self):
+        t = [sum(flatten(te)) for te in self.term]
         return max(t)
 
     def part_b(self):
-        term = []
-        queue = [[i] for i in self.maps[0]]
-        while queue:
-            node = queue.pop()
-            neighbors = self.neighbours(node)
-            if not neighbors:
-                term.append(node)
-            else:
-                queue.extend(neighbors)
-        l = max(len(i) for i in term)
-        term = [i for i in term if len(i) == l]
+        l = max(len(i) for i in self.term)
+        term = [i for i in self.term if len(i) == l]
         t = [sum(flatten(te)) for te in term]
         return max(t)
 
