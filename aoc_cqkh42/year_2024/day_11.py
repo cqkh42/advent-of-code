@@ -27,7 +27,7 @@ class Solution(BaseSolution):
         return sum(blink_num(num, 25) for num in self.numbers)
 
     def part_b(self):
-        return sum(blink_num(num, 75) for num in self.numbers)2
+        return sum(blink_num(num, 75) for num in self.numbers)
 
 
 if __name__ == "__main__":
