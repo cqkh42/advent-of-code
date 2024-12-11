@@ -1,7 +1,3 @@
-from typing import Self, Any
-
-import parse
-
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -20,7 +16,6 @@ class Solution(BaseSolution):
             a = (a * a_factor_post_mod) % mod
             b = (b * b_factor_post_mod) % mod
             if a %65536 == b % 65536:
-                print(a, b)
                 total += 1
             if not a % 4:
                 self.a_outputs.append(a)
