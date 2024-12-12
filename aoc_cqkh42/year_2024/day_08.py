@@ -28,8 +28,7 @@ def _find_single_antinodes(a: Coords, b: Coords, mul=1):
             y_1 = a.y - y_diff
             y_2 = b.y + y_diff
         yield Coords(x_1, y_1), Coords(x_2, y_2)
-        # if min(x_1, x_2, y_1, y_2) <0:
-        #     break
+
 
 def find_antinodes(locations, mul=1):
     n = []
@@ -38,7 +37,7 @@ def find_antinodes(locations, mul=1):
         n.extend(returned)
     return n
 
-
+#todo coords grid
 class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
         vals = defaultdict(set)

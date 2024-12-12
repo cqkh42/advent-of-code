@@ -1,7 +1,7 @@
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo coords and map
 class Maze:
     def __init__(self, maze):
         for y_index, line in enumerate(maze):
@@ -44,11 +44,8 @@ class Maze:
                 return
 
 class Solution(BaseSolution):
-    def _parse_line(self, line: str):
-        return list(line)
-
     def part_a(self):
-        self.base_maze = Maze(self.parsed_lines)
+        self.base_maze = Maze(self.lines_as(list))
         maze = self.base_maze
         maze.run()
         return len({location for direction, location in maze.visited})
@@ -57,7 +54,7 @@ class Solution(BaseSolution):
         nodes = set()
         locations = {location for direction, location in self.base_maze.visited if location != self.base_maze.start_location}
         for x, y in locations:
-            maze = Maze([list(line) for line in self.lines])
+            maze = Maze(self.lines_as(list))
             maze.maze[y][x] = '#'
             maze.run()
             if maze.is_loop:

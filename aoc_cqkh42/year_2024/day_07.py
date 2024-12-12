@@ -8,12 +8,16 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Equation:
-    def __init__(self, total, numbers):
+    PARSER = parse.compile('{:d}')
+    def __init__(self, data):
+        if isinstance(data, str):
+            total, *numbers = (result[0] for result in self.PARSER.findall(data))
+        else:
+            total, *numbers = data
         self.total = total
         self.base_total = total
         self.numbers = numbers
         self.base_numbers = [i for i in numbers]
-        # self.factorise_last()
 
     def factorise_last(self):
         if not self.numbers:
@@ -27,8 +31,8 @@ class Equation:
         if not self.numbers:
             return not self.total
 
-        new_addition = Equation(self.total - self.numbers[-1], self.numbers[:-1])
-        new_mul = Equation(self.total // self.numbers[-1], self.numbers[:-1])
+        new_addition = Equation([self.total - self.numbers[-1], *self.numbers[:-1]])
+        new_mul = Equation([self.total // self.numbers[-1], *self.numbers[:-1]])
         return new_addition.is_valid() or new_mul.is_valid()
 
     def is_valid_b(self):
@@ -53,22 +57,14 @@ class Equation:
         return f'Equation({self.base_total}, {self.base_numbers})'
 
 class Solution(BaseSolution):
-    valid_lines = []
-    invalid_lines = []
-    PARSER = parse.compile('{:d}')
-    def _parse_line(self, line: str):
-        left, *right = (result[0] for result in self.PARSER.findall(line))
-        e = Equation(left, right)
-        return e
-
     def _parse(self: Self) -> Any:
         valid = []
         invalid = []
-        for line in self.parsed_lines:
+        for line in self.lines_as(Equation):
             if line.is_valid():
                 valid.append(line.base_total)
             else:
-                invalid.append(Equation(line.base_total, line.base_numbers))
+                invalid.append(Equation([line.base_total, *line.base_numbers]))
         return valid, invalid
 
     def part_a(self):
@@ -77,7 +73,6 @@ class Solution(BaseSolution):
     def part_b(self):
         new = sum(equation.base_total for equation in self.parsed[1] if equation.is_valid_b())
         return sum(self.parsed[0]) + new
-
 
 
 if __name__ == "__main__":

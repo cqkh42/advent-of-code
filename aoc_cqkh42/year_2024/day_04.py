@@ -15,9 +15,9 @@ def count(line):
 
 class Solution(BaseSolution):
     def part_a(self):
-        arr = np.array([list(line) for line in self.lines])
+        arr = np.array(self.lines_as(list))
         flipped = np.fliplr(arr)
-        l_r = sum(count(line) for line in self.lines)
+        l_r = sum(self.lines_as(count))
         t_b = sum(count(line) for line in zip(*self.lines))
 
         total = l_r + t_b

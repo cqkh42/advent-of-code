@@ -1,7 +1,5 @@
 import itertools
 
-import parse
-
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -12,11 +10,6 @@ def remove_list_items(line):
 
 
 class Solution(BaseSolution):
-    PARSER = parse.compile('{:d}')
-
-    def _parse_line(self, line: str):
-        return [result[0] for result in self.PARSER.findall(line)]
-
     def is_safe_line(self, line):
         line = list(itertools.pairwise(line))
         decreasing = all(x > y for x, y in line)
@@ -25,7 +18,7 @@ class Solution(BaseSolution):
         return bool(in_range and (decreasing or increasing))
 
     def part_a(self):
-        return sum(self.is_safe_line(line) for line in self.parsed_lines)
+        return sum(self.is_safe_line(line) for line in self.line_numbers)
 
     def could_be_safe_line(self, line):
         removals = (
@@ -34,7 +27,7 @@ class Solution(BaseSolution):
         return self.is_safe_line(line) or any(removals)
 
     def part_b(self):
-        return sum(self.could_be_safe_line(line) for line in self.parsed_lines)
+        return sum(self.could_be_safe_line(line) for line in self.line_numbers)
 
 
 if __name__ == "__main__":

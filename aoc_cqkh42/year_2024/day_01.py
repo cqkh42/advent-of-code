@@ -9,12 +9,10 @@ class Solution(BaseSolution):
         return sorted(self.numbers[::2]), sorted(self.numbers[1::2])
 
     def part_a(self):
-        c = [abs(left - right) for left, right in zip(*self.parsed)]
-        return sum(c)
+        return sum(abs(left - right) for left, right in zip(*self.parsed))
 
     def part_b(self):
         counted = Counter(self.parsed[1])
-
         return sum(left*counted[left] for left in self.parsed[0])
 
 if __name__ == "__main__":
