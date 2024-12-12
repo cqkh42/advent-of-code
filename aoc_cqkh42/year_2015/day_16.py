@@ -11,6 +11,10 @@ PARSER = parse.compile("{:w}: {:d}")
 
 
 class Sue(UserDict):
+    def __init__(self, data):
+        sue = PARSER.findall(data)
+        super().__init__(sue)
+
     auntie = {
         "children": 3,
         "cats": 7,
@@ -42,16 +46,12 @@ class Sue(UserDict):
 
 
 class Solution(BaseSolution):
-    def _parse_line(self, line: str):
-        sue = PARSER.findall(line)
-        return Sue(dict(sue))
-
     def part_a(self):
-        sue_is_good = [sue.is_good() for sue in self.parsed_lines]
+        sue_is_good = [sue.is_good() for sue in self.lines_as(Sue)]
         return sue_is_good.index(True) + 1
 
     def part_b(self):
-        is_good_sue = [sue.is_real_sue() for sue in self.parsed_lines]
+        is_good_sue = [sue.is_real_sue() for sue in self.lines_as(Sue)]
         return is_good_sue.index(True) + 1
 
 

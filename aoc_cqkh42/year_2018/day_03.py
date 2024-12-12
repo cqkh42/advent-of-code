@@ -7,25 +7,31 @@ __all__ = ["Solution"]
 
 import itertools
 import collections
+from collections import Counter
 from dataclasses import dataclass
 from typing import Self
 from functools import cached_property
 
 import more_itertools
+from more_itertools.more import first
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 import parse
 
-parser = parse.compile(r'#{:d} @ {:d},{:d}: {:d}x{:d}')
-@dataclass
+
+# @dataclass
 class Claim:
-    claim: int
-    left: int
-    top: int
-    width: int
-    height: int
+    PARSER = parse.compile(
+        r'#{claim:d} @ {left:d},{top:d}: {width:d}x{height:d}')
+    def __init__(self, data):
+        data = self.PARSER.search(data)
+        self.claim = data['claim']
+        self.left = data['left']
+        self.top = data['top']
+        self.width = data['width']
+        self.height = data['height']
 
     @cached_property
     def squares(self) -> set[tuple[int, int]]:
@@ -36,27 +42,21 @@ class Claim:
 
 class Solution(BaseSolution):
     """Solutions for day 3 of 2018's Advent of Code."""
-
-    def _parse(self: Self) -> list[Claim]:
-        return [Claim(*row) for row in parser.findall(self.input_)]
-
     @cached_property
-    def counter(self):
+    def counter(self) -> Counter:
         k = list(more_itertools.flatten(
-            claim.squares for claim in self.parsed))
+            claim.squares for claim in self.lines_as(Claim)))
         return collections.Counter(k)
 
     def part_a(self: Self) -> int:
-        return sum(i > 1 for i in self.counter.values())
+        return sum(count > 1 for count in self.counter.values())
 
     def part_b(self: Self) -> str:
-        c = {a for a, b in self.counter.items() if b == 1}
-        for claim in self.parsed:
-            if claim.squares.issubset(c):
-                return claim.claim
-
-
-
+        c = {claim for claim in self.counter if self.counter[claim] == 1}
+        return first(
+            claim.claim for claim in self.lines_as(Claim)
+            if claim.squares.issubset(c)
+        )
 
 
 if __name__ == "__main__":

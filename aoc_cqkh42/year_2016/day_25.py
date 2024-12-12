@@ -4,6 +4,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.year_2016.day_12 import Computer
 
 #todo computer
+#todo line split
 class Solution(BaseSolution):
     def _parse_line(self, line: str):
         return line.split()
@@ -15,6 +16,3 @@ class Solution(BaseSolution):
             c.run()
             if sum(c.outputs) == (len(c.outputs) / 2):
                 return i
-
-    def part_b(self: Self) -> str | int:
-        return

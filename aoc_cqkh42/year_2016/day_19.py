@@ -1,5 +1,3 @@
-from typing import Self, Any
-
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
@@ -11,11 +9,8 @@ def iteration(nums):
 
 
 class Solution(BaseSolution):
-    def _parse(self: Self) -> Any:
-        return int(self.input_)
-
     def part_a(self):
-        a = list(range(1, self.parsed + 1))
+        a = list(range(1, self.number + 1))
         while len(a) > 1:
             a = iteration(a)
         return a[0]
@@ -28,8 +23,8 @@ class Solution(BaseSolution):
             last, current = one_wins_at[-2:]
             next_ = 4 * current - 3 * last
             one_wins_at.append(next_)
-            if next_ > self.parsed:
+            if next_ > self.number:
                 break
         start, end = one_wins_at[-2:]
 
-        return self.parsed - start + 1
+        return self.number - start + 1

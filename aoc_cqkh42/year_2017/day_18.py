@@ -76,7 +76,7 @@ class ProgramB(BaseProgram):
             self[v] = next_value
         return step
 
-
+#todo line split
 class Solution(BaseSolution):
     def _parse_line(self, line: str):
         return line.split()

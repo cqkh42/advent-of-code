@@ -8,8 +8,10 @@ import parse
 
 NUM_PARSER = parse.compile("{num:d}")
 
+#todo something for line.split()
 
 class BaseSolution(ABC):
+    parsed: Any = None
     """Base solution to build solutions for each day.
 
     Attributes:
@@ -25,13 +27,19 @@ class BaseSolution(ABC):
 
 
     @cached_property
-    def lines(self: Self) -> list[str]:
+    def lines(self: Self) -> tuple[str]:
         """Iterate through all lines in the input data.
 
         Returns:
             A list of lines in the input data
         """
-        return self.input_.split("\n")
+        return tuple(self.input_.split("\n"))
+
+    def lines_as(self, as_type):
+        return tuple(as_type(line) for line in self.lines)
+
+    def numbers_as(self, as_type):
+        return as_type(self.numbers)
 
     @cached_property
     def numbers(self: Self) -> tuple[int, ...]:
@@ -43,6 +51,20 @@ class BaseSolution(ABC):
         return tuple(
             result["num"] for result in NUM_PARSER.findall(self.input_)
         )
+
+    @cached_property
+    def number(self):
+        return self.numbers[0]
+
+    @cached_property
+    def line_numbers(self):
+        return [
+            [num['num'] for num in NUM_PARSER.findall(line)]
+            for line in self.lines
+        ]
+
+    def line_numbers_as(self, as_type):
+        return tuple(as_type(line) for line in self.line_numbers)
 
     def part_a(self: Self) -> str | int | None:
         """Part a for the Solution."""

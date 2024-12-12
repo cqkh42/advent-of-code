@@ -6,11 +6,6 @@ import parse
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-PARSER = parse.compile(
-    "capacity {:d}, durability {:d}, flavor {:d}, texture {:d}, calories {:d}"
-)
-
-
 def get_ratios(num_ingredients):
     master_ratios = itertools.combinations_with_replacement(
         range(1, 101), num_ingredients
@@ -26,12 +21,9 @@ def get_ratios(num_ingredients):
 
 class Solution(BaseSolution):
     def _parse(self):
-        ingredients = np.stack(self.parsed_lines)
+        ingredients = np.stack(self.line_numbers)
         recipes = get_ratios(len(ingredients)) * ingredients
         return recipes.sum(-2)
-
-    def _parse_line(self, line: str):
-        return list(PARSER.search(line))
 
     def output_answer(self, recipe):
         return recipe.clip(min=0).prod(1).max()

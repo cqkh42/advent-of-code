@@ -25,12 +25,10 @@ def sets_sum_to(set_, target, num):
 
 
 class Solution(BaseSolution):
-    def _parse(self):
-        return frozenset(self.numbers)
-
     def solve(self, num_groups):
+        numbers = self.numbers_as(frozenset)
         groups = sets_sum_to(
-            self.parsed, sum(self.parsed) / num_groups, num_groups
+            numbers, sum(numbers) / num_groups, num_groups
         )
         return min(math.prod(i) for i in groups if len(i) == len(min(groups, key=len)))
 

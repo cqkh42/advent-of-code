@@ -29,6 +29,7 @@ class Node:
         }
         self.status_b = mapping[self.status_b]
 
+#todo grid
 class Solution(BaseSolution):
     direction = 'N'
     current = (0, 0)

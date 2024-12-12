@@ -6,7 +6,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     def do_run(self, func, index=0):
-        jumps = list(self.numbers)
+        jumps = self.numbers_as(list)
         for step in itertools.count():
             if index >= len(jumps):
                 return step

@@ -2,8 +2,6 @@ from collections import defaultdict
 from functools import cached_property
 from typing import Self, Any
 
-from networkx.classes import neighbors
-
 from more_itertools import flatten
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution

@@ -15,15 +15,23 @@ PARSER = parse.compile(
 )
 
 #todo coords
-@dataclass(frozen=True)
+# @dataclass(frozen=True)
 class Node:
-    x: int
-    y: int
-    size: int
-    used: int
+    def __init__(self, data):
+        cell = PARSER.search(data)
+        data = cell.named['data']
+        self.x = data['x']
+        self.y = data['y']
+        self.size = data['size']
+        self.used = data['used']
 
     def __iter__(self):
-        yield from asdict(self).items()
+        yield from (
+            ("x", self.x),
+            ('y', self.y),
+            ('size', self.size),
+            ('used', self.used)
+        )
 
     @cached_property
     def available(self):
@@ -31,13 +39,16 @@ class Node:
 
 
 class Solution(BaseSolution):
-    def _parse(self):
-        rows = PARSER.findall(self.input_)
-        cells = [Node(**cell) for cell in [(row.named["data"]) for row in rows]]
+    def _parse_line(self, line: str):
+        try:
+            return Node(line)
+        except AttributeError:
+            return
 
+    def _parse(self):
         valid_cells = more_itertools.flatten(
             (node_a, node_b)
-            for (node_a), (node_b) in itertools.permutations(cells, 2)
+            for (node_a), (node_b) in itertools.permutations(self.parsed_lines, 2)
             if 0 < node_a.used <= node_b.available
         )
 
@@ -45,8 +56,8 @@ class Solution(BaseSolution):
 
         graph = networkx.grid_graph(
             (
-                max(cells, key=lambda cell: cell.y).y + 1,
-                max(cells, key=lambda cell: cell.x).x + 1,
+                max(self.parsed_lines, key=lambda cell: cell.y).y + 1,
+                max(self.parsed_lines, key=lambda cell: cell.x).x + 1,
             )
         )
         nx.set_node_attributes(graph, in_scope_nodes)

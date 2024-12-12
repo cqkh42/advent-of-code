@@ -47,9 +47,17 @@ def parse_line(line):
 
 
 class Solution(BaseSolution):
+    def _parse_line(self, line: str):
+        line = line.split(' -> ')
+        name, weight = NO_DEPENDENCY_PARSER.parse(line[0])
+        if len(line) > 1:
+            dependencies = tuple(line[1].split(", "))
+        else:
+            dependencies = tuple()
+        return name, Program(name, weight, dependencies)
+
     def _parse(self: Self) -> frozendict[str, Program]:
-        lines = [line.split(" -> ") for line in self.lines]
-        return frozendict(parse_line(line) for line in lines)
+        return frozendict(self.parsed_lines)
 
     def part_a(self):
         all_dependencies = (program.dependencies for program in self.parsed.values())

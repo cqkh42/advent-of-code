@@ -50,7 +50,7 @@ class Program:
             step = self[y]
         self.index += step
 
-
+#todo line list
 class Solution(BaseSolution):
     def _parse_line(self, line: str):
         return line.split()

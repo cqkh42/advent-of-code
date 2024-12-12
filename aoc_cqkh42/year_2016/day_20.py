@@ -4,10 +4,14 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
+    LINE_PARSER = parse.compile("{:d}-{:d}")
+
+    def _parse_line(self, line: str):
+        found = self.LINE_PARSER.search(line)
+        return found[0], found[1]
+
     def _parse(self):
-        parser = parse.compile("{:d}-{:d}")
-        rs = parser.findall(self.input_)
-        rs = sorted([(a, b) for a, b in rs], key=lambda x: x[0])
+        rs = sorted(self.parsed_lines)
         ranges = []
 
         current = list(rs[0])
@@ -19,8 +23,7 @@ class Solution(BaseSolution):
                 ranges.append(current)
                 current = [start, end]
         ranges.append(current)
-        ranges = [range(a, b + 1) for a, b in ranges]
-        return ranges
+        return [range(a, b + 1) for a, b in ranges]
 
     def part_a(self):
         first_range = self.parsed[0]

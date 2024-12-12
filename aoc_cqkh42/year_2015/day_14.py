@@ -5,20 +5,20 @@ import parse
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-TIME = 2503
 PARSER = parse.compile(
     r"{name:w} can fly {speed:d} km/s for {duration:d} seconds, but then must "
     r"rest for {rest:d} seconds."
 )
 
 
-@dataclass
 class Reindeer:
-    name: str
-    speed: int
-    duration: int
-    rest: int
-    score = 0
+    def __init__(self, line):
+        as_dict = PARSER.search(line).named
+        self.name = as_dict['name']
+        self.speed = as_dict['speed']
+        self.duration = as_dict['duration']
+        self.rest = as_dict['rest']
+        self.score = 0
 
     def distance(self, time):
         sprints, final_stretch = divmod(time, self.duration + self.rest)
@@ -32,18 +32,18 @@ class Reindeer:
 
 class Solution(BaseSolution):
     def _parse_line(self, line: str):
-        data = PARSER.search(line)
-        return Reindeer(**data.named)
+        return Reindeer(line)
 
-    def part_a(self, time=TIME):
-        return max(deer.distance(time) for deer in self.parsed_lines)
+    def part_a(self, time=2503):
+        return max(deer.distance(time) for deer in self.lines_as(Reindeer))
 
-    def part_b(self, time=TIME):
+    def part_b(self, time=2503):
+        reindeers = self.lines_as(Reindeer)
         for second in range(1, time + 1):
-            highest_score = max(deer.distance(second) for deer in self.parsed_lines)
-            for deer in self.parsed_lines:
+            highest_score = max(deer.distance(second) for deer in reindeers)
+            for deer in reindeers:
                 deer.score += deer.distance(second) == highest_score
-        return max(self.parsed_lines, key=lambda deer: deer.score).score
+        return max(reindeers, key=lambda deer: deer.score).score
 
 
 if __name__ == "__main__":

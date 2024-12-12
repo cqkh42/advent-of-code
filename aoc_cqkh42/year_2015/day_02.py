@@ -7,8 +7,10 @@ __all__ = ["Solution"]
 
 import itertools
 import math
-from typing import Self
 
+from typing import Self, Any
+
+import more_itertools
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -20,7 +22,6 @@ class Present(list):
         paper: How much paper is needed for the present.
         ribbon: How much ribbon is needed for the present.
     """
-
     def _pairs(self: Self) -> itertools.combinations:
         """Pairs of dimensions.
 
@@ -52,6 +53,8 @@ class Present(list):
 
 class Solution(BaseSolution):
     """Solutions for day 2 of 2015's Advent of Code."""
+    def _parse(self):
+        return self.line_numbers_as(Present)
 
     def part_a(self: Self) -> int:
         """Answer part a.
@@ -59,7 +62,7 @@ class Solution(BaseSolution):
         Returns:
             Total paper needed for all presents
         """
-        return sum(present.paper for present in self.parsed_lines)
+        return sum(present.paper for present in self.parsed)
 
     def part_b(self: Self) -> int:
         """Answer part b.
@@ -67,10 +70,7 @@ class Solution(BaseSolution):
         Returns:
             Total ribbon needed for all presents
         """
-        return sum(present.ribbon for present in self.parsed_lines)
-
-    def _parse_line(self, line):
-        return Present(int(dim) for dim in line.split('x'))
+        return sum(present.ribbon for present in self.parsed)
 
 
 if __name__ == "__main__":

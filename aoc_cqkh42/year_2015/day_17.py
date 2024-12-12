@@ -23,9 +23,5 @@ class Solution(BaseSolution):
         sizes = Counter(len(group) for group in valid(self.numbers, target))
         return sizes[min(sizes)]
 
-    def _parse(self: Self) -> str:
-        return self.input_
-
-
 if __name__ == "__main__":
     submit_answers(Solution, 17, 2015)

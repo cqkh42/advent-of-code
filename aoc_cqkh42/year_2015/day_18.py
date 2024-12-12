@@ -31,10 +31,7 @@ class Solution(BaseSolution):
     """Solutions for day 18 of 2015's Advent of Code."""
 
     def _parse(self: Self) -> np.ndarray[bool]:
-        return np.array(self.parsed_lines)
-
-    def _parse_line(self, line: str):
-        return [element == '#' for element in line]
+        return np.array(self.lines_as(list)) == '#'
 
     def part_a(self: Self, steps: int = 100) -> int:
         light_arr = self.parsed.copy()

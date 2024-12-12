@@ -27,11 +27,8 @@ class IP:
 
 
 class Solution(BaseSolution):
-    def _parse_line(self, line: str):
-        return IP(line)
-
     def part_a(self):
-        return sum(ip.tls() for ip in self.parsed_lines)
+        return sum(ip.tls() for ip in self.lines_as(IP))
 
     def part_b(self):
-        return sum(ip.ssl() for ip in self.parsed_lines)
+        return sum(ip.ssl() for ip in self.lines_as(IP))

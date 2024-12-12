@@ -6,6 +6,7 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
+#todo line list
 def sort_words(phrase):
     return [sorted(word) for word in phrase]
 

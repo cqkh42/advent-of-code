@@ -14,10 +14,10 @@ def calc_distance(path, distances):
     distance = sum(distances[x][y] for x, y in more_itertools.pairwise(path))
     return distance
 
-
+#todo grid/ coords
 class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
-        a = np.array([list(line) for line in self.input_.split()])
+        a = np.array(self.lines_as(list))
 
         x = a.shape
         g = nx.grid_graph([x[1], x[0]])
