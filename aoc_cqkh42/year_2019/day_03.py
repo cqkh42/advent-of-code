@@ -5,7 +5,8 @@ import parse
 
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo computer
+#todo coords
 class Solution(BaseSolution):
     parser = parse.compile("{:l}{:d}")
     wire_1 = None

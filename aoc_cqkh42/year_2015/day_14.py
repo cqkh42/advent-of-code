@@ -31,9 +31,6 @@ class Reindeer:
 
 
 class Solution(BaseSolution):
-    def _parse_line(self, line: str):
-        return Reindeer(line)
-
     def part_a(self, time=2503):
         return max(deer.distance(time) for deer in self.lines_as(Reindeer))
 

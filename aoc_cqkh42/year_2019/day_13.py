@@ -9,7 +9,7 @@ from aoc_cqkh42.year_2019.computer import Computer
 class Solution(BaseSolution):
 
     def part_a(self):
-        computer = Computer(list(self.numbers), [])
+        computer = Computer(self.numbers)
         computer.run()
         results = computer.outputs
         chunks = more_itertools.chunked(results, 3)

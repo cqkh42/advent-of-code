@@ -17,9 +17,11 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     """Solutions for day 2 of 2018's Advent of Code."""
+    def _parse_line(self, line: str):
+        return line, collections.Counter(line)
 
     def _parse(self: Self) -> dict[str, collections.Counter]:
-        return {line:collections.Counter(line) for line in self.lines}
+        return dict(self.parsed_lines)
 
     def part_a(self: Self) -> int:
         a = len([a for a in self.parsed.values() if 2 in a.values()])

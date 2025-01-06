@@ -46,15 +46,14 @@ def find_best_config_b(possible_configs, intcode):
 class Solution(BaseSolution):
 
     def part_a(self):
-        inputs = list(self.numbers)
+        inputs = self.numbers
         configs = itertools.permutations(range(5))
         result = find_best_config(configs, inputs)[1]
         return result
 
     def part_b(self):
         range_ = range(5, 10)
-        inputs = list(self.numbers)
-
+        inputs = self.numbers
         configs = itertools.permutations(range_)
         result = find_best_config_b(configs, inputs)[1]
         return result

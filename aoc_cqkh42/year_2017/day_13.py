@@ -10,7 +10,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 def is_caught(time, size):
     return not time % (2 * size - 2)
 
-
+#todo pairs of numbers
 class Solution(BaseSolution):
     PARSER = parse.compile('{:d}: {:d}')
     def _parse_line(self, line: str):

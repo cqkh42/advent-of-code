@@ -1,7 +1,10 @@
 class Computer:
-    def __init__(self, intcode, inputs):
-        self.intcode = intcode.copy()
-        self.inputs = inputs.copy()
+    def __init__(self, intcode, inputs=None):
+        self.intcode = list(intcode).copy()
+        if inputs:
+            self.inputs = inputs.copy()
+        else:
+            self.inputs = []
         self.output = None
         self.outputs = []
         self.pointer = 0

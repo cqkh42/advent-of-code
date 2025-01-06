@@ -66,7 +66,7 @@ def run_it_all(numbers, iters):
         numbers = do_iteration(numbers)
     return "".join([str(i) for i in numbers[:8]])
 
-
+#todo digits
 class Solution(BaseSolution):
     def part_a(self):
         inputs = list(self.input_)

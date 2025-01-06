@@ -18,7 +18,7 @@ FUNC_MAP = {
     "NOT": lambda x: (1 << 16) - 1 - x,
 }
 
-
+#todo computer
 @dataclass
 class Register:
     def __init__(self, lines):

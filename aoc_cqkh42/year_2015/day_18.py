@@ -12,6 +12,7 @@ from scipy.ndimage import generic_filter
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+#todo as array?
 
 def _iteration(lights):
     f = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]

@@ -1,5 +1,6 @@
 import functools
 import itertools
+from typing import Self, Any
 
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
@@ -17,22 +18,22 @@ def _distribute(banks):
 
 
 class Solution(BaseSolution):
+    def _parse(self: Self) -> Any:
+        banks = self.numbers
+        seen = {banks: 1}
+        for dist in itertools.count(1):
+            banks = _distribute(banks)
+            if banks in seen:
+                return dist, seen[banks]
+            seen[banks] = dist
+
+
     def part_a(self):
-        return do(self.numbers)[0]
+        return self.parsed[0]
 
     def part_b(self):
-        a = do(self.numbers)
-        return a[0] - a[1]
+        return self.parsed[0] - self.parsed[1]
 
-
-@functools.cache
-def do(banks):
-    seen = {banks: 1}
-    for dist in itertools.count(1):
-        banks = _distribute(banks)
-        if banks in seen:
-            return dist, seen[banks]
-        seen[banks] = dist
 
 
 if __name__ == "__main__":

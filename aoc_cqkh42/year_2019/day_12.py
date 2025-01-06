@@ -5,7 +5,7 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 _coords = ["x", "y", "z"]
 
-
+#todo coords
 class Planet:
     def __init__(self, positions):
         self.positions = dict(zip(_coords, positions))

@@ -47,7 +47,8 @@ def run(inputs, start_colour):
         except StopIteration:
             return results
 
-
+#todo coords
+#todoc computer
 class Solution(BaseSolution):
     def part_a(self):
         return len(run(self.numbers, 0))

@@ -20,13 +20,13 @@ class Solution(BaseSolution):
         ]
         accumulated = np.cumsum(steps, axis=0)
         distances = np.absolute(accumulated).sum(axis=1) / 2
-        return distances
+        return distances.astype(int)
 
     def part_a(self):
-        return int(self.parsed[-1])
+        return self.parsed[-1]
 
     def part_b(self):
-        return int(self.parsed.max())
+        return self.parsed.max()
 
 
 if __name__ == "__main__":

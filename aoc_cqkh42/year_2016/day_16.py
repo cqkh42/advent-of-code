@@ -5,7 +5,7 @@ import numpy as np
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo digits
 def dragon_curve(a, length):
     b = ~a[::-1]
     z =np.concatenate([a, [False], b])

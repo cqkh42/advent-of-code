@@ -6,6 +6,7 @@ from more_itertools import flatten
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
+#todo line numbers
 class Solution(BaseSolution):
     maps = defaultdict(set)
     def _parse_line(self, line: str):

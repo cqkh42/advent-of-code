@@ -32,7 +32,7 @@ def swap_characters(programs, characters):
     programs[program_index_a] = y
     return programs
 
-
+#todo number parser
 class Solution(BaseSolution):
     programs = list(ascii_lowercase[:16])
     program_history = [ascii_lowercase[:16]]

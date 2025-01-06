@@ -1,5 +1,6 @@
 import itertools
 import re
+from typing import Self, Any
 
 TWO_REGEX = re.compile(r'(\d)\1')
 
@@ -7,15 +8,16 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
 class Solution(BaseSolution):
+    def _parse(self: Self) -> Any:
+        a, b = self.input_.split('-')
+        return int(a), int(b)
     def part_a(self):
-        start, end = self.input_.split('-')
         return sum(
-            _is_valid(password) for password in range(int(start), int(end)))
+            _is_valid(password) for password in range(*self.parsed))
 
     def part_b(self):
-        start, end = self.input_.split('-')
         only_twice = (
-            password for password in range(int(start), int(end))
+            password for password in range(*self.parsed)
             if _repeats_once(password)
         )
         return sum(_is_valid(password) for password in only_twice)

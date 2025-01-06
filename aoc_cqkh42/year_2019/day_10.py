@@ -3,6 +3,8 @@ import math
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 
+#todo grid
+#todo coords
 class Solution(BaseSolution):
     def _parse(self):
         asteroids = set()

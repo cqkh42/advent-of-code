@@ -37,13 +37,6 @@ class Program:
 NO_DEPENDENCY_PARSER = parse.compile("{:l} ({:d})")
 
 
-def parse_line(line):
-    name, weight = NO_DEPENDENCY_PARSER.parse(line[0])
-    if len(line) > 1:
-        dependencies = tuple(line[1].split(", "))
-    else:
-        dependencies = tuple()
-    return name, Program(name, weight, dependencies)
 
 
 class Solution(BaseSolution):

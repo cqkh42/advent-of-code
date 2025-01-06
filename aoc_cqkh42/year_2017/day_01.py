@@ -1,7 +1,7 @@
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo digits
 class Solution(BaseSolution):
     def _parse(self):
         return [int(num) for num in self.input_]
