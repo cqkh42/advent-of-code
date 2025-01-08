@@ -14,8 +14,7 @@ def calc_mul(instructions):
 
 class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
-        instructions = re.findall(r"(mul\(\d+,\d+\)|don't|do)", self.input_)
-        return instructions
+        return re.findall(r"(mul\(\d+,\d+\)|don't|do)", self.input_)
 
     def part_a(self):
         return calc_mul(self.parsed)

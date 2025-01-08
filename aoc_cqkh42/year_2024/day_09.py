@@ -6,16 +6,14 @@ from more_itertools import first, iter_index, flatten
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
-
+#todo digits
 class Solution(BaseSolution):
     def _parse(self: Self) -> Any:
+        digits = (int(num) for num in self.input_)
         field = []
-        # for index, num in enumerate('2333133121414131402'):
-        for index, num in enumerate(self.input_):
-            if index % 2:
-                field.append([None]*int(num))# we're on a storage block
-            else:
-                field.append([index // 2]*int(num))
+        for index, num in enumerate(digits):
+            val = None if index % 2 else index // 2
+            field.append([val]*num)
         return field
 
     def part_a(self):
@@ -31,7 +29,7 @@ class Solution(BaseSolution):
         for mover in self.parsed[::-1][:-1]:
             to_move = [i for i in mover if i is not None]
 
-            if not to_move:
+            if not any(mover):
                 continue
             if to_move[0] in moved:
                 continue

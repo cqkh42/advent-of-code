@@ -1,6 +1,5 @@
 import itertools
 
-import more_itertools
 import numpy as np
 
 from aoc_cqkh42 import submit_answers
@@ -12,7 +11,7 @@ def count(line):
     else:
         return count(''.join(line))
 
-
+#todo grid
 class Solution(BaseSolution):
     def part_a(self):
         arr = np.array(self.lines_as(list))
