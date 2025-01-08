@@ -58,10 +58,11 @@ class BaseSolution(ABC):
 
     @cached_property
     def line_numbers(self):
-        return [
+        lines = [
             [num['num'] for num in NUM_PARSER.findall(line)]
             for line in self.lines
         ]
+        return [line for line in lines if line]
 
     def line_numbers_as(self, as_type):
         return tuple(as_type(line) for line in self.line_numbers)
