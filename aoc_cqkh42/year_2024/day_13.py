@@ -1,4 +1,3 @@
-import itertools
 from typing import Self, Any
 
 import more_itertools
