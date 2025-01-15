@@ -41,7 +41,7 @@ class Solution(BaseSolution):
             return self.move(location, x, y)
 
     def big_move(self, location, grid, x, y):
-        grid = copy.deepcopy(grid)
+        grid = {k:v for k, v in grid.items()}
         return self.move_b(location, grid, x, y)
 
     def move_b(self, location, grid, x, y):
@@ -64,8 +64,6 @@ class Solution(BaseSolution):
         elif grid[new_location] == '.':
             grid[location], grid[new_location] = '.', grid[
                 location]
-        else:
-            print(self.grid[new_location])
         return grid
 
     def part_a(self):
