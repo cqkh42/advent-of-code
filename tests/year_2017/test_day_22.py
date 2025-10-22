@@ -28,5 +28,9 @@ def test_part_a(solution):
 def test_part_a_small(solution):
     assert solution.part_a(70) == 41
 
-def test_part_b(solution):
+def test_part_b_small(solution):
     assert solution.part_b(100) == 26
+
+def test_part_b(solution):
+    assert solution.part_a(70) == 41
+    assert solution.part_b() == 2511944

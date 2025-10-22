@@ -9,25 +9,6 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 #todo coords
-class Node:
-    def __init__(self, string='.'):
-        if string == '#':
-            self.status_a = self.status_b ='infected'
-        else:
-            self.status_a = self.status_b = 'clean'
-
-    def toggle_a(self):
-        self.status_a = "infected" if self.status_a == "clean" else "clean"
-
-    def toggle_b(self):
-        mapping = {
-            'clean': 'weakened',
-            'weakened': 'infected',
-            'infected': 'flagged',
-            'flagged': 'clean'
-        }
-        self.status_b = mapping[self.status_b]
-
 #todo grid
 class Solution(BaseSolution):
     direction = 'N'
@@ -35,16 +16,18 @@ class Solution(BaseSolution):
     total_a = 0
     total_b = 0
 
+    def _reset_to_centre(self):
+        x = (self.num_lines - 1) // 2
+        self.current = (x, x)
+        self.direction = "N"
+
+
     def _parse(self: Self) -> Any:
         d = set()
         for y_index, line in enumerate(self.lines):
             for x_index, value in enumerate(line):
                 if value == "#":
                     d.add((x_index, y_index))
-                # if value == '#':
-                #     d[(x_index, y_index)] = True
-        x = (self.num_lines - 1) // 2
-        self.current = (x,x)
         return d
 
     def turn(self, change):
@@ -81,7 +64,9 @@ class Solution(BaseSolution):
         self.move()
 
     def part_a(self, iters=10_000):
-        infected = self.parsed
+        total = 0
+        self._reset_to_centre()
+        infected = self.parsed.copy()
         for _ in range(iters):
             if self.current in infected:
                 self.turn(1)
@@ -89,16 +74,21 @@ class Solution(BaseSolution):
             else:
                 self.turn(-1)
                 infected.add(self.current)
-                self.total_a += 1
+                total += 1
             self.move()
-        return self.total_a
+        return total
 
     def part_b(self, iters=10_000_000):
-        x = (self.num_lines - 1) // 2
-        self.current = (x, x)
+        self._reset_to_centre()
+        total = 0
+        states = defaultdict(int, {location: 2 for location in self._parse()})
         for _ in range(iters):
-            self.take_step_b()
-        return self.total_b
+            current_state = states.get(self.current, 0)
+            total += current_state == 1
+            self.turn(current_state - 1)
+            states[self.current] =(current_state + 1) % 4
+            self.move()
+        return total
 
 if __name__ == "__main__":
     submit_answers(Solution, 22, 2017)
