@@ -1,135 +1,159 @@
 import dataclasses
 import itertools
 import re
+from dataclasses import dataclass
 
-import more_itertools
-
+from typing import Iterable, Self
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 from aoc_cqkh42.helpers.graph import a_star
 
+@dataclass
+class ChipPair:
+    microchip: int
+    generator: int
+
+    def __hash__(self):
+        return hash((self.microchip, self.generator))
+
+    def is_valid(self):
+        return (0 <= self.microchip <= 3) and (0 <= self.generator <= 3)
+
+    def distance(self):
+        return max((3-self.microchip, 3-self.generator))
+
+@dataclass(eq=True, frozen=True)
+class ChipSet:
+    pairs: Iterable[ChipPair]
+    lift: int = 0
+
+    def __hash__(self):
+        pairs = sorted((pair.microchip, pair.generator) for pair in self.pairs)
+        all_ = tuple((*pairs, self.lift))
+
+        return hash(all_)
+
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
+    def __len__(self):
+        return len(self.pairs)
+
+    def __getitem__(self, item):
+        return self.pairs[item]
+
+    def is_valid(self):
+        if not 0 <= self.lift <= 3:
+            return False
+
+        if not all(pair.is_valid() for pair in self.pairs):
+            return False
+
+        # any loose chips on the same floor as a generator are toast
+        loose_chips = {
+            pair.microchip for pair in self.pairs if pair.generator != pair.microchip
+        }
+        generators = {pair.generator for pair in self.pairs}
+        # are any loose chips on the same floor as generators
+        bad_gen = loose_chips.intersection(generators)
+        return not bad_gen  # if non-zero, return true
 
 class Solution(BaseSolution):
     def _parse(self):
-        indices = re.findall(r" (\w+) generator", self.input_)
-
-        generators = [0 for _ in range(len(indices))]
-        chips = [0 for _ in range(len(indices))]
-
-        for floor_num, info in enumerate(self.lines):
-            for gen in re.findall(r" (\w+) generator", info):
-                index = indices.index(gen)
-                generators[index] = floor_num
-            for chip in re.findall(r" (\w+)-compatible", info):
-                index = indices.index(chip)
-                chips[index] = floor_num
-        generators = list(generators)
-        chips = list(chips)
-        g = Node(generators, chips,  0, 0)
-        return g
+        generator_dict = {}
+        chip_dict = {}
+        for index, line in enumerate(self.lines):
+            for generator in re.findall(r" (\w+) generator", line):
+                generator_dict[generator] = index
+            for chip in re.findall(r" (\w+)-compatible", line):
+                chip_dict[chip] = index
+        pairs = []
+        for key in generator_dict:
+            pairs.append(ChipPair(chip_dict[key], generator_dict[key]))
+        chipset = ChipSet(pairs)
+        return Node(chipset, 0)
 
     def part_a(self):
         z = a_star.AStar(self.parsed)
         return z.run()
 
     def part_b(self):
-        gen = [*self.parsed.generators, 0, 0]
-        chips = [*self.parsed.chips, 0, 0]
-        start = Node(gen, chips, 0, 0)
-        z = a_star.AStar(start)
+        new_chipset = self.parsed.chip_set.pairs + [ChipPair(0,0), ChipPair(0,0)]
+        new_node = Node(ChipSet(new_chipset), 0)
+        z = a_star.AStar(new_node)
         return z.run()
 
 
 @dataclasses.dataclass
 class Node(a_star.BaseNode):
-    generators: list[int, ...]
-    chips: list[int, ...]
-    lift: int
+    chip_set: ChipSet
     distance: int
 
-    def __eq__(self, other):
-        p = sorted((g, c) for g, c in self.pairs())
-        other_p = sorted((g, c) for g, c in other.pairs())
-        return p == other_p and self.lift == other.lift
+    def h(self):
+        return max(pair.distance() for pair in self.chip_set.pairs)
+
+    def __eq__(self, other: Self):
+        return self.chip_set == other.chip_set
 
     def __hash__(self):
-        p = sorted((g, c) for g, c in self.pairs())
-        return hash(tuple(p))
+        return hash(self.chip_set)
 
     def pairs(self):
-        return tuple(zip(self.generators, self.chips))
+        return self.chip_set.pairs
 
     def is_target(self):
-        return set(self.pairs()) == {(3,3)} and self.lift == 3
-
-    def is_valid(self):
-        if not 0 <= self.lift <= 3:
-            return False
-
-        if max(*self.chips, *self.generators) > 3:
-            return False
-        if min(*self.chips, *self.generators) < 0:
-            return False
-
-        # any loose chips on the same floor as a generator are toast
-        loose_chips = {
-            chip for gen, chip in self.pairs() if gen != chip
-        }
-        # are any loose chips on the same floor as generators
-        bad_gen = loose_chips.intersection(self.generators)
-        return not bad_gen  # if non-zero, return true
+        return set(self.pairs()) == {ChipPair(3,3)}
 
     def neighbours(self):
-        a = {i for i in self._neighbours() if i.is_valid()}
+        a = {i for i in self._neighbours() if i.chip_set.is_valid()}
         yield from a
 
-    def move(self, indices, delta, arr, field):
-        for index in more_itertools.always_iterable(indices):
-            arr[index] += delta
-        return dataclasses.replace(
-            self,
-            lift=self.lift+delta,
-            distance=self.distance+1,
-            **{field:arr}
-        )
+    def _move_chip(self, index, floor, increase_distance=True):
+        existing_pair = self.chip_set.pairs[index]
+        new_pair = ChipPair(microchip=floor, generator = existing_pair.generator)
+        new_chipset = self.chip_set.pairs.copy()
+        new_chipset[index] = new_pair
+        return Node(ChipSet(new_chipset, floor), self.distance+increase_distance)
+
+    def _move_generator(self, index, floor, increase_distance=True):
+        existing_pair = self.chip_set.pairs[index]
+        new_pair = ChipPair(generator=floor, microchip = existing_pair.microchip)
+        new_chipset = self.chip_set.pairs.copy()
+        new_chipset[index] = new_pair
+        return Node(ChipSet(new_chipset, floor), self.distance+increase_distance)
 
     def _neighbours(self):
         # we can go up or down
         # we can move 1 or 2
 
-        available_gens = [
-            index for index, gen in enumerate(self.generators) if gen == self.lift
-        ]
-        available_chips = [
-            index for index, chip in enumerate(self.chips) if chip == self.lift
-        ]
-
-        if self.lift == 0:
+        if self.chip_set.lift == 0:
             floors = [1]
-        elif self.lift == 3:
-            floors = [-1]
+        elif self.chip_set.lift == 3:
+            floors = [2]
         else:
-            floors = [-1, 1]
+            floors = [self.chip_set.lift +1, self.chip_set.lift-1]
 
-        double_gens = list(itertools.combinations(available_gens, 2))
-        double_chips = list(itertools.combinations(available_chips, 2))
-        yield from (
-            self.move(index, change, list(self.generators), 'generators')
-            for index, change in itertools.product(available_gens + double_gens, floors)
-        )
+        for a_index, b_index in itertools.permutations(range(len(self.chip_set)), 2):
+            for floor in floors:
+                a = self.chip_set[a_index]
+                b = self.chip_set[b_index]
 
-
-        yield from (
-            self.move(index, change, list(self.chips), 'chips')
-            for index, change in
-        itertools.product(available_chips + double_chips, floors)
-        )
-
-        for gen_index, chip_index, change in itertools.product(
-            available_gens, available_chips, floors
-        ):
-            a = self.move(gen_index, change, list(self.generators), 'generators')
-            yield a.move(chip_index, change,list(self.chips), 'chips')
+                if a.microchip == self.chip_set.lift:
+                    moved = self._move_chip(a_index, floor, True)
+                    if b.microchip == self.chip_set.lift:
+                        yield moved._move_chip(b_index, floor, False)
+                    if b.generator == self.chip_set.lift:
+                        yield moved._move_generator(b_index, floor, False)
+                    if a.generator == self.chip_set.lift:
+                        yield moved._move_generator(a_index, floor, False)
+                    yield moved
+                if a.generator == self.chip_set.lift:
+                    moved = self._move_generator(a_index, floor, True)
+                    if b.generator == self.chip_set.lift:
+                        yield moved._move_generator(b_index, floor, False)
+                    if b.microchip == self.chip_set.lift:
+                        yield moved._move_chip(b_index, floor, False)
+                    yield moved
 
 
 if __name__ == "__main__":
