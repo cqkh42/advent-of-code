@@ -30,21 +30,21 @@ class Solution(BaseSolution):
         return np.array([list(line) for line in self.lines]).astype(int)
 
     def step(self):
-        flashed = np.zeros_like(self.parsed_data)
-        self.parsed_data += 1
-        will_flash = self.parsed_data > 9
+        flashed = np.zeros_like(self.parsed)
+        self.parsed += 1
+        will_flash = self.parsed > 9
         while will_flash.any():
             f = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
             neighbours = generic_filter(will_flash, sum,
                                         footprint=f,
                                         mode='constant', output=int,
                                         cval=0)
-            self.parsed_data += neighbours
+            self.parsed += neighbours
             flashed = np.logical_or(flashed, will_flash)
-            will_flash = np.logical_and(self.parsed_data > 9, flashed != 1)
-        self.parsed_data[self.parsed_data > 9] = 0
+            will_flash = np.logical_and(self.parsed > 9, flashed != 1)
+        self.parsed[self.parsed > 9] = 0
         self.flashes += flashed.sum()
-        return self.parsed_data
+        return self.parsed
 
     def part_a(self):
         for _ in range(100):
@@ -52,9 +52,9 @@ class Solution(BaseSolution):
         return self.flashes
 
     def part_b(self):
-        self.parsed_data = self._parse()
+        self.parsed = self._parse()
         for step in itertools.count(1):
             self.step()
-            if self.parsed_data.sum() == 0:
+            if self.parsed.sum() == 0:
                 return step
 

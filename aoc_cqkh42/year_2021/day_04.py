@@ -48,15 +48,15 @@ class Solution(BaseSolution):
 
     def part_a(self):
         for number in self.numbers:
-            for board in self.parsed_data:
+            for board in self.parsed:
                 board.marked.add(board.numbers.get(number))
                 if board.is_complete():
                     return board.score(number)
 
     def part_b(self):
         for number in self.numbers:
-            for board in self.parsed_data:
+            for board in self.parsed:
                 board.marked.add(board.numbers.get(number))
-            self.parsed_data = [board for board in self.parsed_data if not board.is_complete()]
-            if not self.parsed_data:
+            self.parsed = [board for board in self.parsed if not board.is_complete()]
+            if not self.parsed:
                 return board.score(number)

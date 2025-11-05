@@ -27,14 +27,14 @@ class Solution(BaseSolution):
         else:
             a, b = self.parsed[:, :index], self.parsed[:, index + 1:]
         b = np.flip(b, axis=fold_axis)
-        self.parsed_data = a | b
+        self.parsed = a | b
 
     def part_a(self):
         self.fold()
-        return self.parsed_data.astype(int).sum()
+        return self.parsed.astype(int).sum()
 
     def part_b(self):
         while self.folds:
             self.fold()
-        a = np.concatenate(self.parsed_data)
+        a = np.concatenate(self.parsed)
         return aocr.word(a, True)

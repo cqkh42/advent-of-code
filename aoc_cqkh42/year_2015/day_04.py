@@ -32,7 +32,6 @@ class Solution(BaseSolution):
             hash_.update(f"{answer}".encode())
             if hash_.hexdigest().startswith(sequence):
                 return answer
-        return self._salt
 
     def _parse(self: Self) -> md5:
         """Create a md5 of the input data.
