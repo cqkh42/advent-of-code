@@ -1,7 +1,5 @@
 from operator import mul, sub
 
-import pandas as pd
-
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
@@ -39,10 +37,6 @@ class Program:
         self.history.append(command)
         step = 1
         if self.index == 11 and optimised:
-            print(self.registers)
-            # step = 12
-            # self['g'] = 0
-            # self['f'] = 0
             self.history.append('mul')
         if command in {"mul", "sub", "set"}:
             self[x] = func_map[command](self[x], self[y])

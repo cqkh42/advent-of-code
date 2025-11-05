@@ -3,8 +3,7 @@ from typing import Self, Any
 
 import more_itertools
 import parse
-from black.trans import defaultdict
-
+from collections import defaultdict
 from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 
