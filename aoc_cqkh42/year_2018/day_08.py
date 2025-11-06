@@ -3,36 +3,30 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 import more_itertools
 
 
-def get_metadata(tree, metadata=None):
-    metadata = metadata or []
+def get_metadata(tree, total=0):
     num_children, num_metadata, *tree = tree
-    children = []
     for child in range(num_children):
-        tree, child_metadata = get_metadata(tree, metadata)
-        children.append(child_metadata)
-    this_meta = tree[:num_metadata]
+        tree, child_total = get_metadata(tree)
+        total += child_total
+    total += sum(tree[:num_metadata])
+    return tree[num_metadata:], total
 
-    metadata.extend(children)
-    metadata.append(this_meta)
-    return tree[num_metadata:], metadata
-
-def get_metadata_two(tree, metadata=None):
-    metadata = metadata or []
+def get_metadata_two(tree, total=0):
     num_children, num_metadata, *tree = tree
     children = []
     for child in range(num_children):
         tree, child_metadata = get_metadata_two(tree)
-        children.append(sum(more_itertools.collapse(child_metadata)))
+        children.append(child_metadata)
     this_meta = tree[:num_metadata]
-    if num_children == 0:
-        metadata.append(sum(this_meta))
+    if not num_children:
+        total+=sum(this_meta)
     else:
         for index in this_meta:
             try:
-                metadata.append(children[index-1])
+                total += children[index-1]
             except IndexError:
                 continue
-    return tree[num_metadata:], metadata
+    return tree[num_metadata:], total
 
 class Solution(BaseSolution):
     def part_a(self):
@@ -40,8 +34,8 @@ class Solution(BaseSolution):
         return sum(more_itertools.collapse(metadata))
 
     def part_b(self):
-        _, metadata = get_metadata_two(self.numbers)
-        return sum(more_itertools.collapse(metadata))
+        _, total = get_metadata_two(self.numbers)
+        return total
 
 if __name__ == "__main__":
     submit_answers(Solution,8 , 2018)
