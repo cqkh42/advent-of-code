@@ -89,4 +89,4 @@ class Solution(BaseSolution):
 
 
 if __name__ == "__main__":
-    submit_answers(Solution,5 , 2018)
+    submit_answers(Solution,6 , 2018)
