@@ -2,12 +2,18 @@ from aoc_cqkh42 import submit_answers
 from aoc_cqkh42.helpers.base_solution import BaseSolution
 import more_itertools
 
+
 def get_metadata(tree, metadata=None):
     metadata = metadata or []
     num_children, num_metadata, *tree = tree
+    children = []
     for child in range(num_children):
-        tree, metadata = get_metadata(tree, metadata)
-    metadata.append(tree[:num_metadata])
+        tree, child_metadata = get_metadata(tree, metadata)
+        children.append(child_metadata)
+    this_meta = tree[:num_metadata]
+
+    metadata.extend(children)
+    metadata.append(this_meta)
     return tree[num_metadata:], metadata
 
 def get_metadata_two(tree, metadata=None):
@@ -16,10 +22,10 @@ def get_metadata_two(tree, metadata=None):
     children = []
     for child in range(num_children):
         tree, child_metadata = get_metadata_two(tree)
-        children.append(child_metadata)
+        children.append(sum(more_itertools.collapse(child_metadata)))
     this_meta = tree[:num_metadata]
     if num_children == 0:
-        metadata.append(this_meta)
+        metadata.append(sum(this_meta))
     else:
         for index in this_meta:
             try:
