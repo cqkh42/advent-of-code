@@ -5,17 +5,13 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 
 class Solution(BaseSolution):
     state = ""
-    rules = {}
     valid = set()
     offset = 0
     def _parse(self: Self) -> Any:
         state, _, *rules = self.lines
         self.state = state.strip("initial state: ")
-        for rule in rules:
-            left, right = rule.split(" => ")
-            self.rules[left] = right
-            if right == "#":
-                self.valid.add(left)
+        split = (rule.split(" => ") for rule in rules)
+        self.valid = {left for left, right in split if right == "#"}
         new_state = self.state.strip(".")
         self.offset = len(new_state) - len(self.state)
         self.state = new_state
