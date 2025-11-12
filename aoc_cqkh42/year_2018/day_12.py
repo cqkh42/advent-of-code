@@ -30,31 +30,21 @@ class Solution(BaseSolution):
 
         self.offset += 2
     def part_a(self):
-        return
         for _ in range(20):
             self.turn()
         return sum(index for index, value in enumerate(self.state, -self.offset) if value)
 
-        return
-
     def part_b(self):
-        # y = 96x + c
-        # 48001087 = 96*500000 + c 1087
-        # 28801087 = 96*300000+ c
-        # increases 96 every turn
-        # need an extra 49999290000
-        # return
-        for index in range(1, 50000000001):
-        # for index in range(580000):
+        answers = []
+        for index in range(21, 201):
             self.turn()
-            if not index % 100_000:
-                print()
-                str = "".join("#" if char else "." for char in self.state)
-
-                total = sum(index for index, value in enumerate(self.state, -self.offset) if value)
-                print(index, len(self.state), total)
-        return sum(index for index, value in enumerate(self.state, -self.offset) if value)
-        return
+            total = sum(index for index, value in enumerate(self.state, -self.offset) if value)
+            answers.append(total)
+        thousand = answers[-1]
+        nines = answers[-2]
+        step = thousand - nines
+        start = thousand - (step *200)
+        return (step*50_000_000_000) + start
 
 if __name__ == "__main__":
     submit_answers(Solution, 12, 2018)
