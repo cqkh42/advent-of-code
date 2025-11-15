@@ -125,4 +125,4 @@ class Solution(BaseSolution):
                 return f"{x},{y}"
 
 if __name__ == "__main__":
-    submit_answers(Solution, 13, 2018, user="google")
+    submit_answers(Solution, 13, 2018)
