@@ -31,7 +31,6 @@ class Solution(BaseSolution):
                 recipe_str += str(b)
             self.elves[0] = (1 + self.elves[0] + self.recipes[self.elves[0]]) % len(self.recipes)
             self.elves[1] = (1 + self.elves[1] + self.recipes[self.elves[1]]) % len(self.recipes)
-        print(len(recipe_str), self.input_ in recipe_str)
         a = re.sub(f"{self.input_}.*", "", recipe_str)
         return len(a)
 
