@@ -42,7 +42,7 @@ class BaseSolution(ABC):
         return as_type(self.numbers)
 
     @cached_property
-    def numbers(self: Self) -> tuple[int, ...]:
+    def numbers(self: Self) -> tuple[int]:
         """Find all numbers in the input data.
 
         Returns:

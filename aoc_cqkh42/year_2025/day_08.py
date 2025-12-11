@@ -19,7 +19,6 @@ from aoc_cqkh42.helpers.base_solution import BaseSolution
 from scipy.spatial.distance import pdist
 from sklearn.metrics import pairwise_distances
 
-FUNCS = {"*": math.prod, "+": sum}
 
 def distance(pair):
     l, r = pair
