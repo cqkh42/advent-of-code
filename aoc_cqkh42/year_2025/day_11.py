@@ -32,6 +32,8 @@ class Solution(BaseSolution):
 
     def _parse(self: Self) -> Any:
         graph = nx.DiGraph()
+        dic = {input_: set(outputs) for input_, outputs in self.parsed_lines}
+
         for input_, *outputs in self.parsed_lines:
             for output in outputs:
                 graph.add_edge(input_, output)
@@ -44,6 +46,9 @@ class Solution(BaseSolution):
 
     def part_b(self: Self) -> int:
         """Answer part b."""
+        for node in self.parsed:
+            if self.parsed.in_degree(node) == self.parsed.out_degree(node):
+
         paths = nx.all_simple_paths(self.parsed, source="svr", target="out")
         return sum("dac" in path and "fft" in path for path in paths)
         # svr to all nodes is fine
