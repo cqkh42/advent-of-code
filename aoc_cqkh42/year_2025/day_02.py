@@ -35,22 +35,30 @@ class Solution(BaseSolution):
         split = re.split(r"[-,]", self.input_)
         for start, end in more_itertools.chunked(split, 2):
             nums.extend(range(int(start), int(end) + 1))
-        return set(nums)
+        return (nums)
 
     def part_a(self: Self) -> int:
         """Answer part a.
         """
+        regex = re.compile(r"^(\d+)\1$")
+        total = 0
         for num in self.parsed:
-            try:
-                l, r = more_itertools.batched(str(num), len(str(num))//2, strict=True)
-                if l == r:
-                    self.simples.add(num)
-            except ValueError:
+            if len(str(num)) % 2:
                 continue
-        return sum(self.simples)
+            if regex.match(str(num)):
+                total += num
+        return total
+        #     try:
+        #         l, r = more_itertools.batched(str(num), len(str(num))//2, strict=True)
+        #         if l == r:
+        #             self.simples.add(num)
+        #     except ValueError:
+        #         continue
+        # return sum(self.simples)
 
     def part_b(self: Self) -> int:
         """Answer part b."""
+        return
         invalids = 0
         for num in self.parsed:
             if is_splitable(str(num)):
