@@ -31,11 +31,6 @@ class Solution(BaseSolution):
         """Answer part a.
         """
         regex = re.compile(r"^(\d+)\1$", flags=re.MULTILINE)
-        s = "\n".join([str(i) for i in self.parsed])
-        print(s[:20])
-        k = regex.findall(s)
-        return sum(int(num) for num in k)
-        print(k[:5])
         self.simples = {num for num in self.parsed if regex.match(str(num))}
         return sum(self.simples)
 
